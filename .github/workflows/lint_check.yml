@@ -1,5 +1,11 @@
 name: Server
-on: [push]
+on:
+  push:
+    paths:
+      - "**/*.py"
+  pull_request:
+    paths:
+      - "**/*.py"
 
 env:
   PYTHON_VERSION: "3.12.7"
