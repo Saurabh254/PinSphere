@@ -1,7 +1,5 @@
 name: Check linting using Ruff
-on:
-  push:
-    branches: all
+on: [push]
 
 jobs:
   lint_check:
