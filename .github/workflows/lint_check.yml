@@ -1,17 +1,20 @@
 name: Check linting using Ruff
 on: [push]
 
+env:
+  PYTHON_VERSION: "3.12.7"
+
 jobs:
   lint_check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-      - name: Setting Up Python-$${PYTHON_VERSION}
+      - name: Setting Up Python-${{ env.PYTHON_VERSION }}
         uses: actions/setup-python@v3
         with:
-          python-version: $${PYTHON_VERSION}
-      - name: Setting up UV and installing dependencies.
-        run: python -m pip install uv & uv sync
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Setting up UV and installing dependencies
+        run: python -m pip install uv && uv sync
       - name: Link Check
         run: uv run task lint_check
