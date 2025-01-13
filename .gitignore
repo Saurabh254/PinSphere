@@ -1,0 +1,67 @@
+# Python-related files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.env
+.env.*
+
+# FastAPI related
+instance/
+*.sqlite3
+*.db
+*.log
+
+# Node.js related files (React frontend)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build and dependencies
+build/
+dist/
+.eslintcache
+.cache/
+*.lock
+
+# Environment-specific files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Testing and coverage
+.coverage
+.coverage.*
+*.egg-info/
+.cache/
+pytest_cache/
+htmlcov/
+*.pytest_cache/
+
+# Logs and temporary files
+logs/
+*.log
+*.tmp
+*.temp
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE and editor-specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Specific to React frontend
+public/env.*
+coverage/
+
+# Docker related
+.dockerignore
+docker-compose.override.yml
+
