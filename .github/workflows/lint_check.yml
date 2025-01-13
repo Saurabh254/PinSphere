@@ -15,6 +15,6 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Setting up uv and installing dependencies
-        run: python -m pip install uv && cd server && uv sync
+        run: python -m pip install uv && cd server && uv sync --dev
       - name: Link Check
         run: uv run task lint_check
