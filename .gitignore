@@ -23,7 +23,7 @@ build/
 dist/
 .eslintcache
 .cache/
-*.lock
+
 
 # Environment-specific files
 .DS_Store
