@@ -19,7 +19,7 @@ jobs:
           python-version-file: "server/.python-version"
       - name: uv install
         working-directory: ./server
-        run: python -m pip install uv && cd server && uv sync --dev
+        run: uv sync --dev
       - name: Link Check (ruff)
         working-directory: ./server
         run: uv run task lint_check
