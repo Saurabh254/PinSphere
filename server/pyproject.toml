@@ -1,7 +1,23 @@
 [project]
 name = "server"
 version = "0.1.0"
-description = "Add your description here"
+description = "A social platform to discover, share, and organize your favorite images. Explore creativity and connect through stunning visuals."
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "fastapi[standard]>=0.115.6",
+]
+
+[dependency-groups]
+dev = [
+    "ipython>=8.31.0",
+    "pyright>=1.1.391",
+    "ruff>=0.9.1",
+    "taskipy>=1.14.1",
+]
+
+[tool.taskipy.tasks]
+type_check = { cmd = "pyright . ", help="Check Typing using Pyright in strict mode"}
+lint = { cmd = "ruff format . && ruff check --fix .", help = "run linters with autofix" }
+lint_check = { cmd = "ruff format --check . && ruff check .", help = "run ruff linter" }
+clean = { cmd = "find * -name '*.pyc' -delete && find * -name '__pycache__' -delete", help = "clean up .pyc and __pycache__" }

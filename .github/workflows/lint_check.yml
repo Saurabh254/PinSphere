@@ -1,0 +1,28 @@
+name: Server
+on: [push]
+
+env:
+  PYTHON_VERSION: "3.12.7"
+
+jobs:
+  lint_check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: "server/.python-version"
+      - name: uv install
+        working-directory: ./server
+        run: uv sync --dev
+      - name: Link Check (ruff)
+        working-directory: ./server
+        run: uv run task lint_check
+      - name: Type Check Server (pyright)
+        working-directory: ./server
+        run: uv run task type_check
