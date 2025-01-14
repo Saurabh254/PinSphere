@@ -1,18 +1,27 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from database import get_db  # Async database session dependency
+from core.database.session_manager import get_async_session
+from pin_sphere.user.service import get_user_by_email
 from schemas import UserCreate, UserUpdate, UserResponse
 from service import get_user, get_users, create_user, update_user, delete_user
 
 # Create an API router for user-related endpoints
 router = APIRouter(
-    prefix='/user',
-    tags=['user'], 
+    prefix="/user",
+    tags=["user"],
 )
 
+
 # Fetch all users with optional pagination
-@router.get("/users", response_model=list[UserResponse], summary="Fetch all users", tags=["Users"])
-async def read_users(skip: int = 0, limit: int = 10, db: AsyncSession = Depends(get_db)):
+@router.get(
+    "/users",
+    response_model=list[UserResponse],
+    summary="Fetch all users",
+    tags=["Users"],
+)
+async def read_users(
+    skip: int = 0, limit: int = 10, db: AsyncSession = Depends(get_async_session)
+):
     """
     Fetch a list of users with optional pagination.
 
@@ -22,9 +31,15 @@ async def read_users(skip: int = 0, limit: int = 10, db: AsyncSession = Depends(
     users = await get_users(db, skip=skip, limit=limit)
     return users
 
+
 # Fetch a specific user by ID
-@router.get("/users/{user_id}", response_model=UserResponse, summary="Fetch a user by ID", tags=["Users"])
-async def read_user(user_id: int, db: AsyncSession = Depends(get_db)):
+@router.get(
+    "/users/{user_id}",
+    response_model=UserResponse,
+    summary="Fetch a user by ID",
+    tags=["Users"],
+)
+async def read_user(user_id: int, db: AsyncSession = Depends(get_async_session)):
     """
     Fetch a single user by their unique ID.
 
@@ -35,24 +50,37 @@ async def read_user(user_id: int, db: AsyncSession = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
+
 # Create a new user
-@router.post("/users", response_model=UserResponse, summary="Create a new user", tags=["Users"])
-async def create_new_user(user: UserCreate, db: AsyncSession = Depends(get_db)):
+@router.post(
+    "/users", response_model=UserResponse, summary="Create a new user", tags=["Users"]
+)
+async def create_new_user(
+    user: UserCreate, db: AsyncSession = Depends(get_async_session)
+):
     """
     Create a new user with the provided details.
 
     - **user**: JSON payload containing user details (name, email, password).
     """
     # Additional validation (e.g., checking for existing email) could go here.
-    existing_user = await db.execute(select(User).filter(User.email == user.email))
+    existing_user = await get_user_by_email(db, email=user.email)
     if existing_user.scalars().first():
         raise HTTPException(status_code=400, detail="Email already registered")
 
     return await create_user(db, user)
 
+
 # Update an existing user
-@router.put("/users/{user_id}", response_model=UserResponse, summary="Update a user", tags=["Users"])
-async def update_existing_user(user_id: int, user_update: UserUpdate, db: AsyncSession = Depends(get_db)):
+@router.put(
+    "/users/{user_id}",
+    response_model=UserResponse,
+    summary="Update a user",
+    tags=["Users"],
+)
+async def update_existing_user(
+    user_id: int, user_update: UserUpdate, db: AsyncSession = Depends(get_async_session)
+):
     """
     Update an existing user by their unique ID.
 
@@ -64,9 +92,17 @@ async def update_existing_user(user_id: int, user_update: UserUpdate, db: AsyncS
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
+
 # Delete a user by ID
-@router.delete("/users/{user_id}", response_model=UserResponse, summary="Delete a user", tags=["Users"])
-async def delete_existing_user(user_id: int, db: AsyncSession = Depends(get_db)):
+@router.delete(
+    "/users/{user_id}",
+    response_model=UserResponse,
+    summary="Delete a user",
+    tags=["Users"],
+)
+async def delete_existing_user(
+    user_id: int, db: AsyncSession = Depends(get_async_session)
+):
     """
     Delete a user by their unique ID.
 

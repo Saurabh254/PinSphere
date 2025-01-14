@@ -5,6 +5,7 @@ from sqlalchemy.sql import func
 # Base class for all models
 Base = declarative_base()
 
+
 class BaseModel(Base):
     __abstract__ = True  # Makes this class abstract and not mapped to a table
 
@@ -16,4 +17,6 @@ class BaseModel(Base):
     # Optionally add common methods
     def as_dict(self):
         """Convert model instance to dictionary for easy serialization."""
-        return {column.name: getattr(self, column.name) for column in self.__table__.columns}
+        return {
+            column.name: getattr(self, column.name) for column in self.__table__.columns
+        }
