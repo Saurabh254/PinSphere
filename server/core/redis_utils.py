@@ -1,10 +1,18 @@
-import redis.asyncio as aioredis
+from typing import AsyncGenerator
 
+import redis.asyncio as aioredis
 from config import settings
 
 
-def get_redis_client() -> aioredis.Redis:
+async def get_redis_client() -> AsyncGenerator[aioredis.Redis, None]:
     """
-    returns redis client session from pool
+    Returns a Redis client session from the connection pool.
+    Ensures proper cleanup by closing the client after use.
     """
-    return aioredis.from_url(settings.redis_dsn)
+    # Create a Redis client from the connection pool
+    client: aioredis.Redis = aioredis.from_url(str(settings.redis_dsn))  # type: ignore
+    try:
+        yield client
+    finally:
+        # Ensure the client is properly closed
+        await client.aclose()

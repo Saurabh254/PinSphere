@@ -1,15 +1,15 @@
 __all__ = ["settings"]
 
 
-from pydantic import Field, PostgresDsn, RedisDsn
+from pydantic import PostgresDsn, RedisDsn
 from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    database_dsn: PostgresDsn = (
+    database_dsn: PostgresDsn = PostgresDsn(
         "postgresql+asyncpg://postgres:postgres@localhost:5432/pin_sphere"
     )
-    redis_dsn: RedisDsn = Field(
+    redis_dsn: RedisDsn = RedisDsn(
         "redis://localhost:6379/0",
     )
 
@@ -17,4 +17,4 @@ class Settings(BaseSettings):
         env_file = ".env"
 
 
-settings = Settings()
+settings = Settings()  # type: ignore

@@ -65,7 +65,7 @@ async def create_new_user(
     """
     # Additional validation (e.g., checking for existing email) could go here.
     existing_user = await get_user_by_email(db, email=user.email)
-    if existing_user.scalars().first():
+    if existing_user and existing_user.scalars().first():
         raise HTTPException(status_code=400, detail="Email already registered")
 
     return await create_user(db, user)
