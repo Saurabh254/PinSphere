@@ -32,7 +32,7 @@ c = get_config()  # noqa
 
 ## List of files to run at IPython startup.
 #  Default: []
-c.InteractiveShellApp.exec_files = ["conftest.py"]
+# c.InteractiveShellApp.exec_files = ["conftest.py"]
 
 ## lines of code to run at IPython startup.
 #  Default: []
