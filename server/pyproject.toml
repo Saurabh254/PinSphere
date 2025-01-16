@@ -6,12 +6,16 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi[standard]>=0.115.6",
+    "pydantic-settings>=2.7.1",
+
+    "redis>=5.2.1",
+    "sqlalchemy>=2.0.37",
 ]
 
 [dependency-groups]
 dev = [
     "ipython>=8.31.0",
-    "pyright>=1.1.391",
+  "pyright>=1.1.391",
     "ruff>=0.9.1",
     "taskipy>=1.14.1",
 ]
@@ -21,3 +25,6 @@ type_check = { cmd = "pyright . ", help="Check Typing using Pyright in strict mo
 lint = { cmd = "ruff format . && ruff check --fix .", help = "run linters with autofix" }
 lint_check = { cmd = "ruff format --check . && ruff check .", help = "run ruff linter" }
 clean = { cmd = "find * -name '*.pyc' -delete && find * -name '__pycache__' -delete", help = "clean up .pyc and __pycache__" }
+
+[tool.ruff]
+target-version = "py310"
