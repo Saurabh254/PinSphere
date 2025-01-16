@@ -5,9 +5,9 @@ description = "A social platform to discover, share, and organize your favorite 
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "asyncpg>=0.30.0",
     "fastapi[standard]>=0.115.6",
     "pydantic-settings>=2.7.1",
-
     "redis>=5.2.1",
     "sqlalchemy>=2.0.37",
 ]

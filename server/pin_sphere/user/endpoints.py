@@ -2,19 +2,19 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.database.session_manager import get_async_session
 from pin_sphere.user.service import get_user_by_email
-from schemas import UserCreate, UserUpdate, UserResponse
-from service import get_user, get_users, create_user, update_user, delete_user
+from .schemas import UserCreate, UserUpdate, UserResponse
+from .service import get_user, get_users, create_user, update_user, delete_user
 
 # Create an API router for user-related endpoints
 router = APIRouter(
-    prefix="/user",
-    tags=["user"],
+    prefix="/users",
+    tags=["Users"],
 )
 
 
 # Fetch all users with optional pagination
 @router.get(
-    "/users",
+    "",
     response_model=list[UserResponse],
     summary="Fetch all users",
     tags=["Users"],
@@ -34,7 +34,7 @@ async def read_users(
 
 # Fetch a specific user by ID
 @router.get(
-    "/users/{user_id}",
+    "/{user_id}",
     response_model=UserResponse,
     summary="Fetch a user by ID",
     tags=["Users"],
@@ -53,7 +53,7 @@ async def read_user(user_id: int, db: AsyncSession = Depends(get_async_session))
 
 # Create a new user
 @router.post(
-    "/users", response_model=UserResponse, summary="Create a new user", tags=["Users"]
+    "", response_model=UserResponse, summary="Create a new user", tags=["Users"]
 )
 async def create_new_user(
     user: UserCreate, db: AsyncSession = Depends(get_async_session)
@@ -73,7 +73,7 @@ async def create_new_user(
 
 # Update an existing user
 @router.put(
-    "/users/{user_id}",
+    "/{user_id}",
     response_model=UserResponse,
     summary="Update a user",
     tags=["Users"],
@@ -95,7 +95,7 @@ async def update_existing_user(
 
 # Delete a user by ID
 @router.delete(
-    "/users/{user_id}",
+    "/{user_id}",
     response_model=UserResponse,
     summary="Delete a user",
     tags=["Users"],
