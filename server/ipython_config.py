@@ -1,4 +1,4 @@
-#type: ignore
+# type: ignore
 
 # Configuration file for ipython.
 
