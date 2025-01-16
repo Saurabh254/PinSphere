@@ -1,9 +1,8 @@
-__all__ = ['router']
+__all__ = ["router"]
 
 from pin_sphere.user import endpoints
 
 from fastapi import APIRouter
-
 
 
 router = APIRouter(prefix="/api/v1")

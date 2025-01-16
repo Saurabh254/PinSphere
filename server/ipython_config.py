@@ -1,10 +1,10 @@
 # Configuration file for ipython.
 
-c = get_config()  #noqa
+c = get_config()  # noqa
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # InteractiveShellApp(Configurable) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## A Mixin for applications that start InteractiveShell instances.
 #
 #      Provides configurables for loading extensions and executing files
@@ -30,7 +30,7 @@ c = get_config()  #noqa
 
 ## List of files to run at IPython startup.
 #  Default: []
-c.InteractiveShellApp.exec_files = ['conftest.py']
+c.InteractiveShellApp.exec_files = ["conftest.py"]
 
 ## lines of code to run at IPython startup.
 #  Default: []
@@ -100,9 +100,9 @@ c.InteractiveShellApp.exec_files = ['conftest.py']
 #  Default: False
 # c.InteractiveShellApp.reraise_ipython_extension_failures = False
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Application(SingletonConfigurable) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## This is an application.
 
 ## The date format used by logging formatters for %(asctime)s
@@ -173,9 +173,9 @@ c.InteractiveShellApp.exec_files = ['conftest.py']
 #  Default: False
 # c.Application.show_config_json = False
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # BaseIPythonApplication(Application) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #  Default: False
 # c.BaseIPythonApplication.add_ipython_dir_to_sys_path = False
 
@@ -242,9 +242,9 @@ c.InteractiveShellApp.exec_files = ['conftest.py']
 #  Default: False
 # c.BaseIPythonApplication.verbose_crash = False
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # TerminalIPythonApp(BaseIPythonApplication, InteractiveShellApp) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #  See also: BaseIPythonApplication.add_ipython_dir_to_sys_path
 # c.TerminalIPythonApp.add_ipython_dir_to_sys_path = False
 
@@ -380,9 +380,9 @@ c.InteractiveShellApp.exec_files = ['conftest.py']
 #  See also: BaseIPythonApplication.verbose_crash
 # c.TerminalIPythonApp.verbose_crash = False
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # InteractiveShell(SingletonConfigurable) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## An enhanced, interactive shell for Python.
 
 ## 'all', 'last', 'last_expr' or 'none', 'last_expr_or_assign' specifying which
@@ -539,9 +539,9 @@ c.InteractiveShellApp.exec_files = ['conftest.py']
 #  Default: 'Context'
 # c.InteractiveShell.xmode = 'Context'
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # TerminalInteractiveShell(InteractiveShell) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ##
 #  See also: InteractiveShell.ast_node_interactivity
 # c.TerminalInteractiveShell.ast_node_interactivity = 'last_expr'
@@ -899,9 +899,9 @@ c.InteractiveShellApp.exec_files = ['conftest.py']
 #  See also: InteractiveShell.xmode
 # c.TerminalInteractiveShell.xmode = 'Context'
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # HistoryAccessor(HistoryAccessorBase) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## Access the history database without adding to it.
 #
 #      This is intended for use by standalone history tools. IPython shells use
@@ -940,9 +940,9 @@ c.InteractiveShellApp.exec_files = ['conftest.py']
 #  Default: traitlets.Undefined
 # c.HistoryAccessor.hist_file = traitlets.Undefined
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # HistoryManager(HistoryAccessor) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## A class to organize all history-related functionality in one place.
 
 ## Options for configuring the SQLite connection
@@ -966,9 +966,9 @@ c.InteractiveShellApp.exec_files = ['conftest.py']
 #  See also: HistoryAccessor.hist_file
 # c.HistoryManager.hist_file = traitlets.Undefined
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # MagicsManager(Configurable) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## Object that handles all magic-related functionality for IPython.
 
 ## Automatically call line magics without requiring explicit % prefix
@@ -1000,9 +1000,9 @@ c.InteractiveShellApp.exec_files = ['conftest.py']
 #  Default: {}
 # c.MagicsManager.lazy_magics = {}
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # ProfileDir(LoggingConfigurable) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## An object to manage the profile directory and its resources.
 #
 #      The profile directory is used by all IPython applications, to manage
@@ -1016,9 +1016,9 @@ c.InteractiveShellApp.exec_files = ['conftest.py']
 #  Default: ''
 # c.ProfileDir.location = ''
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # BaseFormatter(Configurable) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## A base formatter class that is configurable.
 #
 #      This formatter should usually be used as the base class of all formatters.
@@ -1054,9 +1054,9 @@ c.InteractiveShellApp.exec_files = ['conftest.py']
 #  Default: {}
 # c.BaseFormatter.type_printers = {}
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # PlainTextFormatter(BaseFormatter) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## The default pretty-printer.
 #
 #      This uses :mod:`IPython.lib.pretty` to compute the format data of
@@ -1109,9 +1109,9 @@ c.InteractiveShellApp.exec_files = ['conftest.py']
 #  Default: False
 # c.PlainTextFormatter.verbose = False
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Completer(Configurable) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## Enable auto-closing dictionary keys.
 #
 #  When enabled string keys will be suffixed with a final quote (matching the
@@ -1180,9 +1180,9 @@ c.InteractiveShellApp.exec_files = ['conftest.py']
 #  Default: True
 # c.Completer.use_jedi = True
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # IPCompleter(Completer) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## Extension of the completer class with IPython-specific features
 
 ##
@@ -1290,9 +1290,9 @@ c.InteractiveShellApp.exec_files = ['conftest.py']
 #  See also: Completer.use_jedi
 # c.IPCompleter.use_jedi = True
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # ScriptMagics(Magics) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## Magics for talking to scripts
 #
 #      This defines a base `%%script` cell magic for running a cell
@@ -1315,18 +1315,18 @@ c.InteractiveShellApp.exec_files = ['conftest.py']
 #  Default: {}
 # c.ScriptMagics.script_paths = {}
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # LoggingMagics(Magics) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## Magics related to all logging machinery.
 
 ## Suppress output of log state when logging is enabled
 #  Default: False
 # c.LoggingMagics.quiet = False
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # StoreMagics(Magics) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## Lightweight persistence for python variables.
 #
 #      Provides the %store magic.
