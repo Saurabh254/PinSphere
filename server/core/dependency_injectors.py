@@ -6,7 +6,7 @@ from typing import Awaitable, Callable, cast
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database.session_manager import get_async_session
+from .database.session_manager import get_async_session
 from .redis_utils import get_redis_client
 
 log = logging.getLogger(__name__)

@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
 from core.models import User
-from schemas import UserCreate, UserUpdate
+from .schemas import UserCreate, UserUpdate
 
 
 # Service to fetch a single user by ID

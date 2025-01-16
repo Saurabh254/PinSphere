@@ -22,7 +22,8 @@ class User(BaseModel):
     password_salt: Mapped[str] = mapped_column(String(50), nullable=False)
 
 
-class UserProfile(BaseModel):
+class UserPhotos(BaseModel):
+    __tablename__ = "user_photos"
     id: Mapped[UUID] = mapped_column(SA_UUID, primary_key=True)
     user_id: Mapped[UUID] = mapped_column(
         SA_UUID, ForeignKey("users.id"), nullable=False

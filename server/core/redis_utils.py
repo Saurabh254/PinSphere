@@ -1,4 +1,4 @@
-from typing import AsyncGenerator
+from typing import AsyncGenerator, AsyncIterator
 
 import redis.asyncio as aioredis
 from config import settings
