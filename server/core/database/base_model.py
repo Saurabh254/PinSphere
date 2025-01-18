@@ -7,14 +7,13 @@ Base = declarative_base()
 
 
 class BaseModel(Base):
-    __abstract__ = True  # Makes this class abstract and not mapped to a table
+    __abstract__ = True
 
     # Common fields
     id = Column(Integer, primary_key=True, index=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
-    # Optionally add common methods
     def as_dict(self):
         """Convert model instance to dictionary for easy serialization."""
         return {

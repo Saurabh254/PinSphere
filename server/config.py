@@ -7,7 +7,7 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     database_dsn: PostgresDsn = PostgresDsn(
-        "postgresql+asyncpg://postgres:postgres@localhost:5432/pin_sphere"
+        "postgresql+asyncpg://saurabh254:prod_123@localhost:5432/pin_sphere"
     )
     redis_dsn: RedisDsn = RedisDsn(
         "redis://localhost:6379/0",
