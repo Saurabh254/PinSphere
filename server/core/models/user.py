@@ -1,10 +1,11 @@
 import enum
+import uuid
 from uuid import UUID
 
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy import Boolean, ForeignKey, String, UUID as SA_UUID, Enum as saEnum
-from core.database.base_model import BaseModel
+from core.database.base_model import TimeStampModel, RecordModel
 
 
 class ImageStatus(enum.Enum):
@@ -12,17 +13,16 @@ class ImageStatus(enum.Enum):
     PROCESSED = "PROCESSED"
 
 
-class User(BaseModel):
+class User(TimeStampModel):
     __tablename__ = "users"
-    id: Mapped[UUID] = mapped_column(SA_UUID, primary_key=True)
-    username: Mapped[str] = mapped_column(String(50), nullable=False)
+    username: Mapped[str] = mapped_column(String(50), nullable=False, primary_key=True)
     name: Mapped[str] = mapped_column(String(50), nullable=True)
     email: Mapped[str] = mapped_column(String(50), nullable=False)
-    password_hash: Mapped[str] = mapped_column(String(50), nullable=False)
+    password: Mapped[str] = mapped_column(String(50), nullable=False)
     password_salt: Mapped[str] = mapped_column(String(50), nullable=False)
 
 
-class UserPhotos(BaseModel):
+class UserPhotos(RecordModel):
     __tablename__ = "user_photos"
     id: Mapped[UUID] = mapped_column(SA_UUID, primary_key=True)
     user_id: Mapped[UUID] = mapped_column(
