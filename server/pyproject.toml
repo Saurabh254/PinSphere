@@ -6,8 +6,11 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "asyncpg>=0.30.0",
-    "fastapi[standard]>=0.115.6",
+    "faker>=33.3.1",
+    "fastapi[all,standard]>=0.115.6",
+    "psycopg>=3.2.4",
     "pydantic-settings>=2.7.1",
+    "pytest>=8.3.4",
     "redis>=5.2.1",
     "sqlalchemy>=2.0.37",
 ]
@@ -21,7 +24,7 @@ dev = [
 ]
 
 [tool.taskipy.tasks]
-type_check = { cmd = "pyright . ", help="Check Typing using Pyright in strict mode"}
+type_check = { cmd = "pyright pin_sphere core ", help="Check Typing using Pyright in strict mode"}
 lint = { cmd = "ruff format . && ruff check --fix .", help = "run linters with autofix" }
 lint_check = { cmd = "ruff format --check . && ruff check .", help = "run ruff linter" }
 clean = { cmd = "find * -name '*.pyc' -delete && find * -name '__pycache__' -delete", help = "clean up .pyc and __pycache__" }

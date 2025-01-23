@@ -1,6 +1,6 @@
 __all__ = ["router"]
 
-from pin_sphere.user import endpoints
+from pin_sphere.users import endpoints
 
 from fastapi import APIRouter
 

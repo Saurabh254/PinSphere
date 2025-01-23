@@ -90,10 +90,10 @@ c = get_config()  # noqa
 #  Default: None
 # c.InteractiveShellApp.pylab = None
 
-## If true, IPython will populate the user namespace with numpy, pylab, etc.
+## If true, IPython will populate the users namespace with numpy, pylab, etc.
 #          and an ``import *`` is done from numpy and pylab, when using pylab mode.
 #
-#          When False, pylab mode should not import any names into the user
+#          When False, pylab mode should not import any names into the users
 #  namespace.
 #  Default: True
 # c.InteractiveShellApp.pylab_import_all = True
@@ -358,7 +358,7 @@ c = get_config()  # noqa
 #  See also: InteractiveShellApp.pylab
 # c.TerminalIPythonApp.pylab = None
 
-## If true, IPython will populate the user namespace with numpy, pylab, etc.
+## If true, IPython will populate the users namespace with numpy, pylab, etc.
 #  See also: InteractiveShellApp.pylab_import_all
 # c.TerminalIPythonApp.pylab_import_all = True
 
@@ -394,7 +394,7 @@ c = get_config()  # noqa
 # c.InteractiveShell.ast_node_interactivity = 'last_expr'
 
 ## A list of ast.NodeTransformer subclass instances, which will be applied to
-#  user input before code is run.
+#  users input before code is run.
 #  Default: []
 # c.InteractiveShell.ast_transformers = []
 
@@ -657,7 +657,7 @@ c = get_config()  # noqa
 #  Default: False
 # c.TerminalInteractiveShell.extra_open_editor_shortcuts = False
 
-## Provide an alternative handler to be called when the user presses Return. This
+## Provide an alternative handler to be called when the users presses Return. This
 #  is an advanced option intended for debugging, which may be changed or removed
 #  in later releases.
 #  Default: None
@@ -1138,7 +1138,7 @@ c = get_config()  # noqa
 #          Successive options allow to enable more eager evaluation for better
 #          completion suggestions, including for nested dictionaries, nested lists,
 #          or even results of function calls.
-#          Setting ``unsafe`` or higher can lead to evaluation of arbitrary user
+#          Setting ``unsafe`` or higher can lead to evaluation of arbitrary users
 #          code on :kbd:`Tab` with potentially unwanted or dangerous side effects.
 #
 #          Allowed values are:
