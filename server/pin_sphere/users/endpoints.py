@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import UUID4
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.database.session_manager import get_async_session
 from pin_sphere.users.service import get_user_by_email, get_user_by_username

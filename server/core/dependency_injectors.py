@@ -84,7 +84,7 @@ def inject_asyncpg_session[RT, **P](
         if (
             db_param in bound_arguments.arguments
             and bound_arguments.arguments[db_param]
-            and type(bound_arguments.arguments[db_param]) == AsyncSession
+            and isinstance(bound_arguments.arguments[db_param], AsyncSession)
         ):
             return await func(*args, **kwargs)
 

@@ -1,5 +1,4 @@
 import enum
-import uuid
 from uuid import UUID
 
 from sqlalchemy.orm import Mapped
@@ -24,7 +23,6 @@ class User(TimeStampModel):
 
 class UserPhotos(RecordModel):
     __tablename__ = "user_photos"
-    id: Mapped[UUID] = mapped_column(SA_UUID, primary_key=True)
     user_id: Mapped[UUID] = mapped_column(
         SA_UUID, ForeignKey("users.id"), nullable=False
     )

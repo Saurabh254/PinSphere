@@ -4,7 +4,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
 
-from core.dependency_injectors import Inject, inject_asyncpg_session
 from core.models import User
 from .schemas import UserCreate, UserUpdate
 

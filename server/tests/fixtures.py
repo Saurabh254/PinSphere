@@ -1,4 +1,4 @@
-__all__= ['test_client']
+__all__ = ["test_client"]
 from fastapi.testclient import TestClient
 from main import app
 
