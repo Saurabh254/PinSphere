@@ -21,7 +21,7 @@ router = APIRouter(
     tags=["Account Operations"],
 )
 async def read_users(
-        skip: int = 0, limit: int = 10, db: AsyncSession = Depends(get_async_session)
+    skip: int = 0, limit: int = 10, db: AsyncSession = Depends(get_async_session)
 ):
     """
     Fetch a list of users with optional pagination.
@@ -31,6 +31,7 @@ async def read_users(
     """
     users = await get_users(db, skip=skip, limit=limit)
     return users
+
 
 @router.get(
     "/check-username/{username}",
@@ -45,7 +46,7 @@ async def check_username_availability(
 
     - **username**: The username to check.
     """
-    print("sus",db)
+    print("sus", db)
     existing_user = await get_user_by_username(db, username=username)
 
     if existing_user:
@@ -60,9 +61,7 @@ async def check_username_availability(
     summary="Delete an account by username",
     tags=["Account Operations"],
 )
-async def delete_account(
-    username: str, db: AsyncSession = Depends(get_async_session)
-):
+async def delete_account(username: str, db: AsyncSession = Depends(get_async_session)):
     """
     Delete the users account by their username.
 
@@ -72,6 +71,8 @@ async def delete_account(
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user
+
+
 # Fetch a specific users by username
 @router.get(
     "/{username}",
@@ -93,10 +94,13 @@ async def read_user(username: str, db: AsyncSession = Depends(get_async_session)
 
 # Create a new users
 @router.post(
-    "", response_model=UserResponse, summary="Create a new users", tags=["Account Operations"],
+    "",
+    response_model=UserResponse,
+    summary="Create a new users",
+    tags=["Account Operations"],
 )
 async def create_new_user(
-        user: UserCreate, db: AsyncSession = Depends(get_async_session)
+    user: UserCreate, db: AsyncSession = Depends(get_async_session)
 ):
     """
     Create a new users with the provided details.
@@ -124,7 +128,9 @@ async def create_new_user(
     tags=["Account Operations"],
 )
 async def update_existing_user(
-        username: str, user_update: UserUpdate, db: AsyncSession = Depends(get_async_session)
+    username: str,
+    user_update: UserUpdate,
+    db: AsyncSession = Depends(get_async_session),
 ):
     """
     Update an existing users by their unique username.
@@ -146,7 +152,7 @@ async def update_existing_user(
     tags=["Account Operations"],
 )
 async def delete_existing_user(
-        username: str, db: AsyncSession = Depends(get_async_session)
+    username: str, db: AsyncSession = Depends(get_async_session)
 ):
     """
     Delete a users by their unique username.

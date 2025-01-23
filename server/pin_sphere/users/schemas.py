@@ -24,7 +24,6 @@ class UserResponse(BaseModel):
     name: str
     email: EmailStr
     created_at: datetime
-    updated_at: datetime
 
     # Config class to allow ORM models to be serialized
     class Config:
