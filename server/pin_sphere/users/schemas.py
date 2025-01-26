@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, SecretStr
 from typing import Optional
 
 
@@ -8,7 +8,7 @@ from typing import Optional
 class UserCreate(BaseModel):
     username: str  # Username as the unique identifier
     email: EmailStr
-    password: str
+    password: SecretStr
 
 
 # Schema for updating a users (optional fields)

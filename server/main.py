@@ -4,6 +4,11 @@ from starlette.middleware.cors import CORSMiddleware
 from pin_sphere import api
 from fastapi import FastAPI
 
+from pin_sphere.exception_handling import add_exception_handler
+from fastapi import FastAPI
+
+from asgi_correlation_id import CorrelationIdMiddleware
+
 app = FastAPI(
     title="PinSphere API",
     description="PinSphere API (version api/v1)",
@@ -16,6 +21,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.add_middleware(CorrelationIdMiddleware)
+
+add_exception_handler(app)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

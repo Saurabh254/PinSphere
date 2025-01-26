@@ -25,8 +25,8 @@ def upgrade() -> None:
         sa.Column("username", sa.String(length=50), nullable=False),
         sa.Column("name", sa.String(length=50), nullable=True),
         sa.Column("email", sa.String(length=50), nullable=False),
-        sa.Column("password", sa.String(length=50), nullable=False),
-        sa.Column("password_salt", sa.String(length=50), nullable=False),
+        sa.Column("password", sa.LargeBinary, nullable=False),
+        sa.Column("password_salt", sa.LargeBinary, nullable=False),
         sa.Column(
             "created_at",
             sa.DateTime(timezone=True),

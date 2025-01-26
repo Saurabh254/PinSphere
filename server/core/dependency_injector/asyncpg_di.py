@@ -7,33 +7,12 @@ from typing import Awaitable, Callable, cast
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .database.session_manager import async_session
-from .redis_utils import get_redis_client
+from core.database.session_manager import async_session
+from .errors import InjectError
+from .injector import Inject
 
 log = logging.getLogger(__name__)
 
-
-def inject_redis[RT, **P](
-    func: Callable[..., Awaitable[RT]],
-) -> Callable[..., Awaitable[RT]]:
-    if not inspect.iscoroutinefunction(func):
-        raise TypeError("function must be a coroutine")
-
-    @functools.wraps(func)
-    async def _wrapper(*args: P.args, **kwargs: P.kwargs) -> RT:
-        if "redis" not in kwargs.keys():
-            _redis_client = get_redis_client()
-            kwargs["redis"] = _redis_client
-        return await func(*args, **kwargs)
-
-    return _wrapper
-
-
-class Inject: ...
-
-
-class InjectError(Exception):
-    pass
 
 
 def inject_asyncpg_session[RT, **P](
@@ -71,7 +50,7 @@ def inject_asyncpg_session[RT, **P](
 
     if not db_param:
         raise InjectError(
-            f"Function {func.__name__} must have a Session parameter "
+            f"Function {func.__name__} must have a AsyncSession parameter "
             "with default value of Inject()"
         )
 

@@ -1,9 +1,14 @@
+import secrets
+import hashlib
+import os
+
 from fastapi import HTTPException
 from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
 
+from core.authflow.service import hash_password
 from core.models import User
 from .schemas import UserCreate, UserUpdate
 
@@ -15,6 +20,12 @@ async def get_user(db: AsyncSession, username: str):
         return result.scalars().one()
     except NoResultFound:
         return None
+
+
+async def verify_user(session: AsyncSession, username: str, password: str):
+    user = await get_user(session, username)
+
+
 
 
 # Service to fetch a users by email
@@ -36,13 +47,13 @@ async def get_users(db: AsyncSession, skip: int = 0, limit: int = 10):
 # Service to create a new users
 async def create_user(db: AsyncSession, user: UserCreate):
     # Add password hashing logic here
-    hashed_password = user.password  # Ensure to hash password before saving to DB
+    hashed_salt, hashed_password = hash_password(user.password)
     new_user = User(
         username=user.username,
         name=user.username,
         email=str(user.email),
         password=hashed_password,
-        password_salt=hashed_password,
+        password_salt=hashed_salt,
     )
     db.add(new_user)
     await db.commit()
