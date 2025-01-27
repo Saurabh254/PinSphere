@@ -5,7 +5,6 @@ from pin_sphere import api
 from fastapi import FastAPI
 
 from pin_sphere.exception_handling import add_exception_handler
-from fastapi import FastAPI
 
 from asgi_correlation_id import CorrelationIdMiddleware
 

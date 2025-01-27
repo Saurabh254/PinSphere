@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Body, Depends
 from fastapi.responses import ORJSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
-from starlette.authentication import AuthCredentials
 
 from core.database.session_manager import get_async_session
 from . import schemas, service
@@ -9,13 +8,20 @@ from . import schemas, service
 router = APIRouter(
     prefix="/auth",
     tags=["auth"],
-    responses={404: {"description": "Not found"}, 400: {"description": "Bad request"}, 403: {"description": "Forbidden"}},
+    responses={
+        404: {"description": "Not found"},
+        400: {"description": "Bad request"},
+        403: {"description": "Forbidden"},
+    },
     default_response_class=ORJSONResponse,
 )
 
 
-@router.post('/login', response_model=schemas.LoginResponse)
-async def login(credentials: schemas.LoginUser = Body(), session: AsyncSession = Depends(get_async_session)):
+@router.post("/login", response_model=schemas.LoginResponse)
+async def login(
+    credentials: schemas.LoginUser = Body(),
+    session: AsyncSession = Depends(get_async_session),
+):
     """
     Login with pin_sphere
 
@@ -24,8 +30,11 @@ async def login(credentials: schemas.LoginUser = Body(), session: AsyncSession =
     return await service.login_user(credentials, session)
 
 
-@router.post('/signup', status_code=204)
-async def signup(credentials: schemas.SignupUser = Body(), session: AsyncSession = Depends(get_async_session)):
+@router.post("/signup", status_code=204)
+async def signup(
+    credentials: schemas.SignupUser = Body(),
+    session: AsyncSession = Depends(get_async_session),
+):
     """
     Signup with pin_sphere
     - **body**: credentials to log in with pin_sphere.

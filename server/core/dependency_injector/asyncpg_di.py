@@ -9,10 +9,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database.session_manager import async_session
 from .errors import InjectError
-from .injector import Inject
 
 log = logging.getLogger(__name__)
-
 
 
 def inject_asyncpg_session[RT, **P](
