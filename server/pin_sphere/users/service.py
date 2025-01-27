@@ -45,13 +45,13 @@ async def get_users(db: AsyncSession, skip: int = 0, limit: int = 10):
 
 
 # Service to create a new users
-async def create_user(db: AsyncSession, user: UserCreate):
+async def create_user(db: AsyncSession, user_data: UserCreate):
     # Add password hashing logic here
-    hashed_salt, hashed_password = hash_password(user.password)
+    hashed_salt, hashed_password = hash_password(user_data.password)
     new_user = User(
-        username=user.username,
-        name=user.username,
-        email=str(user.email),
+        username=user_data.username,
+        name=user_data.username,
+        email=str(user_data.email),
         password=hashed_password,
         password_salt=hashed_salt,
     )
