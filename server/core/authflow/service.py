@@ -13,7 +13,9 @@ def hash_password(password: SecretStr | str) -> Tuple[bytes, bytes]:
     # Hash the password with the salt
     hashed_password: bytes = hashlib.pbkdf2_hmac(
         "sha256",  # Hashing algorithm
-        password.get_secret_value().encode("UTF-8") if isinstance(password, SecretStr) else password.encode("UTF-8"),
+        password.get_secret_value().encode("UTF-8")
+        if isinstance(password, SecretStr)
+        else password.encode("UTF-8"),
         salt,
         100000,  # Number of iterations
     )
