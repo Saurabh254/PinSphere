@@ -1,7 +1,3 @@
-import secrets
-import hashlib
-import os
-
 from fastapi import HTTPException
 from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -20,12 +16,6 @@ async def get_user(db: AsyncSession, username: str):
         return result.scalars().one()
     except NoResultFound:
         return None
-
-
-async def verify_user(session: AsyncSession, username: str, password: str):
-    user = await get_user(session, username)
-
-
 
 
 # Service to fetch a users by email

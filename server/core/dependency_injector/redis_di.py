@@ -1,4 +1,4 @@
-__all__ = ['inject_redis']
+__all__ = ["inject_redis"]
 import functools
 import inspect
 import logging
@@ -7,6 +7,7 @@ from typing import Awaitable, Callable
 from core.redis_utils import get_redis_client
 
 log = logging.getLogger(__name__)
+
 
 def inject_redis[RT, **P](
     func: Callable[..., Awaitable[RT]],
