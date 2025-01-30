@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
-from typing import Any
+from typing import Annotated, Any
 
 from fastapi import Depends, HTTPException
-from fastapi.security import HTTPBearer
+from fastapi.security import OAuth2PasswordBearer
 import jwt
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -24,32 +24,45 @@ def create_access_token(
     :param expires_delta: expires delta
     :return: JWT access token
     """
-    data.update({"exp": str(datetime.now() + expires_delta)})
+    data.update({"exp": datetime.now() + expires_delta})
     encode = jwt.encode(data, settings.AUTH_SECRET, algorithm=settings.ALGORITHM)  # type: ignore
     return encode
 
 
 def decode_access_token(token: str) -> dict[str, Any] | None:
     try:
-        return jwt.decode(token, settings.AUTH_SECRET, algorithm=settings.ALGORITHM)  # type: ignore
-    except jwt.DecodeError:
+        return jwt.decode(token, settings.AUTH_SECRET, algorithms=settings.ALGORITHM)  # type: ignore
+    except jwt.DecodeError as e:
+        log.debug("Error decoding access token: %s", e)
         return None
     except jwt.ExpiredSignatureError:
+        log.debug("Error expired access token")
         return None
     except jwt.InvalidTokenError:
+        log.debug("Error invalid access token")
         return None
     except Exception as e:
         log.error(e)
         raise e
 
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login", description="Ge")
+
+
 async def get_current_user(
-    token: str = Depends(HTTPBearer(description="this is description")),
+    token: Annotated[str, Depends(oauth2_scheme)],
     session: AsyncSession = Depends(get_async_session),
 ) -> User:
+    """
+    Get current user from token
+    :param token: token
+    :param session: session
+
+    """
     decoded: dict[str, Any] | None = decode_access_token(token)
     if decoded is None:
         raise HTTPException(status_code=401, detail="Invalid token")
+    print(decoded)
     stmt = select(User).filter(User.username == decoded.get("sub"))
     result = await session.execute(stmt)
     return result.scalars().first()

@@ -1,9 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.database.session_manager import get_async_session
+from core.models import User
 from pin_sphere.users.service import get_user_by_email, get_user_by_username
 from .schemas import UserCreate, UserUpdate, UserResponse
 from .service import get_user, get_users, create_user, update_user, delete_user
+from core.authflow import auth
 
 # Create an API router for users-related endpoints
 router = APIRouter(
@@ -11,7 +13,14 @@ router = APIRouter(
     tags=["Account Operations"],
 )
 
-
+@router.get(
+    "/me",
+    response_model=UserResponse,
+    summary="Get current user",
+    tags=["Account Operations"]
+)
+async def get_me(current_user: User = Depends(auth.get_current_user), session: AsyncSession = Depends(get_async_session)):
+    return await get_user(session, current_user.username)
 # Fetch all users with optional pagination
 @router.get(
     "",
@@ -20,7 +29,10 @@ router = APIRouter(
     tags=["Account Operations"],
 )
 async def read_users(
-    skip: int = 0, limit: int = 10, db: AsyncSession = Depends(get_async_session)
+    skip: int = 0,
+    limit: int = 10,
+    db: AsyncSession = Depends(get_async_session),
+    current_user: User = Depends(auth.get_current_user),
 ):
     """
     Fetch a list of users with optional pagination.
@@ -38,14 +50,15 @@ async def read_users(
     tags=["Account Operations"],
 )
 async def check_username_availability(
-    username: str, db: AsyncSession = Depends(get_async_session)
+    username: str,
+    db: AsyncSession = Depends(get_async_session),
+    current_user: User = Depends(auth.get_current_user),
 ):
     """
     Check if the provided username is available for registration.
 
     - **username**: The username to check.
     """
-    print("sus", db)
     existing_user = await get_user_by_username(db, username=username)
 
     if existing_user:
@@ -60,7 +73,11 @@ async def check_username_availability(
     summary="Delete an account by username",
     tags=["Account Operations"],
 )
-async def delete_account(username: str, db: AsyncSession = Depends(get_async_session)):
+async def delete_account(
+    username: str,
+    db: AsyncSession = Depends(get_async_session),
+    current_user: User = Depends(auth.get_current_user),
+):
     """
     Delete the users account by their username.
 
@@ -79,7 +96,11 @@ async def delete_account(username: str, db: AsyncSession = Depends(get_async_ses
     summary="Fetch a users by username",
     tags=["Account Operations"],
 )
-async def read_user(username: str, db: AsyncSession = Depends(get_async_session)):
+async def read_user(
+    username: str,
+    db: AsyncSession = Depends(get_async_session),
+    current_user: User = Depends(auth.get_current_user),
+):
     """
     Fetch a single users by their unique username.
 
@@ -99,7 +120,9 @@ async def read_user(username: str, db: AsyncSession = Depends(get_async_session)
     tags=["Account Operations"],
 )
 async def create_new_user(
-    user: UserCreate, db: AsyncSession = Depends(get_async_session)
+    user: UserCreate,
+    db: AsyncSession = Depends(get_async_session),
+    current_user: User = Depends(auth.get_current_user),
 ):
     """
     Create a new users with the provided details.
@@ -130,6 +153,7 @@ async def update_existing_user(
     username: str,
     user_update: UserUpdate,
     db: AsyncSession = Depends(get_async_session),
+    current_user: User = Depends(auth.get_current_user),
 ):
     """
     Update an existing users by their unique username.
@@ -151,7 +175,9 @@ async def update_existing_user(
     tags=["Account Operations"],
 )
 async def delete_existing_user(
-    username: str, db: AsyncSession = Depends(get_async_session)
+    username: str,
+    db: AsyncSession = Depends(get_async_session),
+    current_user: User = Depends(auth.get_current_user),
 ):
     """
     Delete a users by their unique username.
