@@ -9,7 +9,6 @@ from pydantic import SecretStr
 def hash_password(password: SecretStr | str) -> Tuple[bytes, bytes]:
     # Generate a random salt
     salt = os.urandom(16)
-
     # Hash the password with the salt
     hashed_password: bytes = hashlib.pbkdf2_hmac(
         "sha256",  # Hashing algorithm
@@ -26,6 +25,15 @@ def hash_password(password: SecretStr | str) -> Tuple[bytes, bytes]:
 def verify_password(
     stored_password: bytes, stored_salt: bytes, given_password: str
 ) -> bool:
+    """
+    Verify stored password against stored salt.
+
+    :param stored_password: stored password.
+    :param stored_salt: stored salt.
+    :param given_password: password.
+    :return: True if stored password matches stored salt.
+
+    """
     give_password = hashlib.pbkdf2_hmac(
         "sha256",
         iterations=100000,

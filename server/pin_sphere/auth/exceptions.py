@@ -9,8 +9,10 @@ class UserNotFound(ServerError):
 
 
 class InvalidUsernameOrPassword(ServerError):
-    def __init__(self, message: str = "Invalid username or password"):
-        super().__init__(400, message)
+    def __init__(
+        self, status_code: int = 400, message: str = "Invalid username or password"
+    ):
+        super().__init__(status_code, message)
         self.status_code = 400
         self.message = message
 

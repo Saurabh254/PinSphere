@@ -7,7 +7,8 @@ from fastapi import FastAPI
 from pin_sphere.exception_handling import add_exception_handler
 
 from asgi_correlation_id import CorrelationIdMiddleware
-
+import logging
+logging.basicConfig(level=logging.INFO)
 app = FastAPI(
     title="PinSphere API",
     description="PinSphere API (version api/v1)",
@@ -21,7 +22,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.add_middleware(CorrelationIdMiddleware)
-
 add_exception_handler(app)
 
 if __name__ == "__main__":
