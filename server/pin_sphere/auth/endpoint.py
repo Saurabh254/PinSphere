@@ -1,7 +1,7 @@
 from typing import Annotated
-
 from fastapi import APIRouter, Body, Depends
 from fastapi.responses import ORJSONResponse
+from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -23,8 +23,10 @@ router = APIRouter(
 @router.post("/login")
 async def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     session: AsyncSession = Depends(get_async_session),
 ):
+    return await service.login_user(form_data, session)
     return await service.login_user(form_data, session)
 
 
