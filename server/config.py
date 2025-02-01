@@ -16,6 +16,13 @@ class Settings(BaseSettings):
     AUTH_SECRET: str = (
         "159cdf30c1cee803eec9dc63bb16c1b2882c4354aa2eb6a34a46ed50775d94ad"
     )
+    AWS_STORAGE_BUCKET_NAME: str = "pinsphere"
+    AWS_REGION: str = "us-east-1"
+    AWS_SECRET_ACCESS_KEY: str = "lzBdlQOBsAREMnmBD0LaUOm6NUTZO5i5awjf6Bkw"
+    AWS_ACCESS_KEY_ID: str = "uGPRISlXZ7rBkB3PahjU"
+    AWS_SESSION_TOKEN: str = "saurabh_prod"
+    AWS_SIGNATURE_VERSION: str = "s3v4"
+    MINIO_ENDPOINT_URL: str = "http://localhost:9000"
 
     class Config:
         env_file = ".env"

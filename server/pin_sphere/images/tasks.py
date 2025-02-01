@@ -1,3 +1,5 @@
+# from uuid import UUID
+#
 # from celery import Celery
 # from blurhash import encode
 # from PIL import Image
@@ -5,23 +7,25 @@
 #
 # from sqlalchemy.ext.asyncio import AsyncSession
 #
+# from core.dependency_injector import Inject, inject_asyncpg_session
+# from core.models.user import ImageStatus
+#
 # celery = Celery("tasks", broker="redis://localhost:6379/0")
 #
 #
 # @celery.task
-# async def process_image(image_id: UUID, db: AsyncSession = ...):
+# @inject_asyncpg_session
+# async def process_image(image_id: UUID, session: AsyncSession = Inject()):
 #     """
 #     Process uploaded image to generate blurhash
 #     """
-#     db = SessionLocal()
-#     photo = await db.get(UserPhotos, image_id)
+#     photo = await session.get(UserPhotos, image_id)
 #
 #     if not photo:
 #         return
 #
 #     # Download image from S3
-#     response = s3_client.get_object(Bucket=BUCKET_NAME, Key=photo.image_key)
-#     image = Image.open(BytesIO(response["Body"].read()))
+#
 #
 #     # Generate blurhash
 #     blurhash = encode(image)
@@ -29,4 +33,4 @@
 #     # Update database
 #     photo.blurhash = blurhash
 #     photo.status = ImageStatus.PROCESSED
-#     await db.commit()
+#     await session.commit()
