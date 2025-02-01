@@ -8,6 +8,7 @@ from pin_sphere.exception_handling import add_exception_handler
 
 from asgi_correlation_id import CorrelationIdMiddleware
 import logging
+
 logging.basicConfig(level=logging.INFO)
 app = FastAPI(
     title="PinSphere API",

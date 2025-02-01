@@ -13,14 +13,20 @@ router = APIRouter(
     tags=["Account Operations"],
 )
 
+
 @router.get(
     "/me",
     response_model=UserResponse,
     summary="Get current user",
-    tags=["Account Operations"]
+    tags=["Account Operations"],
 )
-async def get_me(current_user: User = Depends(auth.get_current_user), session: AsyncSession = Depends(get_async_session)):
+async def get_me(
+    current_user: User = Depends(auth.get_current_user),
+    session: AsyncSession = Depends(get_async_session),
+):
     return await get_user(session, current_user.username)
+
+
 # Fetch all users with optional pagination
 @router.get(
     "",

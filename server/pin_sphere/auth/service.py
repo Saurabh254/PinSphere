@@ -2,7 +2,6 @@ from fastapi import HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
-from starlette.datastructures import FormData
 
 from core.authflow.auth import create_access_token
 from core.authflow.service import verify_password

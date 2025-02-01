@@ -7,6 +7,7 @@ class ServerError(Exception):
     """
     Base exception class for all server errors.
     """
+
     def __init__(
         self,
         status_code: int = 500,
