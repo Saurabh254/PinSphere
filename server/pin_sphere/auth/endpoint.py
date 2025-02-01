@@ -1,5 +1,8 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Body, Depends
 from fastapi.responses import ORJSONResponse
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database.session_manager import get_async_session
@@ -17,17 +20,12 @@ router = APIRouter(
 )
 
 
-@router.post("/login", response_model=schemas.LoginResponse)
+@router.post("/login")
 async def login(
-    credentials: schemas.LoginUser = Body(),
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     session: AsyncSession = Depends(get_async_session),
 ):
-    """
-    Login with pin_sphere
-
-    - **body**: credentials to log in with pin_sphere.
-    """
-    return await service.login_user(credentials, session)
+    return await service.login_user(form_data, session)
 
 
 @router.post("/signup", status_code=204)
