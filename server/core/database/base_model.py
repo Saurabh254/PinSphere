@@ -1,3 +1,5 @@
+import uuid
+
 from sqlalchemy import Column, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Mapped, mapped_column
@@ -30,4 +32,6 @@ class RecordModel(TimeStampModel):
     __abstract__ = True
 
     # Common fields
-    id: Mapped[int] = mapped_column(UUID, primary_key=True, index=True)
+    id: Mapped[int] = mapped_column(
+        UUID, primary_key=True, index=True, default=lambda: uuid.uuid4()
+    )
