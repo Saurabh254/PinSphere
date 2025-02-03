@@ -10,22 +10,20 @@ LOGGING_CONFIG = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "default": {
-            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-        },
+        "default": {"format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"},
         "detailed": {
             "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s - [%(pathname)s:%(lineno)d]"
         },
         "json": {
             "class": "pythonjsonlogger.jsonlogger.JsonFormatter",
-            "format": "%(asctime)s %(name)s %(levelname)s %(message)s %(pathname)s %(lineno)s %(funcName)s %(process)d %(thread)d %(threadName)s"
-        }
+            "format": "%(asctime)s %(name)s %(levelname)s %(message)s %(pathname)s %(lineno)s %(funcName)s %(process)d %(thread)d %(threadName)s",
+        },
     },
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
             "formatter": "default",
-            "stream": "ext://sys.stdout"
+            "stream": "ext://sys.stdout",
         },
         "error_file": {
             "class": "logging.handlers.RotatingFileHandler",
@@ -33,7 +31,7 @@ LOGGING_CONFIG = {
             "filename": "logs/error.log",
             "maxBytes": 10485760,  # 10MB
             "backupCount": 5,
-            "level": "ERROR"
+            "level": "ERROR",
         },
         "app_file": {
             "class": "logging.handlers.TimedRotatingFileHandler",
@@ -48,36 +46,34 @@ LOGGING_CONFIG = {
             "formatter": "json",
             "filename": "logs/celery.log",
             "maxBytes": 10485760,
-            "backupCount": 5
+            "backupCount": 5,
         },
         "sqlalchemy_file": {
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "detailed",
             "filename": "logs/sqlalchemy.log",
             "maxBytes": 10485760,
-            "backupCount": 5
-        }
+            "backupCount": 5,
+        },
     },
     "loggers": {
         "": {  # Root logger
             "handlers": ["console", "error_file"],
-            "level": LOG_LEVEL
-        },
-        "app": {
-            "handlers": ["app_file"],
             "level": LOG_LEVEL,
-            "propagate": True
         },
+        "app": {"handlers": ["app_file"], "level": LOG_LEVEL, "propagate": True},
         "uvicorn": {
             "handlers": ["app_file"],
             "level": LOG_LEVEL,
-            "propagate": True  # Changed to False
+            "propagate": True,  # Changed to False
         },
         "uvicorn.error": {
             "level": LOG_LEVEL,
-            "propagate": False  # Added this logger
+            "propagate": False,  # Added this logger
         },
-}}
+    },
+}
+
 
 def setup_logging():
     """Initialize logging configuration"""

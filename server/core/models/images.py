@@ -15,10 +15,14 @@ class ImageProcessingStatus(enum.Enum):
 
 class Images(RecordModel):
     __tablename__ = "images"
-    username: Mapped[str] = mapped_column(String(50),ForeignKey("users.username"), nullable=False)
+    username: Mapped[str] = mapped_column(
+        String(50), ForeignKey("users.username"), nullable=False
+    )
     blurhash: Mapped[str] = mapped_column(String(50), nullable=True)
     image_key: Mapped[str] = mapped_column(String(256), nullable=False)
-    status: Mapped[ImageProcessingStatus] = mapped_column(SAEnum(ImageProcessingStatus, name='image_processing_enum'), nullable=False)
+    status: Mapped[ImageProcessingStatus] = mapped_column(
+        SAEnum(ImageProcessingStatus, name="image_processing_enum"), nullable=False
+    )
     deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
     @hybrid_property

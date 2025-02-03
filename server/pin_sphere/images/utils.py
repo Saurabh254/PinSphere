@@ -3,7 +3,7 @@ import uuid
 from core.types import FileContentType
 
 
-def get_image_key(username: str, ext: FileContentType) -> str :
+def get_image_key(username: str, ext: FileContentType) -> str:
     """
     Generate a unique image key for the given username and extension.
 

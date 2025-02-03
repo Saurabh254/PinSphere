@@ -1,5 +1,5 @@
 from typing import Optional
-from uuid import UUID, uuid4
+from uuid import UUID
 from pydantic import BaseModel, HttpUrl, computed_field
 from enum import Enum
 
@@ -24,5 +24,7 @@ class ImageResponse(BaseModel):
     blurhash: Optional[str]
 
     @computed_field
-    def url (self) -> HttpUrl:
-        return HttpUrl(f"{settings.AWS_ENDPOINT_URL}/{settings.AWS_STORAGE_BUCKET_NAME}/{self.image_key}")
+    def url(self) -> HttpUrl:
+        return HttpUrl(
+            f"{settings.AWS_ENDPOINT_URL}/{settings.AWS_STORAGE_BUCKET_NAME}/{self.image_key}"
+        )

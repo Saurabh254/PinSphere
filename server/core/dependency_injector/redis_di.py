@@ -6,7 +6,7 @@ import logging
 from typing import Awaitable, Callable
 from core.redis_utils import get_redis_client
 
-log = logging.getLogger('main')
+log = logging.getLogger("main")
 
 
 def inject_redis[RT, **P](

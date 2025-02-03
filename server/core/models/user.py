@@ -1,17 +1,12 @@
 import enum
-from uuid import UUID
 
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy import (
-    Boolean,
-    ForeignKey,
     LargeBinary,
     String,
-    UUID as SA_UUID,
-    Enum as saEnum,
 )
-from core.database.base_model import TimeStampModel, RecordModel
+from core.database.base_model import TimeStampModel
 
 
 class ImageStatus(enum.Enum):

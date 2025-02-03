@@ -1,6 +1,6 @@
 from typing import BinaryIO
 
-from botocore.client import BaseClient
+from botocore.client import BaseClient  # type: ignore
 from botocore.exceptions import BotoCoreError, ClientError  # type: ignore
 from .types import FileContentType
 from config import settings
@@ -32,7 +32,7 @@ def upload_image(
             file_name,
             ExtraArgs={"ContentType": content_type},
         )
-        return f"{settings.MINIO_ENDPOINT_URL}/{settings.AWS_STORAGE_BUCKET_NAME}/{file_name}"
+        return f"{settings.AWS_ENDPOINT_URL}/{settings.AWS_STORAGE_BUCKET_NAME}/{file_name}"
     except (BotoCoreError, ClientError) as e:
         log.error(f"Error uploading image: {e}")
         return None
@@ -40,7 +40,7 @@ def upload_image(
 
 def get_image_url(key: str) -> str:
     """Returns the image URL given its key."""
-    return f"{settings.MINIO_ENDPOINT_URL}/{settings.AWS_STORAGE_BUCKET_NAME}/{key}"
+    return f"{settings.AWS_ENDPOINT_URL}/{settings.AWS_STORAGE_BUCKET_NAME}/{key}"
 
 
 def create_presigned_get(object_name: str, expiration: int = 3600) -> str | None:
@@ -53,12 +53,12 @@ def create_presigned_get(object_name: str, expiration: int = 3600) -> str | None
 
     # Generate a presigned URL for the S3 object
     try:
-        response = s3_client.generate_presigned_url( # type: ignore
+        response = s3_client.generate_presigned_url(  # type: ignore
             "get_object",  # type: ignore
             Params={"Bucket": settings.AWS_STORAGE_BUCKET_NAME, "Key": object_name},
             ExpiresIn=expiration,
         )
-    except ClientError as e:
+    except ClientError:
         # log.error(e)
         return None
     # The response contains the presigned URL
@@ -102,6 +102,8 @@ def create_presigned_post(
     except ClientError as e:
         log.error(f"Error generating presigned URL: {e}")
         return None
+
+
 #
 
 if __name__ == "__main__":

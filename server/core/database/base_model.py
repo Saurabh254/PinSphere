@@ -32,4 +32,6 @@ class RecordModel(TimeStampModel):
     __abstract__ = True
 
     # Common fields
-    id: Mapped[int] = mapped_column(UUID, primary_key=True, index=True, default=lambda: uuid.uuid4())
+    id: Mapped[int] = mapped_column(
+        UUID, primary_key=True, index=True, default=lambda: uuid.uuid4()
+    )

@@ -5,7 +5,6 @@ from sqlalchemy import pool
 
 from alembic import context
 from core.database.base_model import Base
-from core.models import Images, User
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

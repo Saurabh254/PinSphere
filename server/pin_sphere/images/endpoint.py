@@ -1,7 +1,6 @@
 # type: ignore
-from typing import Literal
 
-from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from uuid import UUID
 
@@ -17,7 +16,9 @@ from fastapi_pagination import Page
 router = APIRouter(prefix="/images", tags=["images"])
 
 
-@router.post("", status_code=status.HTTP_201_CREATED, response_model=schemas.ImageResponse)
+@router.post(
+    "", status_code=status.HTTP_201_CREATED, response_model=schemas.ImageResponse
+)
 async def upload_image(
     image_key: str,
     session: AsyncSession = Depends(get_async_session),
@@ -27,6 +28,8 @@ async def upload_image(
     Upload a new image for a user
     """
     return await service.save_image(current_user, image_key, session)  # type: ignore
+
+
 @router.get("", response_model=Page[schemas.ImageResponse])
 async def get_images(
     session: AsyncSession = Depends(get_async_session),
@@ -36,9 +39,11 @@ async def get_images(
     Get all images for a user
     """
     return await service.get_images(current_user, session)
+
+
 @router.get("/upload_url")
 def get_pre_signed_url(
-    ext: FileContentType ,
+    ext: FileContentType,
     user: User = Depends(auth.get_current_user),
 ):
     """
@@ -46,6 +51,8 @@ def get_pre_signed_url(
     """
 
     return service.get_image_pre_signed_url(user, ext)
+
+
 @router.get("/{image_id}", response_model=schemas.ImageResponse)
 async def get_image_by_id(
     image_id: UUID,

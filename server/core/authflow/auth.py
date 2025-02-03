@@ -12,7 +12,7 @@ from core.database.session_manager import get_async_session
 from core.models import User
 import logging
 
-log = logging.getLogger('main')
+log = logging.getLogger("main")
 
 
 def create_access_token(
@@ -45,7 +45,9 @@ def decode_access_token(token: str) -> dict[str, Any] | None:
         raise e
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/auth/login", description="Get token from the login endpoint")
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl="api/v1/auth/login", description="Get token from the login endpoint"
+)
 
 
 async def get_current_user(
@@ -63,7 +65,7 @@ async def get_current_user(
         raise HTTPException(status_code=401, detail="Invalid token")
     stmt = select(User).filter(User.username == decoded.get("username"))
     result = await session.execute(stmt)
-    user =  result.scalars().first()
+    user = result.scalars().first()
     if not user:
         raise HTTPException(status_code=401, detail="User not found")
     return user

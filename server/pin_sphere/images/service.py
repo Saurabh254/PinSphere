@@ -1,4 +1,3 @@
-from fastapi import File
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import select
 from uuid import UUID
@@ -6,14 +5,19 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from core import storage
 from core.models import Images, User
-from core.models.images import ImageProcessingStatus, Images
+from core.models.images import ImageProcessingStatus
 from core.types import FileContentType
-from pin_sphere.images.exceptions import  ImageAlreadyExistsError, ImageFormatError, \
-    ImageNotFoundError
+from pin_sphere.base_exception import ServerError
+from pin_sphere.images.exceptions import (
+    ImageAlreadyExistsError,
+    ImageNotFoundError,
+)
 from pin_sphere.images.utils import get_image_key
 
 
-async def get_image(image_id: UUID, session: AsyncSession, user: User | None = None) -> Images | None:
+async def get_image(
+    image_id: UUID, session: AsyncSession, user: User | None = None
+) -> Images | None:
     """
     Retrieve an image from the database by its ID.
 
@@ -30,6 +34,7 @@ async def get_image(image_id: UUID, session: AsyncSession, user: User | None = N
         stmt = stmt.filter_by(username=user.username)
     result = await session.execute(stmt)
     return result.scalar_one_or_none()
+
 
 async def delete_image(user: User, image_id: UUID, session: AsyncSession) -> None:
     """
@@ -50,9 +55,7 @@ async def delete_image(user: User, image_id: UUID, session: AsyncSession) -> Non
     await session.commit()
 
 
-async def save_image(
-    user: User, image_key: str,  session: AsyncSession
-) -> Images:
+async def save_image(user: User, image_key: str, session: AsyncSession) -> Images:
     """
     Save an image to the database.
 
@@ -68,19 +71,30 @@ async def save_image(
     existing_image = await session.execute(stmt)
     if existing_image.scalar_one_or_none():
         raise ImageAlreadyExistsError
-    image = Images(username=user.username, image_key=image_key, status=ImageProcessingStatus.PROCESSING)
+    image = Images(
+        username=user.username,
+        image_key=image_key,
+        status=ImageProcessingStatus.PROCESSING,
+    )
     session.add(image)
     await session.commit()
     await session.refresh(image)
     return image
 
 
-def get_image_pre_signed_url(user: User, ext: FileContentType ) -> dict[str, str]:
+def get_image_pre_signed_url(user: User, ext: FileContentType) -> dict[str, str]:
     image_key = get_image_key(user.username, ext)
 
-    return storage.create_presigned_post(image_key, ext)
+    res = storage.create_presigned_post(image_key, ext)
+    if not res:
+        raise ServerError(status_code=500, message="Failed to create presigned URL")
+    return res
 
 
 async def get_images(user: User, session: AsyncSession):
-    stmt = select(Images).filter_by(username=user.username).order_by(Images.created_at.desc())
-    return await paginate(session, stmt )
+    stmt = (
+        select(Images)
+        .filter_by(username=user.username)
+        .order_by(Images.created_at.desc())
+    )
+    return await paginate(session, stmt)
