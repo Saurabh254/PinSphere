@@ -1,19 +1,20 @@
 from typing import BinaryIO
 
+from botocore.client import BaseClient
 from botocore.exceptions import BotoCoreError, ClientError  # type: ignore
 from .types import FileContentType
 from config import settings
 import boto3  # type: ignore
 import logging
 
-log = logging.getLogger("pin_sphere")
+log = logging.getLogger("main")
 
-s3_client = boto3.client(  # type: ignore
+s3_client: BaseClient = boto3.client(  # type: ignore
     "s3",
     region_name=settings.AWS_REGION,
     aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
     aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-    endpoint_url=settings.MINIO_ENDPOINT_URL,
+    endpoint_url=settings.AWS_ENDPOINT_URL,
     verify=False,
 )
 
@@ -33,7 +34,7 @@ def upload_image(
         )
         return f"{settings.MINIO_ENDPOINT_URL}/{settings.AWS_STORAGE_BUCKET_NAME}/{file_name}"
     except (BotoCoreError, ClientError) as e:
-        print(f"Error uploading image: {e}")
+        log.error(f"Error uploading image: {e}")
         return None
 
 
@@ -52,15 +53,14 @@ def create_presigned_get(object_name: str, expiration: int = 3600) -> str | None
 
     # Generate a presigned URL for the S3 object
     try:
-        response = s3_client.generate_presigned_url(  # type: ignore
+        response = s3_client.generate_presigned_url( # type: ignore
             "get_object",  # type: ignore
             Params={"Bucket": settings.AWS_STORAGE_BUCKET_NAME, "Key": object_name},
             ExpiresIn=expiration,
         )
     except ClientError as e:
-        log.error(e)
+        # log.error(e)
         return None
-
     # The response contains the presigned URL
     return response  # type: ignore
 
@@ -80,9 +80,9 @@ def create_presigned_post(
     :return: Dictionary with url and fields, or None if error
     """
     try:
-        fields = {
-            "Content-Type": content_type.value,
-        }
+        # fields = {
+        #     "Content-Type": content_type.value,
+        # }
         # TODO: conditions has to be fixed in future. right now It's not a big deal as minio is creating issues.
 
         # conditions = [
@@ -94,7 +94,7 @@ def create_presigned_post(
         response = s3_client.generate_presigned_post(  # type: ignore
             Bucket=settings.AWS_STORAGE_BUCKET_NAME,
             Key=object_name,
-            Fields=fields,
+            # Fields=fields,
             # Conditions=conditions,
             ExpiresIn=expiration,
         )
@@ -102,7 +102,7 @@ def create_presigned_post(
     except ClientError as e:
         log.error(f"Error generating presigned URL: {e}")
         return None
-
+#
 
 if __name__ == "__main__":
     print(create_presigned_post("okkkk", FileContentType.PNG))

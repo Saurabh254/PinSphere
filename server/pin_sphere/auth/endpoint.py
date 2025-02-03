@@ -25,7 +25,6 @@ async def login(
     session: AsyncSession = Depends(get_async_session),
 ):
     return await service.login_user(form_data, session)
-    return await service.login_user(form_data, session)
 
 
 @router.post("/signup", status_code=204)
