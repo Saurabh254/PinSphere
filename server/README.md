@@ -91,7 +91,7 @@ To get started with Pinsphere locally, follow these steps:
    uv sync 
    ```
 
-3. **(Optional) Environment variables setup:**
+3. ** Environment variables setup:**
    Create a `.env` file and add the required environment variables for the database, cloud storage credentials, and OAuth setup. Example:
 
    ```env
