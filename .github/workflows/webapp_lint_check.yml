@@ -10,7 +10,7 @@ on:
       - "**/*.tsx"
 
 env:
-  NODE_VERSION: "20.x"
+  NODE_VERSION: "23.4.0"
 
 jobs:
   lint_check:
