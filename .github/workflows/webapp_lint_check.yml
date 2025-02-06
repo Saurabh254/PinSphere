@@ -10,7 +10,7 @@ on:
       - "**/*.tsx"
 
 env:
-  NODE_VERSION: "20.x"
+  NODE_VERSION: "23.4.0"
 
 jobs:
   lint_check:
@@ -22,8 +22,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          cache-dependency-path: './webapp/package-lock.json'
 
       - name: Install dependencies
         working-directory: ./webapp
