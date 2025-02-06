@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.database.session_manager import get_async_session
 from core.models import User
-from pin_sphere.users.service import get_user_by_email, get_user_by_username
-from .schemas import UserCreate, UserUpdate, UserResponse
-from .service import get_user, get_users, create_user, update_user, delete_user
+from pin_sphere.users.service import get_user_by_username
+from .schemas import UserUpdate, UserResponse
+from .service import get_user, get_users, update_user, delete_user
 from core.authflow import auth
 
 # Create an API router for users-related endpoints
@@ -20,7 +20,6 @@ router = APIRouter(
     summary="Get current user",
     tags=["Account Operations"],
 )
-
 async def get_me(
     current_user: User = Depends(auth.get_current_user),
     session: AsyncSession = Depends(get_async_session),
@@ -117,7 +116,6 @@ async def read_user(
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user
-
 
 
 # Update an existing users

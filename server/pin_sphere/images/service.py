@@ -55,7 +55,9 @@ async def delete_image(user: User, image_id: UUID, session: AsyncSession) -> Non
     await session.commit()
 
 
-async def save_image(user: User, image_key: str, session: AsyncSession, description: str | None = None ) -> Images:
+async def save_image(
+    user: User, image_key: str, session: AsyncSession, description: str | None = None
+) -> Images:
     """
     Save an image to the database.
 
@@ -76,7 +78,7 @@ async def save_image(user: User, image_key: str, session: AsyncSession, descript
         username=user.username,
         image_key=image_key,
         status=ImageProcessingStatus.PROCESSING,
-        description=description
+        description=description,
     )
     session.add(image)
     await session.commit()

@@ -21,14 +21,14 @@ router = APIRouter(prefix="/images", tags=["images"])
 )
 async def upload_image(
     image_key: str,
-        description: str| None = None ,
+    description: str | None = None,
     session: AsyncSession = Depends(get_async_session),
     current_user: User = Depends(auth.get_current_user),
 ):
     """
     Upload a new image for a user
     """
-    return await service.save_image(current_user, image_key,description,  session)  # type: ignore
+    return await service.save_image(current_user, image_key, description, session)  # type: ignore
 
 
 @router.get("", response_model=Page[schemas.ImageResponse])
