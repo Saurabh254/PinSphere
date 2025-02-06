@@ -55,13 +55,16 @@ async def delete_image(user: User, image_id: UUID, session: AsyncSession) -> Non
     await session.commit()
 
 
-async def save_image(user: User, image_key: str, session: AsyncSession) -> Images:
+async def save_image(
+    user: User, image_key: str, session: AsyncSession, description: str | None = None
+) -> Images:
     """
     Save an image to the database.
 
     Args:
         user (User): The user uploading the image.
         image_key (str): The key of the image to save.
+        description(str): this is the description of the image.
         session (AsyncSession): The SQLAlchemy asynchronous session to use for the query.
 
     Returns:
@@ -75,6 +78,7 @@ async def save_image(user: User, image_key: str, session: AsyncSession) -> Image
         username=user.username,
         image_key=image_key,
         status=ImageProcessingStatus.PROCESSING,
+        description=description,
     )
     session.add(image)
     await session.commit()

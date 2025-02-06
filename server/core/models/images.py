@@ -23,6 +23,7 @@ class Images(RecordModel):
     status: Mapped[ImageProcessingStatus] = mapped_column(
         SAEnum(ImageProcessingStatus, name="image_processing_enum"), nullable=False
     )
+    description: Mapped[str] = mapped_column(String, nullable=True)
     deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
     @hybrid_property
