@@ -28,7 +28,7 @@ async def upload_image(
     """
     Upload a new image for a user
     """
-    return await service.save_image(current_user, image_key, description, session)  # type: ignore
+    return await service.save_image(current_user, image_key, description=description,session= session)  # type: ignore
 
 
 @router.get("", response_model=Page[schemas.ImageResponse])

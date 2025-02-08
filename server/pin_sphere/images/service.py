@@ -49,7 +49,7 @@ async def delete_image(user: User, image_id: UUID, session: AsyncSession) -> Non
         bool: True if the deletion was successful, False otherwise.
     """
     image = await get_image(image_id, session)
-    if not image:
+    if not image or image.username != user.username:
         raise ImageNotFoundError
     image.deleted = True
     await session.commit()
