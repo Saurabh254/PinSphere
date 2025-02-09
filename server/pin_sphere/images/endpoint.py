@@ -9,11 +9,16 @@ from starlette import status
 from core.database.session_manager import get_async_session
 from core.models import User
 from core.types import FileContentType
-from . import service, schemas
+from . import service, schemas, tasks
 from core.authflow import auth
 from fastapi_pagination import Page
 
 router = APIRouter(prefix="/images", tags=["images"])
+
+
+@router.get("/somm")
+async def som():
+    tasks.check_istask_running.delay()
 
 
 @router.post(
@@ -28,7 +33,9 @@ async def upload_image(
     """
     Upload a new image for a user
     """
-    return await service.save_image(current_user, image_key, description=description,session= session)  # type: ignore
+    return await service.save_image(
+        current_user, image_key, description=description, session=session
+    )  # type: ignore
 
 
 @router.get("", response_model=Page[schemas.ImageResponse])
