@@ -1,14 +1,12 @@
 __all__ = ["settings"]
 
 
+from typing import Literal
 from pydantic import PostgresDsn, RedisDsn
 from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    database_dsn: PostgresDsn = PostgresDsn(
-        "postgresql+asyncpg://postgres:postgres@localhost:5432/pin_sphere"
-    )
     redis_dsn: RedisDsn = RedisDsn(
         "redis://localhost:6379/0",
     )
@@ -23,6 +21,11 @@ class Settings(BaseSettings):
     AWS_SESSION_TOKEN: str = "saurabh_prod"
     AWS_SIGNATURE_VERSION: str = "s3v4"
     AWS_ENDPOINT_URL: str = "http://localhost:9000"
+
+    def get_database_dsn(self, driver: Literal["asyncpg", "psycopg"]) -> PostgresDsn:
+        return PostgresDsn(
+            f"postgresql+{driver}://postgres:postgres@localhost:5432/pin_sphere"
+        )
 
     class Config:
         env_file = ".env"
