@@ -6,7 +6,9 @@ import sys
 from celery import Celery
 
 sys.path.append(os.getcwd())
-app = Celery("tasks", broker="amqp://pin_sphere:pin_sphere_prod@localhost:5672/")
+from config import settings
+
+app = Celery("tasks", broker=settings.RABBIT_MQ_URL)
 
 app.autodiscover_tasks(["pin_sphere.images"], related_name="tasks")
 

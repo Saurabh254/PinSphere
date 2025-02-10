@@ -1,3 +1,4 @@
+from typing import Any
 from uuid import UUID
 
 from fastapi_pagination.ext.sqlalchemy import paginate
@@ -33,7 +34,7 @@ async def get_image(
     Returns:
         Images: The image object if found, otherwise None.
     """
-    stmt = select(Images).filter_by(id=image_id)
+    stmt = select(Images).filter_by(id=image_id, deleted=False)
     if user:
         stmt = stmt.filter_by(username=user.username)
     result = await session.execute(stmt)
@@ -52,7 +53,7 @@ async def delete_image(user: User, image_id: UUID, session: AsyncSession) -> Non
     Returns:
         bool: True if the deletion was successful, False otherwise.
     """
-    image = await get_image(image_id, session)
+    image = await get_image(image_id, session, user)
     if not image or image.username != user.username:
         raise ImageNotFoundError
     image.deleted = True
@@ -100,16 +101,15 @@ def get_image_pre_signed_url(user: User, ext: FileContentType) -> dict[str, str]
     return res
 
 
-async def get_images(user: User, session: AsyncSession):
-    stmt = (
-        select(Images)
-        .filter_by(username=user.username)
-        .order_by(Images.created_at.desc())
-    )
+async def get_images(username: str | None, session: AsyncSession):
+    stmt = select(Images).filter_by(deleted=False).order_by(Images.created_at.desc())
+    if username:
+        stmt = stmt.filter_by(username=username)
+
     return await paginate(session, stmt)
 
 
-def save_blurhash(image_id: str, encoding: str, session: Session) -> None:
+def update_image(image_id: str, session: Session, /, **kwargs: dict[str, Any]) -> None:
     """Stores the Blurhash encoding into the database.
 
     Args:
@@ -120,9 +120,9 @@ def save_blurhash(image_id: str, encoding: str, session: Session) -> None:
     Raises:
         ImageNotFoundError: Raised when the image_id does not exist.
     """
-
     image: Images | None = session.query(Images).get(image_id)
     if not image:
         raise ImageNotFoundError
-    image.blurhash = encoding
+    for key, value in kwargs.items():
+        setattr(image, key, value)
     session.commit()

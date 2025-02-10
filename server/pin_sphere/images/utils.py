@@ -5,6 +5,7 @@ from typing import BinaryIO
 import blurhash  # type: ignore
 import boto3
 from PIL import Image
+from typing_extensions import Tuple
 
 from config import settings
 from core.types import FileContentType
@@ -50,6 +51,14 @@ def get_image(image_key: str) -> BinaryIO:
     )  # type: ignore
 
 
-def retrive_blurhash_by_image_key(image_key: str) -> str:
+def retrieve_blurhash_by_image_key(image_key: str) -> str:
     image = Image.open(get_image(image_key)).convert("RGB")
     return blurhash.encode(image, x_components=4, y_components=4)  # type:ignore
+
+
+def retrieve_blurhash_and_metadata(image_key: str) -> Tuple[str, dict[str, int]]:
+    image = Image.open(get_image(image_key)).convert("RGB")
+    return blurhash.encode(image, x_components=4, y_components=4), {  # type: ignore
+        "width": image.size[0],
+        "height": image.size[1],
+    }

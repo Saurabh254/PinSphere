@@ -2,7 +2,7 @@
 
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
@@ -42,12 +42,12 @@ async def upload_image(
 @router.get("", response_model=Page[schemas.ImageResponse])
 async def get_images(
     session: AsyncSession = Depends(get_async_session),
-    current_user: User = Depends(auth.get_current_user),
+    username: str | None = Query(None, description="Username or None"),
 ):
     """
     Get all images for a user
     """
-    return await service.get_images(current_user, session)
+    return await service.get_images(username, session)
 
 
 @router.get("/upload_url")
@@ -89,6 +89,5 @@ async def delete_image(
     Delete an image by ID
     """
     success = await service.delete_image(current_user, image_id, session)  # type: ignore
-    if not success:
-        raise HTTPException(status_code=404, detail="Image not found")
+
     return {"status": "success"}
