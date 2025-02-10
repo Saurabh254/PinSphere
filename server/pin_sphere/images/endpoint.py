@@ -88,6 +88,6 @@ async def delete_image(
     """
     Delete an image by ID
     """
-    success = await service.delete_image(current_user, image_id, session)  # type: ignore
+    await service.delete_image(current_user, image_id, session)  # type: ignore
 
     return {"status": "success"}
