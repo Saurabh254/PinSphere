@@ -13,6 +13,7 @@ from pin_sphere.images.exceptions import (
     ImageNotFoundError,
 )
 from pin_sphere.images.utils import get_image_key
+from . import tasks
 
 
 async def get_image(
