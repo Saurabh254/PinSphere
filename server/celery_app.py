@@ -1,7 +1,6 @@
 # type: ignore
 
 from celery import Celery
-import pin_sphere
 import sys
 import os
 
