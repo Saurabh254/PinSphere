@@ -50,10 +50,10 @@ oauth2_scheme = OAuth2PasswordBearer(
 )
 
 
-async def get_current_user(
+async def get_optional_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],
     session: AsyncSession = Depends(get_async_session),
-) -> User:
+) -> User | None:
     """
     Get current user from token
     :param token: token
@@ -65,7 +65,15 @@ async def get_current_user(
         raise HTTPException(status_code=401, detail="Invalid token")
     stmt = select(User).filter(User.username == decoded.get("username"))
     result = await session.execute(stmt)
-    user = result.scalars().first()
+    return result.scalars().first()
+
+
+async def get_current_user(
+    user: User | None = Depends(get_optional_current_user),
+) -> User:
+    """
+    Get current user from token
+    """
     if not user:
         raise HTTPException(status_code=401, detail="User not found")
     return user
