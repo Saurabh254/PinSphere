@@ -1,4 +1,5 @@
 import enum
+from typing import Dict
 
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -26,7 +27,7 @@ class Images(RecordModel):
     )
     description: Mapped[str] = mapped_column(String, nullable=True)
     deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-    _metadata: Mapped[dict] = mapped_column(JSONB, nullable=True)
+    _metadata: Mapped[Dict[str, str | int | bool]] = mapped_column(JSONB, nullable=True)
 
     @hybrid_property
     def url(self):

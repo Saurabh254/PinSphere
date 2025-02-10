@@ -43,7 +43,11 @@ def get_image(image_key: str) -> BinaryIO:
     Returns:
         BinaryIO: A binary stream of the image retrieved from S3.
     """
-    return io.BytesIO(s3_client.get_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=image_key)["Body"].read())  # type: ignore
+    return io.BytesIO(
+        s3_client.get_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=image_key)[
+            "Body"
+        ].read()
+    )  # type: ignore
 
 
 def retrive_blurhash_by_image_key(image_key: str) -> str:
