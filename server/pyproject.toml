@@ -8,7 +8,7 @@ dependencies = [
     "alembic>=1.14.1",
     "asgi-correlation-id>=4.3.4",
     "asyncpg>=0.30.0",
-    "blurhash>=1.1.4",
+    "blurhash-python",
     "boto3>=1.36.11",
     "boto3-stubs[all]>=1.36.16",
     "celery[librabbitmq]>=5.4.0",
@@ -43,3 +43,6 @@ reapply_migrations = {cmd = "alembic downgrade base && alembic upgrade head && e
 
 [tool.ruff]
 target-version = "py310"
+
+[tool.uv.sources]
+blurhash-python = { git = "https://github.com/woltapp/blurhash-python" }

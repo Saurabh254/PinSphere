@@ -12,7 +12,7 @@ from setup_logging import setup_logging
 from fastapi_pagination import add_pagination
 
 setup_logging()
-log = logging.getLogger("app")
+log = logging.getLogger(__name__)
 app = FastAPI(
     title="PinSphere API",
     description="PinSphere API (version api/v1)",

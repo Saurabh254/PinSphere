@@ -1,63 +1,37 @@
 # type: ignore
-import os
 
-
-import boto3
-import sys
-
-
-import io
-from PIL import Image
 
 from celery_app import app
+from pin_sphere.images import service
+from pin_sphere.images.utils import retrive_blurhash_by_image_key
+import logging
+from core.boto3_client import s3_client
+from core.database.session_manager import get_sync_session
 
-sys.path.append(os.getcwd())
-from config import settings
-
-sys.path.remove(os.getcwd())
-
-
-# Initialize S3 client
-s3_client = boto3.client(
-    "s3",
-    aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-    aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-)
+log = logging.getLogger(__name__)
 
 
 @app.task
-def compress_image_s3(object_key: str, quality: int = 60):
+def generate_blurhash(image_id: str, image_key: str):
     """Compresses an image from S3 and uploads it back.
 
     Args:
-        object_key: S3 object key (path in bucket).
+        image_key: S3 object key (path in bucket).
         quality: Compression quality (0-100, higher is better) default to 60.
     """
     try:
-        # Download image from S3
-        response = s3_client.get_object(
-            Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=object_key
+        with next(get_sync_session()) as session:
+            blurhash_encoding = retrive_blurhash_by_image_key(image_key)
+            service.save_blurhash(image_id, blurhash_encoding, session)
+        log.debug(
+            "Blurhash successfully created.",
+            extra={
+                "image_id": image_id,
+                "blurhash_encoding": blurhash_encoding,
+                "image_key": image_key,
+            },
         )
-        img = Image.open(io.BytesIO(response["Body"].read()))
-
-        # Compress image
-        compressed_image = io.BytesIO()
-        img.save(compressed_image, format=img.format, optimize=True, quality=quality)
-        compressed_image.seek(0)
-
-        # Generate new object key
-        filename, ext = object_key.rsplit(".", 1)
-        compressed_key = f"{filename}_compressed.{ext}"
-
-        # Upload compressed image back to S3
-        s3_client.put_object(
-            Bucket=settings.AWS_STORAGE_BUCKET_NAME,
-            Key=compressed_key,
-            Body=compressed_image,
-            ContentType=response["ContentType"],
-        )
-
     except s3_client.exceptions.NoSuchKey:
-        print(f"Error: Image file not found in S3: {object_key}")
+        log.error(f"Image not found with image id [{image_key}]")
     except Exception as e:
         print(f"An error occurred: {e}")

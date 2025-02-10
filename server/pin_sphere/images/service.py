@@ -2,7 +2,7 @@ from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import select
 from uuid import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from sqlalchemy.orm import Session
 from core import storage
 from core.models import Images, User
 from core.models.images import ImageProcessingStatus
@@ -83,6 +83,7 @@ async def save_image(
     session.add(image)
     await session.commit()
     await session.refresh(image)
+    tasks.generate_blurhash.delay(image.id, image.image_key)  # type: ignore
     return image
 
 
@@ -102,3 +103,22 @@ async def get_images(user: User, session: AsyncSession):
         .order_by(Images.created_at.desc())
     )
     return await paginate(session, stmt)
+
+
+def save_blurhash(image_id: str, encoding: str, session: Session) -> None:
+    """Stores the Blurhash encoding into the database.
+
+    Args:
+        image_id (str): The ID of the image.
+        encoding (str): The Blurhash encoding.
+        session (Session): SQLAlchemy synchronous session instance.
+
+    Raises:
+        ImageNotFoundError: Raised when the image_id does not exist.
+    """
+
+    image: Images | None = session.query(Images).get(image_id)
+    if not image:
+        raise ImageNotFoundError
+    image.blurhash = encoding
+    session.commit()
