@@ -1,11 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from core.authflow import auth
 from core.database.session_manager import get_async_session
 from core.models import User
 from pin_sphere.users.service import get_user_by_username
-from .schemas import UserUpdate, UserResponse
-from .service import get_user, get_users, update_user, delete_user
-from core.authflow import auth
+
+from .schemas import UserResponse, UserUpdate
+from .service import delete_user, get_user, get_users, update_user
 
 # Create an API router for users-related endpoints
 router = APIRouter(

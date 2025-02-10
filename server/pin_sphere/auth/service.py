@@ -5,7 +5,8 @@ from core.authflow.auth import create_access_token
 from core.authflow.service import verify_password
 from core.models import User
 from pin_sphere.users import service as user_service
-from . import schemas, exceptions
+
+from . import exceptions, schemas
 
 
 async def login_user(

@@ -1,6 +1,6 @@
 import boto3
-from config import settings
 
+from config import settings
 
 s3_client = boto3.client(
     "s3",

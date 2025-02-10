@@ -1,10 +1,10 @@
 __all__ = ["router"]
 
-from pin_sphere.users import endpoints as user_endpoints
-
 from fastapi import APIRouter
+
 from pin_sphere.auth import endpoint as auth_endpoint
 from pin_sphere.images import endpoint as image_endpoint
+from pin_sphere.users import endpoints as user_endpoints
 
 router = APIRouter(prefix="/api/v1")
 

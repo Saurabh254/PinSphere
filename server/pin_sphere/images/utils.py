@@ -1,12 +1,12 @@
 import io
-from typing import BinaryIO
 import uuid
+from typing import BinaryIO
+
 import blurhash  # type: ignore
 import boto3
 from PIL import Image
 
 from config import settings
-
 from core.types import FileContentType
 
 

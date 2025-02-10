@@ -1,7 +1,7 @@
 from datetime import datetime
+from typing import Optional
 
 from pydantic import BaseModel, EmailStr, SecretStr
-from typing import Optional
 
 
 # Schema for creating a users

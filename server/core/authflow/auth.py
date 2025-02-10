@@ -1,16 +1,16 @@
+import logging
 from datetime import datetime, timedelta
 from typing import Annotated, Any
 
+import jwt
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
-import jwt
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config import settings
 from core.database.session_manager import get_async_session
 from core.models import User
-import logging
 
 log = logging.getLogger("main")
 

@@ -1,11 +1,12 @@
 from fastapi import HTTPException
 from pydantic import EmailStr
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.authflow.service import hash_password
 from core.models import User
+
 from .schemas import UserCreate, UserUpdate
 
 

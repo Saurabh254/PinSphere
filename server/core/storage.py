@@ -1,11 +1,13 @@
+import logging
 from typing import BinaryIO
 
+import boto3  # type: ignore
 from botocore.client import BaseClient  # type: ignore
 from botocore.exceptions import BotoCoreError, ClientError  # type: ignore
-from .types import FileContentType
+
 from config import settings
-import boto3  # type: ignore
-import logging
+
+from .types import FileContentType
 
 log = logging.getLogger("main")
 
