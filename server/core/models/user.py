@@ -1,11 +1,11 @@
 import enum
 
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import mapped_column
 from sqlalchemy import (
     LargeBinary,
     String,
 )
+from sqlalchemy.orm import Mapped, mapped_column
+
 from core.database.base_model import TimeStampModel
 
 

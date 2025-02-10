@@ -1,8 +1,9 @@
 # type: ignore
 
-from celery import Celery
-import sys
 import os
+import sys
+
+from celery import Celery
 
 sys.path.append(os.getcwd())
 app = Celery("tasks", broker="amqp://pin_sphere:pin_sphere_prod@localhost:5672/")

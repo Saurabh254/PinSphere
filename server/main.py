@@ -1,15 +1,14 @@
+import logging
+
 import uvicorn
+from asgi_correlation_id import CorrelationIdMiddleware
+from fastapi import FastAPI
+from fastapi_pagination import add_pagination
 from starlette.middleware.cors import CORSMiddleware
 
 from pin_sphere import api
-from fastapi import FastAPI
-
 from pin_sphere.exception_handling import add_exception_handler
-
-from asgi_correlation_id import CorrelationIdMiddleware
-import logging
 from setup_logging import setup_logging
-from fastapi_pagination import add_pagination
 
 setup_logging()
 log = logging.getLogger(__name__)

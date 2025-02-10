@@ -1,10 +1,12 @@
 from typing import Annotated
+
 from fastapi import APIRouter, Body, Depends
 from fastapi.responses import ORJSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database.session_manager import get_async_session
+
 from . import schemas, service
 
 router = APIRouter(

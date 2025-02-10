@@ -1,12 +1,13 @@
 # type: ignore
 
 
-from celery_app import app
-from pin_sphere.images import service
-from pin_sphere.images.utils import retrive_blurhash_by_image_key
 import logging
+
+from celery_app import app
 from core.boto3_client import s3_client
 from core.database.session_manager import get_sync_session
+from pin_sphere.images import service
+from pin_sphere.images.utils import retrive_blurhash_by_image_key
 
 log = logging.getLogger(__name__)
 

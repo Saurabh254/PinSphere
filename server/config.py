@@ -2,6 +2,7 @@ __all__ = ["settings"]
 
 
 from typing import Literal
+
 from pydantic import PostgresDsn, RedisDsn
 from pydantic_settings import BaseSettings
 

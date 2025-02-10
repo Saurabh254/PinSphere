@@ -1,11 +1,12 @@
 import enum
 from typing import Dict
 
+from sqlalchemy import Boolean, ForeignKey, String
+from sqlalchemy import Enum as SAEnum
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import Boolean, ForeignKey, String
-from sqlalchemy import Enum as SAEnum
+
 from config import settings
 from core.database.base_model import RecordModel
 
