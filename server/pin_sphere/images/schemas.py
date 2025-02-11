@@ -44,7 +44,7 @@ class ImageResponse(BaseModel):
     )
     # I named this metadata because pydantic doesn't allow to create field starting with _ symbol
     # Also I have set exclude=True which preserve the metadata
-    raw_metadata: dict[str, Any] = Field(..., exclude=True, alias="_metadata")
+    raw_metadata: dict[str, Any] | None = Field(None, exclude=True, alias="_metadata")
 
     @computed_field
     def url(self) -> HttpUrl:
@@ -53,5 +53,7 @@ class ImageResponse(BaseModel):
         )
 
     @computed_field
-    def metadata(self) -> ImageMeta:
+    def metadata(self) -> ImageMeta | None:
+        if self.raw_metadata is None:
+            return None
         return ImageMeta(**self.raw_metadata)
