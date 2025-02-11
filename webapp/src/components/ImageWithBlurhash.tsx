@@ -6,7 +6,7 @@ const getRandomSize = () => {
   return sizes[Math.floor(Math.random() * sizes.length)];
 };
 
-const ImageWithBlurhash = ({ image, blurhash, metadata }) => {
+const ImageWithBlurhash = ({ image, blurhash }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
