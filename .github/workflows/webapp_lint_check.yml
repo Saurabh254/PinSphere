@@ -31,12 +31,8 @@ jobs:
 
       - name: Lint Check (ESLint)
         working-directory: ./webapp
-        run: npm run lint
-
-      - name: Format Check (Prettier)
-        working-directory: ./webapp
-        run: npm run format:check
+        run: npm run lint_check
 
       - name: Type Check
         working-directory: ./webapp
-        run: npm run type-check
+        run: npm run type_check

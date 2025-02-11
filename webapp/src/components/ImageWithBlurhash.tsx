@@ -6,7 +6,16 @@ const getRandomSize = () => {
   return sizes[Math.floor(Math.random() * sizes.length)];
 };
 
-const ImageWithBlurhash = ({ image, blurhash }) => {
+interface Image {
+  id: string;
+  url: string;
+  blurhash: string;
+  description: string;
+}
+interface ImageWithBlurhashParm {
+  image: Image;
+}
+const ImageWithBlurhash = ({ image }: ImageWithBlurhashParm) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
@@ -14,7 +23,7 @@ const ImageWithBlurhash = ({ image, blurhash }) => {
       {/* Blurhash Placeholder */}
       {!isLoaded && (
         <Blurhash
-          hash={blurhash}
+          hash={image.blurhash}
           width="100%"
           height={getRandomSize()} // Adjust as needed
           resolutionX={32}
@@ -32,7 +41,7 @@ const ImageWithBlurhash = ({ image, blurhash }) => {
           isLoaded ? "" : "hidden"
         }`}
         src={image.url}
-        alt={image.title}
+        alt={image.description}
         onLoad={() =>
           setTimeout(
             () => setIsLoaded(true),
