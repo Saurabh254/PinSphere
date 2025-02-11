@@ -1,13 +1,14 @@
 name: Web App
 on:
   push:
-    paths:
-      - "**/*.ts"
-      - "**/*.tsx"
-  pull_request:
-    paths:
-      - "**/*.ts"
-      - "**/*.tsx"
+    branches: "**"
+  #   paths:
+  #     - "**/*.ts"
+  #     - "**/*.tsx"
+  # pull_request:
+  #   paths:
+  #     - "**/*.ts"
+  #     - "**/*.tsx"
 
 env:
   NODE_VERSION: "20.x"
@@ -22,8 +23,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          cache-dependency-path: './webapp/package-lock.json'
 
       - name: Install dependencies
         working-directory: ./webapp
