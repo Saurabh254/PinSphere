@@ -4,13 +4,16 @@
 ---
 
 ## Table of Contents
-- [Aim](#aim)
-- [Features](#features)
-- [Usage](#usage)
-- [Infrastructure](#infrastructure)
-- [Installation](#installation)
-- [Contributing](#contributing)
-- [License](#license)
+- [Pinsphere Backend](#pinsphere-backend)
+  - [Table of Contents](#table-of-contents)
+  - [Aim](#aim)
+  - [Features](#features)
+  - [Usage](#usage)
+  - [Infrastructure](#infrastructure)
+  - [Installation](#installation)
+  - [Structure](#structure)
+  - [License](#license)
+    - [Points Covered:](#points-covered)
 
 ---
 
@@ -88,7 +91,7 @@ To get started with Pinsphere locally, follow these steps:
 2. **Install dependencies:**
    For backend, run:
    ```bash
-   uv sync 
+   uv sync
    ```
 
 3. ** Environment variables setup:**
@@ -120,7 +123,111 @@ Your app should now be running at `http://localhost:3000`.
 
 ---
 
+## Structure
 
+```
+server
+├── alembic.ini
+├── celery_app.py
+├── config.py
+├── conf.py
+├── conftest.py
+├── core
+│   ├── authflow
+│   │   ├── auth.py
+│   │   ├── __init__.py
+│   │   └── service.py
+│   ├── boto3_client.py
+│   ├── database
+│   │   ├── base_model.py
+│   │   ├── __init__.py
+│   │   └── session_manager.py
+│   ├── __init__.py
+│   ├── models
+│   │   ├── images.py
+│   │   ├── __init__.py
+│   │   └── user.py
+│   ├── redis_utils.py
+│   ├── storage.py
+│   └── types.py
+├── docker-compose.yml
+├── Dockerfile
+├── docs
+│   └── conf.py
+├── history.sqlite
+├── ipython_config.py
+├── log
+├── logs
+│   ├── app.log
+│   ├── app.log.2025-02-03
+│   ├── app.log.2025-02-04
+│   ├── app.log.2025-02-05
+│   ├── app.log.2025-02-06
+│   ├── app.log.2025-02-08
+│   ├── app.log.2025-02-09
+│   ├── app.log.2025-02-10
+│   ├── celery.log
+│   ├── error.log
+│   └── sqlalchemy.log
+├── main.py
+├── ok.png
+├── pid
+├── pin_sphere
+│   ├── api.py
+│   ├── auth
+│   │   ├── endpoint.py
+│   │   ├── exceptions.py
+│   │   ├── __init__.py
+│   │   ├── schemas.py
+│   │   └── service.py
+│   ├── base_exception.py
+│   ├── exception_handling.py
+│   ├── images
+│   │   ├── endpoint.py
+│   │   ├── exceptions.py
+│   │   ├── __init__.py
+│   │   ├── schemas.py
+│   │   ├── service.py
+│   │   ├── tasks.py
+│   │   └── utils.py
+│   ├── __init__.py
+│   └── users
+│       ├── endpoints.py
+│       ├── __init__.py
+│       ├── schemas.py
+│       ├── service.py
+│       └── tasks.py
+├── pyproject.toml
+├── pyrightconfig.json
+├── README.md
+├── scripts
+│   └── migrations
+│       ├── env.py
+│       ├── README
+│       ├── script.py.mako
+│       └── versions
+│           ├── 463fb820ea97_create_metadata_column_in_images_table.py
+│           ├── 53c200918d00_create_users_table.py
+│           ├── 81e7346f8f87_add_description_in_images_table.py
+│           └── f2e1a69354d4_create_images_table.py
+├── security
+├── setup_logging.py
+├── startup
+│   ├── 00-imports.py
+│   └── README
+├── tests
+│   ├── fixtures.py
+│   ├── __init__.py
+│   └── test_users
+│       ├── fixtures.py
+│       ├── __init__.py
+│       └── test_api.py
+├── uv.lock
+└── what.txt
+
+20 directories, 78 files
+
+```
 ## License
 
 Pinsphere is open-source software licensed under the [MIT License](LICENSE).
