@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Image } from "../types";
 import { Blurhash } from "react-blurhash";
 interface ImageWithBlurhashParm {
