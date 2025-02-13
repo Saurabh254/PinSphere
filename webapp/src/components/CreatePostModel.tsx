@@ -7,6 +7,7 @@ import { upload_file } from "../utils";
 const CreatePostModel = () => {
   const [file, setFile] = useState<File | null>(null);
   const [fileExt, setFileExt] = useState<string | null>(null);
+  const [description, setDescription] = useState<string>("");
   const call_api = async () => {
     if (file) {
       try {
@@ -28,6 +29,12 @@ const CreatePostModel = () => {
       }
     }
   };
+  const close_dialog = () => {
+    setFile(null);
+    setFileExt(null);
+    setDescription("");
+    document.getElementById("my_modal_1")?.close();
+  };
 
   return (
     <>
@@ -39,14 +46,26 @@ const CreatePostModel = () => {
             setFile={setFile}
             setFileExt={setFileExt}
           />
-          <div className="flex w-full items-baseline gap-4">
-            <div className="modal-action w-fit ml-auto">
-              <form method="dialog">
-                <button className="btn">Cancel</button>
-              </form>
+
+          {file ? (
+            <div className="w-full flex items-center justify-center">
+              <input
+                className="input"
+                type="text"
+                placeholder="write your description here"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
             </div>
-            <button className="btn" onClick={call_api}>
-              <span className="loading loading-spinner"></span>
+          ) : (
+            ""
+          )}
+          <div className="flex w-full items-center  mt-8 gap-4">
+            <button className="btn ml-auto" onClick={close_dialog}>
+              Cancel
+            </button>
+            <button className="btn " onClick={call_api}>
+              <span className="loading loading-spinner "></span>
               Upload Image
             </button>
           </div>

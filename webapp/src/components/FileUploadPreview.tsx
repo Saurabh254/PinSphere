@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ImagePreview from "./ImagePreview";
 
 interface FileUploadPreviewProps {
   file: File | null;
@@ -8,6 +9,7 @@ interface FileUploadPreviewProps {
 }
 
 export default function FileUploadPreview({
+  file,
   setFile,
   setFileExt,
 }: FileUploadPreviewProps) {
@@ -31,16 +33,7 @@ export default function FileUploadPreview({
         onChange={handleFileChange}
         className="mb-4 file-input "
       />
-      {preview && (
-        <div className="mt-4 flex-col flex  items-center">
-          <h3>Preview</h3>
-          <img
-            src={preview}
-            alt="File Preview"
-            className="mt-2 max-h-[80vh] max-w-[80vw] object-cover rounded-lg mx-8 bg-red-300"
-          />
-        </div>
-      )}
+      {preview && file && <ImagePreview preview={preview} />}
     </div>
   );
 }
