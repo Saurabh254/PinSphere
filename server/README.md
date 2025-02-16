@@ -83,7 +83,9 @@ Pinsphere is built with the following key technologies:
 ### High Level Architecture Diagram
 
 <img src="assets/high_level_architecture.png"/>
+
 ---
+
 ## Installation
 
 To get started with Pinsphere locally, follow these steps:
