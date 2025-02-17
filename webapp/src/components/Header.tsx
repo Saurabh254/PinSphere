@@ -77,7 +77,11 @@ const Header = () => {
           </div>
 
           <div className="md:flex hidden">
-            <button type="submit" className="btn btn-primary">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              onClick={handle_logout}
+            >
               Logout
             </button>
           </div>
