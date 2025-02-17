@@ -10,6 +10,7 @@ from typing_extensions import Tuple
 from config import settings
 from core.types import FileContentType
 
+
 def get_content_key(username: str, ext: FileContentType) -> str:
     """
     Generate a unique content key for the given username and extension.
@@ -23,6 +24,7 @@ def get_content_key(username: str, ext: FileContentType) -> str:
     """
     return f"content/{username}/{uuid.uuid4()}.{ext.name.casefold()}"
 
+
 # Initialize S3 client
 s3_client = boto3.client(
     "s3",
@@ -30,6 +32,7 @@ s3_client = boto3.client(
     aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
     endpoint_url=settings.AWS_ENDPOINT_URL,
 )
+
 
 def get_content(content_key: str) -> BinaryIO:
     """
@@ -42,12 +45,16 @@ def get_content(content_key: str) -> BinaryIO:
         BinaryIO: A binary stream of the content retrieved from S3.
     """
     return io.BytesIO(
-        s3_client.get_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=content_key)["Body"].read()
+        s3_client.get_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=content_key)[
+            "Body"
+        ].read()
     )  # type: ignore
+
 
 def retrieve_blurhash_by_content_key(content_key: str) -> str:
     image = Image.open(get_content(content_key)).convert("RGB")
     return blurhash.encode(image, x_components=4, y_components=4)  # type:ignore
+
 
 def retrieve_blurhash_and_metadata(content_key: str) -> Tuple[str, dict[str, int]]:
     image = Image.open(get_content(content_key)).convert("RGB")

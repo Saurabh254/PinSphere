@@ -16,7 +16,9 @@ from pin_sphere.content.exceptions import (
     ContentNotFoundError,
 )
 from pin_sphere.content.utils import get_content_key
+
 from . import tasks
+
 
 async def get_content(
     content_id: UUID, session: AsyncSession, user: User | None = None
@@ -27,12 +29,14 @@ async def get_content(
     result = await session.execute(stmt)
     return result.scalar_one_or_none()
 
+
 async def delete_content(user: User, content_id: UUID, session: AsyncSession) -> None:
     content = await get_content(content_id, session, user)
     if not content or content.username != user.username:
         raise ContentNotFoundError
     content.deleted = True
     await session.commit()
+
 
 async def save_content(
     user: User, content_key: str, session: AsyncSession, description: str | None = None
@@ -53,6 +57,7 @@ async def save_content(
     tasks.generate_blurhash.delay(content.id, content.content_key)
     return content
 
+
 def get_content_pre_signed_url(user: User, ext: FileContentType) -> dict[str, str]:
     content_key = get_content_key(user.username, ext)
     res = storage.create_presigned_post(content_key, ext)
@@ -60,13 +65,22 @@ def get_content_pre_signed_url(user: User, ext: FileContentType) -> dict[str, st
         raise ServerError(status_code=500, message="Failed to create presigned URL")
     return res
 
+
 async def get_contents(username: str | None, session: AsyncSession):
-    stmt = select(Content).filter_by(deleted=False).filter_by(status=ContentProcessingStatus.PROCESSED).order_by(Content.created_at.desc())
+    stmt = (
+        select(Content)
+        .filter_by(deleted=False)
+        .filter_by(status=ContentProcessingStatus.PROCESSED)
+        .order_by(Content.created_at.desc())
+    )
     if username:
         stmt = stmt.filter_by(username=username)
     return await paginate(session, stmt)
 
-def update_content(content_id: str, session: Session, /, **kwargs: dict[str, Any]) -> None:
+
+def update_content(
+    content_id: str, session: Session, /, **kwargs: dict[str, Any]
+) -> None:
     content: Content | None = session.query(Content).get(content_id)
     if not content:
         raise ContentNotFoundError

@@ -1,6 +1,7 @@
 # type: ignore
 
 from uuid import UUID
+
 from fastapi import APIRouter, Depends, Query
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -11,11 +12,15 @@ from core.database.session_manager import get_async_session
 from core.models import User
 from core.types import FileContentType
 from pin_sphere.content.exceptions import ContentNotFoundError
+
 from . import schemas, service
 
 router = APIRouter(prefix="/content", tags=["content"])
 
-@router.post("", status_code=status.HTTP_201_CREATED, response_model=schemas.ContentResponse)
+
+@router.post(
+    "", status_code=status.HTTP_201_CREATED, response_model=schemas.ContentResponse
+)
 async def upload_content(
     content_key: str,
     description: str | None = None,
@@ -29,6 +34,7 @@ async def upload_content(
         current_user, content_key, description=description, session=session
     )  # type: ignore
 
+
 @router.get("", response_model=Page[schemas.ContentResponse])
 async def get_contents(
     session: AsyncSession = Depends(get_async_session),
@@ -39,6 +45,7 @@ async def get_contents(
     """
     return await service.get_contents(username, session)
 
+
 @router.get("/upload_url")
 def get_pre_signed_url(
     ext: FileContentType,
@@ -48,6 +55,7 @@ def get_pre_signed_url(
     Get pre-signed URL for image upload
     """
     return service.get_content_pre_signed_url(user, ext)
+
 
 @router.get("/{content_key}", response_model=schemas.ContentResponse)
 async def get_image_by_id(
@@ -62,6 +70,7 @@ async def get_image_by_id(
     if not image:
         raise ContentNotFoundError()
     return image  # type: ignore
+
 
 @router.delete("/{content_key}", status_code=204)
 async def delete_image(
