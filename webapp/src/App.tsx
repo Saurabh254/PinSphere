@@ -5,7 +5,6 @@ const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/login"));
 const Signup = lazy(() => import("./pages/signup"));
 const CreatePostModel = lazy(() => import("./components/CreatePostModel"));
-import "remixicon/fonts/remixicon.css";
 const App = () => {
   return (
     <>
