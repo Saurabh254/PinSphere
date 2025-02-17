@@ -54,7 +54,7 @@ async def save_content(
     session.add(content)
     await session.commit()
     await session.refresh(content)
-    tasks.generate_blurhash.delay(content.id, content.content_key)
+    tasks.generate_blurhash.delay(content.id, content.content_key)  # type: ignore
     return content
 
 
