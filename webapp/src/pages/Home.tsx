@@ -20,7 +20,7 @@ const MainView = () => {
   useEffect(() => {
     const api_call = async () => {
       await api_client
-        .get(API_URL + "/images")
+        .get(API_URL + "/content")
         .then((result) => {
           setImages(result.data);
         })
