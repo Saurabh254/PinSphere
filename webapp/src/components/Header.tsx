@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router";
 import { removeTokenFromStorage } from "../service/TokenManager";
 import { RiLogoutCircleLine } from "@remixicon/react";
+
 const toggleUploadContentModel = () => {
-  const modal = document.getElementById("my_modal_1");
+  const modal = document.getElementById("my_upload_model");
   if (modal) {
     (modal as HTMLDialogElement).showModal();
   }

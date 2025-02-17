@@ -1,5 +1,4 @@
-import { useState } from "react";
-
+import FileDropZone from "./FileUploadDropZone";
 interface FileUploadPreviewProps {
   file: File | null;
   setFile: (file: File | null) => void;
@@ -8,11 +7,10 @@ interface FileUploadPreviewProps {
 }
 
 export default function FileUploadPreview({
+  file,
   setFile,
   setFileExt,
 }: FileUploadPreviewProps) {
-  const [preview, setPreview] = useState<string | null>(null);
-
   const handleFileChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ): void => {
@@ -21,21 +19,17 @@ export default function FileUploadPreview({
     if (selectedFile) {
       setFile(selectedFile);
       setFileExt(selectedFile.type);
-      setPreview(URL.createObjectURL(selectedFile));
     }
   };
+  console.log(file);
   return (
-    <div className="flex flex-col items-center p-4 rounded-lg w-auto mx-8 max-h-[80vh]">
-      <input
-        type="file"
-        onChange={handleFileChange}
-        className="mb-4 file-input "
-      />
-      {preview && (
-        <div className="mt-4 flex-col flex  items-center max-h-[60vh] border-red-50 border-2">
+    <div className="flex flex-col items-center p-4 rounded-lg w-auto mx-8 max-h-full">
+      {!file && <FileDropZone handleFileChange={handleFileChange} />}
+      {file && (
+        <div className="mt-4 flex-col flex  items-center max-h-[60vh] ">
           <h3>Preview</h3>
           <img
-            src={preview}
+            src={URL.createObjectURL(file)}
             alt="File Preview"
             className="mt-2 max-h-full   object-cover rounded-lg mx-8 bg-red-300"
           />
