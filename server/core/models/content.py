@@ -11,20 +11,20 @@ from config import settings
 from core.database.base_model import RecordModel
 
 
-class ImageProcessingStatus(enum.Enum):
+class ContentProcessingStatus(enum.Enum):
     PROCESSING = "PROCESSING"
     PROCESSED = "PROCESSED"
 
 
-class Images(RecordModel):
-    __tablename__ = "images"
+class Content(RecordModel):
+    __tablename__ = "contents"
     username: Mapped[str] = mapped_column(
         String(50), ForeignKey("users.username"), nullable=False
     )
     blurhash: Mapped[str] = mapped_column(String(50), nullable=True)
-    image_key: Mapped[str] = mapped_column(String(256), nullable=False)
-    status: Mapped[ImageProcessingStatus] = mapped_column(
-        SAEnum(ImageProcessingStatus, name="image_processing_enum"), nullable=False
+    content_key: Mapped[str] = mapped_column(String(256), nullable=False)
+    status: Mapped[ContentProcessingStatus] = mapped_column(
+        SAEnum(ContentProcessingStatus, name="content_processing_enum"), nullable=False
     )
     description: Mapped[str] = mapped_column(String, nullable=True)
     deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)

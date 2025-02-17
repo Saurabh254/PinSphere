@@ -10,7 +10,7 @@ from config import settings
 
 app = Celery("tasks", broker=settings.RABBIT_MQ_URL)
 
-app.autodiscover_tasks(["pin_sphere.images"], related_name="tasks")
+app.autodiscover_tasks(["pin_sphere.content"], related_name="tasks")
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-from .images import Images
+from .content import Content
 from .user import User
 
-__all__ = ["User", "Images"]
+__all__ = ["User", "Content"]

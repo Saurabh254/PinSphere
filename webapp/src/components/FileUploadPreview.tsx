@@ -25,19 +25,19 @@ export default function FileUploadPreview({
     }
   };
   return (
-    <div className="flex flex-col items-center p-4 rounded-lg w-auto mx-8">
+    <div className="flex flex-col items-center p-4 rounded-lg w-auto mx-8 max-h-[80vh]">
       <input
         type="file"
         onChange={handleFileChange}
         className="mb-4 file-input "
       />
       {preview && (
-        <div className="mt-4 flex-col flex  items-center">
+        <div className="mt-4 flex-col flex  items-center max-h-[60vh] border-red-50 border-2">
           <h3>Preview</h3>
           <img
             src={preview}
             alt="File Preview"
-            className="mt-2 max-h-[80vh] max-w-[80vw] object-cover rounded-lg mx-8 bg-red-300"
+            className="mt-2 max-h-full   object-cover rounded-lg mx-8 bg-red-300"
           />
         </div>
       )}
