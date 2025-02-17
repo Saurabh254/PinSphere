@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router";
-
+import { removeTokenFromStorage } from "../service/TokenManager";
+import { RiLogoutCircleLine } from "@remixicon/react";
 const toggleUploadContentModel = () => {
   const modal = document.getElementById("my_modal_1");
   if (modal) {
@@ -8,11 +9,6 @@ const toggleUploadContentModel = () => {
 };
 
 const Header = () => {
-  const navigator = useNavigate();
-  const handle_logout = () => {
-    navigator("/login");
-  };
-
   return (
     <div className="bg-gray-800 text-white px-4 py-3">
       <div className="container mx-auto flex items-center justify-between">
@@ -77,17 +73,67 @@ const Header = () => {
           </div>
 
           <div className="md:flex hidden">
+            <LogoutDialog />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const LogoutDialog = () => {
+  const navigator = useNavigate();
+  const handle_logout = () => {
+    removeTokenFromStorage();
+    navigator("/login");
+  };
+  return (
+    <>
+      {/* Open the modal using document.getElementById('ID').showModal() method */}
+      <button
+        className="btn btn-primary flex items-center justify-center"
+        onClick={() => {
+          const modal = document.getElementById("logout_model");
+          if (modal) {
+            (modal as HTMLDialogElement).showModal();
+          }
+        }}
+      >
+        Logout
+      </button>
+      <dialog
+        id="logout_model"
+        className="modal modal-bottom sm:modal-middle  w-full"
+      >
+        <div className="modal-box flex flex-col w-fit items-center py-12">
+          <div className="h-16 w-16 bg-red-100 rounded-full outline-8 outline-red-100 mb-4 items-center justify-center flex">
+            <RiLogoutCircleLine
+              size={48} // set custom `width` and `height`
+              color="red" // set `fill` color
+              className="my-icon" // add custom class name
+            />
+          </div>
+          <p className=" text-black pb-8 mt-4">
+            Are you sure you want to log out?
+          </p>
+          <div className="flex items-center justify-center p-0 gap-4">
+            <div className="modal-action mt-0 ml-auto">
+              <form method="dialog">
+                {/* if there is a button in form, it will close the modal */}
+                <button className="btn btn-primary">Cancel</button>
+              </form>
+            </div>
             <button
               type="submit"
-              className="btn btn-primary"
               onClick={handle_logout}
+              className="btn bg-red-500 text-white"
             >
               Logout
             </button>
           </div>
         </div>
-      </div>
-    </div>
+      </dialog>
+    </>
   );
 };
 
