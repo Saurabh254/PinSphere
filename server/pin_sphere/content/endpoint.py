@@ -1,8 +1,7 @@
 # type: ignore
 
 from uuid import UUID
-
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, Query
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
@@ -11,22 +10,14 @@ from core.authflow import auth
 from core.database.session_manager import get_async_session
 from core.models import User
 from core.types import FileContentType
+from pin_sphere.content.exceptions import ContentNotFoundError
+from . import schemas, service
 
-from . import schemas, service, tasks
+router = APIRouter(prefix="/content", tags=["content"])
 
-router = APIRouter(prefix="/images", tags=["images"])
-
-
-@router.get("/somm")
-async def som():
-    tasks.check_istask_running.delay()
-
-
-@router.post(
-    "", status_code=status.HTTP_201_CREATED, response_model=schemas.ImageResponse
-)
-async def upload_image(
-    image_key: str,
+@router.post("", status_code=status.HTTP_201_CREATED, response_model=schemas.ContentResponse)
+async def upload_content(
+    content_key: str,
     description: str | None = None,
     session: AsyncSession = Depends(get_async_session),
     current_user: User = Depends(auth.get_current_user),
@@ -34,21 +25,19 @@ async def upload_image(
     """
     Upload a new image for a user
     """
-    return await service.save_image(
-        current_user, image_key, description=description, session=session
+    return await service.save_content(
+        current_user, content_key, description=description, session=session
     )  # type: ignore
 
-
-@router.get("", response_model=Page[schemas.ImageResponse])
-async def get_images(
+@router.get("", response_model=Page[schemas.ContentResponse])
+async def get_contents(
     session: AsyncSession = Depends(get_async_session),
     username: str | None = Query(None, description="Username or None"),
 ):
     """
     Get all images for a user
     """
-    return await service.get_images(username, session)
-
+    return await service.get_contents(username, session)
 
 @router.get("/upload_url")
 def get_pre_signed_url(
@@ -58,36 +47,30 @@ def get_pre_signed_url(
     """
     Get pre-signed URL for image upload
     """
+    return service.get_content_pre_signed_url(user, ext)
 
-    return service.get_image_pre_signed_url(user, ext)
-
-
-@router.get("/{image_id}", response_model=schemas.ImageResponse)
+@router.get("/{content_key}", response_model=schemas.ContentResponse)
 async def get_image_by_id(
-    image_id: UUID,
+    content_key: UUID,
     session: AsyncSession = Depends(get_async_session),
     current_user: User = Depends(auth.get_current_user),
 ):
     """
     Get image details by ID
     """
-    image = await service.get_image(image_id, session, current_user)  # type: ignore
+    image = await service.get_content(content_key, session, current_user)  # type: ignore
     if not image:
-        raise HTTPException(status_code=404, detail="Image not found")
+        raise ContentNotFoundError()
     return image  # type: ignore
 
-
-@router.delete("/{image_id}", status_code=204)
+@router.delete("/{content_key}", status_code=204)
 async def delete_image(
-    image_id: UUID,
+    content_key: UUID,
     session: AsyncSession = Depends(get_async_session),
-    current_user: User = Depends(
-        auth.get_current_user
-    ),  # Add the current_user dependency
+    current_user: User = Depends(auth.get_current_user),
 ):
     """
     Delete an image by ID
     """
-    await service.delete_image(current_user, image_id, session)  # type: ignore
-
+    await service.delete_image(current_user, content_key, session)  # type: ignore
     return {"status": "success"}
