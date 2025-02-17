@@ -45,6 +45,8 @@ const CreatePostModal = () => {
           ? "Image uploaded successfully"
           : "Failed to create post"
       );
+
+      toggleUploadContentModel();
     } catch (error) {
       console.error("Error during upload:", error);
       showToast("error", "An error occurred during upload");
@@ -61,6 +63,13 @@ const CreatePostModal = () => {
 
   return (
     <>
+      {toast?.type == "success" ? (
+        <div className="toast toast-end fixed z-50">
+          <div className={`alert alert-${toast.type}`}>
+            <span>{toast.message}</span>
+          </div>
+        </div>
+      ) : null}
       <dialog id="my_upload_model" className="modal">
         {toast && (
           <div className="toast toast-end fixed z-50">
