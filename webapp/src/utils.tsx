@@ -1,4 +1,5 @@
 import axios from "axios";
+import { FileContentType } from "./types";
 
 type PreSignedUrlType = {
   url: string;
@@ -6,18 +7,22 @@ type PreSignedUrlType = {
     [key: string]: string;
   };
 };
-export const upload_file = async (data: PreSignedUrlType, file: File) => {
+export const upload_file = async (
+  data: PreSignedUrlType,
+  file: File,
+  fileExt: FileContentType
+) => {
   const formdata = new FormData();
 
   // Ensure fields (key, policy, etc.) come before the file
   Object.entries(data.fields).forEach(([key, val]) => {
     formdata.append(key, val);
   });
+  formdata.append("Content-Type", fileExt);
 
   // Append the file correctly (no need for "image.png" as the third argument)
   formdata.append("file", file);
   const uninterceptedAxiosInstance = axios.create();
-
   return await uninterceptedAxiosInstance.post(data.url, formdata, {
     headers: {
       "Content-Type": "multipart/form-data",

@@ -2,7 +2,7 @@
 
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Body, Depends, Query
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
@@ -22,8 +22,8 @@ router = APIRouter(prefix="/content", tags=["content"])
     "", status_code=status.HTTP_201_CREATED, response_model=schemas.ContentResponse
 )
 async def upload_content(
-    content_key: str,
-    description: str | None = None,
+    content_key: str = Body(),
+    description: str | None = Body(None),
     session: AsyncSession = Depends(get_async_session),
     current_user: User = Depends(auth.get_current_user),
 ):

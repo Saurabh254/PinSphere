@@ -21,7 +21,7 @@ s3_client: BaseClient = boto3.client(  # type: ignore
 )
 
 
-def upload_image(
+def upload_content(
     file: BinaryIO,
     file_name: str,
     content_type: FileContentType,
@@ -82,22 +82,18 @@ def create_presigned_post(
     :return: Dictionary with url and fields, or None if error
     """
     try:
-        # fields = {
-        #     "Content-Type": content_type.value,
-        # }
-        # TODO: conditions has to be fixed in future. right now It's not a big deal as minio is creating issues.
 
-        # conditions = [
+        conditions = [
         #     ['content-length-range', 1, file_size],  # Add buffer for metadata
-        #     {'bucket': settings.AWS_STORAGE_BUCKET_NAME},
-        #     {'key': object_name},
-        # ]
+            {'bucket': settings.AWS_STORAGE_BUCKET_NAME},
+            {'key': object_name},
+            {"Content-Type": content_type.value,}
+        ]
 
         response = s3_client.generate_presigned_post(  # type: ignore
             Bucket=settings.AWS_STORAGE_BUCKET_NAME,
             Key=object_name,
-            # Fields=fields,
-            # Conditions=conditions,
+            Conditions=conditions,
             ExpiresIn=expiration,
         )
         return response  # type: ignore

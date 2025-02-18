@@ -4,7 +4,8 @@ import api_client from "../api_client";
 import { Route, Routes, useNavigate } from "react-router";
 import Header from "../components/Header";
 import ImageWithBlurhash from "../components/ImageWithBlurhash";
-import { Image } from "../types";
+import { Content } from "../types";
+import ContentWithBlurhash from "../components/ContentWithBlurhash";
 
 type Page<T> = {
   items: T[];
@@ -16,13 +17,13 @@ type Page<T> = {
 
 const MainView = () => {
   const navigate = useNavigate();
-  const [images, setImages] = useState<Page<Image> | null>(null);
+  const [contents, setContents] = useState<Page<Content> | null>(null);
   useEffect(() => {
     const api_call = async () => {
       await api_client
         .get(API_URL + "/content")
         .then((result) => {
-          setImages(result.data);
+          setContents(result.data);
         })
         .catch((err) => {
           console.log(err);
@@ -37,9 +38,9 @@ const MainView = () => {
   }
   return (
     <div className="columns-2 md:columns-4 gap-4 space-y-4 mt-8 mx-4">
-      {images &&
-        images.items.map((image) => (
-          <ImageWithBlurhash image={image} key={image.id} />
+      {contents &&
+        contents.items.map((content) => (
+          <ContentWithBlurhash content={content} key={content.id} />
         ))}
     </div>
   );

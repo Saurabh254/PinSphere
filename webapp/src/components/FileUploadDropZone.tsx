@@ -30,7 +30,12 @@ const FileDropzone = ({
         </p>
         <label className="mt-4 inline-block cursor-pointer px-4 py-2 border rounded-lg text-sm font-medium bg-gray-100 hover:bg-gray-200">
           Browse File
-          <input type="file" onChange={handleFileChange} className="hidden" />
+          <input
+            type="file"
+            onChange={handleFileChange}
+            className="hidden"
+            accept="images/*, videos/*, audios/*"
+          />
         </label>
       </div>
     </div>

@@ -32,12 +32,12 @@ const CreatePostModal = () => {
       const { data } = await api_client.get(
         `${API_URL}/content/upload_url?ext=${encodeURIComponent(fileExt)}`
       );
-      const uploadResponse = await upload_file(data, file);
+      const uploadResponse = await upload_file(data, file, fileExt);
       const postResponse =
         uploadResponse.status === 204
-          ? await api_client.post(
-              `${API_URL}/content?content_key=${data.fields.key}`
-            )
+          ? await api_client.post(`${API_URL}/content`, {
+              content_key: data.fields.key,
+            })
           : null;
       showToast(
         postResponse?.status === 201 ? "success" : "error",
@@ -84,6 +84,7 @@ const CreatePostModal = () => {
             fileExt={fileExt}
             setFile={setFile}
             setFileExt={setFileExt}
+            setToast={setToast}
           />
           <div className="flex justify-between gap-4">
             <button className="btn ml-auto" onClick={handleCancel}>

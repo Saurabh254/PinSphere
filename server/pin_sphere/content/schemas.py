@@ -24,6 +24,7 @@ class ContentCreate(BaseModel):
 class ContentMeta(BaseModel):
     height: int
     width: int
+    content_type: Optional[str] = "okkk"
 
 
 class ContentResponse(BaseModel):
@@ -32,7 +33,7 @@ class ContentResponse(BaseModel):
     content_key: str = Field(
         ..., description="Key of the content in storage", exclude=True
     )
-    status: ContentStatus = Field(..., description="Processing status of the content")
+    status: ContentStatus = Field(..., description="Processing status of the content", exclude=True)
     blurhash: Optional[str] = Field(
         None, description="Blurhash for fast loading previews"
     )
@@ -46,6 +47,7 @@ class ContentResponse(BaseModel):
         None, exclude=True, alias="_metadata"
     )
 
+
     @computed_field
     def url(self) -> HttpUrl:
         return HttpUrl(
@@ -54,4 +56,5 @@ class ContentResponse(BaseModel):
 
     @computed_field
     def metadata(self) -> Optional[ContentMeta]:
+        print('okkk this is ', self.raw_metadata)
         return ContentMeta(**self.raw_metadata) if self.raw_metadata else None
