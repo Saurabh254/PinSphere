@@ -1,11 +1,14 @@
 import { isValidContentType } from "../service/file_upload_utils";
+import { FileContentType } from "../types";
 import FileDropZone from "./FileUploadDropZone";
 interface FileUploadPreviewProps {
   file: File | null;
   setFile: (file: File | null) => void;
-  fileExt: string | null;
-  setFileExt: (fileExt: string | null) => void;
-  setToast: (toast: { error: string }) => void;
+  fileExt: FileContentType | null;
+  setFileExt: (fileExt: FileContentType | null) => void;
+  setToast: React.Dispatch<
+    React.SetStateAction<{ type: string; message: string } | null>
+  >;
 }
 
 export default function FileUploadPreview({
@@ -21,12 +24,12 @@ export default function FileUploadPreview({
     const selectedFile = event.target.files?.[0] || null;
     if (selectedFile && isValidContentType(selectedFile.type)) {
       setFile(selectedFile);
-      setFileExt(selectedFile.type);
+      setFileExt(selectedFile.name.split(".").pop() as FileContentType);
       console.log(selectedFile);
     } else if (!selectedFile) {
-      setToast({ error: "select a file" });
+      setToast({ type: "error", message: "select a file" });
     } else {
-      setToast({ error: "Invalid file format" });
+      setToast({ type: "error", message: "Invalid file format" });
     }
   };
   return (

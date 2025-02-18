@@ -3,7 +3,6 @@ import { API_URL } from "../constants";
 import api_client from "../api_client";
 import { Route, Routes, useNavigate } from "react-router";
 import Header from "../components/Header";
-import ImageWithBlurhash from "../components/ImageWithBlurhash";
 import { Content } from "../types";
 import ContentWithBlurhash from "../components/ContentWithBlurhash";
 

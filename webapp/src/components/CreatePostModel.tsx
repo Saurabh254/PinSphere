@@ -3,6 +3,7 @@ import FileUploadPreview from "./FileUploadPreview";
 import api_client from "../api_client";
 import { upload_file } from "../utils";
 import { API_URL } from "../constants";
+import { FileContentType } from "../types";
 
 const toggleUploadContentModel = () => {
   const modal = document.getElementById("my_upload_model");
@@ -13,7 +14,7 @@ const toggleUploadContentModel = () => {
 
 const CreatePostModal = () => {
   const [file, setFile] = useState<File | null>(null);
-  const [fileExt, setFileExt] = useState<string | null>(null);
+  const [fileExt, setFileExt] = useState<FileContentType | null>(null);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState<{ type: string; message: string } | null>(
     null

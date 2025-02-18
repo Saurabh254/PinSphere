@@ -7,7 +7,7 @@ interface Metadata {
 export interface Content {
   id: string;
   url: string;
-  blurhash: string | null;
+  blurhash: string;
   description: string;
   metadata: Metadata;
 }

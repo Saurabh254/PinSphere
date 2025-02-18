@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Image } from "../types";
+import { Content } from "../types";
 import { Blurhash } from "react-blurhash";
 interface ImageWithBlurhashParm {
-  image: Image;
+  image: Content;
   key: string;
 }
 
