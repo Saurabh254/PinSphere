@@ -1,3 +1,4 @@
+import logging
 from typing import Any
 from uuid import UUID
 
@@ -15,11 +16,12 @@ from pin_sphere.content.exceptions import (
     ContentAlreadyExistsError,
     ContentNotFoundError,
 )
-from pin_sphere.content.utils import get_content_key, get_content_type_from_s3
+from pin_sphere.content.utils import get_content_key
 
 from . import tasks
-import logging
+
 log = logging.getLogger(__name__)
+
 
 async def get_content(
     content_id: UUID, session: AsyncSession, user: User | None = None

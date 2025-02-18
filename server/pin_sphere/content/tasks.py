@@ -27,7 +27,10 @@ def generate_blurhash(image_id: str, image_key: str):
     try:
         with next(get_sync_session()) as session:
             blurhash_encoding, metadata = retrieve_blurhash_and_metadata(image_key)
-            log.error(f"create error: {metadata}", extra={"blurhash_encoding": blurhash_encoding, "metadata": metadata})
+            log.error(
+                f"create error: {metadata}",
+                extra={"blurhash_encoding": blurhash_encoding, "metadata": metadata},
+            )
             service.update_content(
                 image_id,
                 session,

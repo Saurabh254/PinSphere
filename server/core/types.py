@@ -1,5 +1,6 @@
-__all__ = ['FileContentType']
+__all__ = ["FileContentType"]
 from enum import Enum
+
 
 class FileContentType(Enum):
     JPEG = "image/jpeg"

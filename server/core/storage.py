@@ -82,12 +82,13 @@ def create_presigned_post(
     :return: Dictionary with url and fields, or None if error
     """
     try:
-
         conditions = [
-        #     ['content-length-range', 1, file_size],  # Add buffer for metadata
-            {'bucket': settings.AWS_STORAGE_BUCKET_NAME},
-            {'key': object_name},
-            {"Content-Type": content_type.value,}
+            #     ['content-length-range', 1, file_size],  # Add buffer for metadata
+            {"bucket": settings.AWS_STORAGE_BUCKET_NAME},
+            {"key": object_name},
+            {
+                "Content-Type": content_type.value,
+            },
         ]
 
         response = s3_client.generate_presigned_post(  # type: ignore
