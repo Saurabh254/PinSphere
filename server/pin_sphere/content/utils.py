@@ -1,4 +1,5 @@
 import io
+import logging
 import uuid
 from typing import BinaryIO
 
@@ -9,6 +10,9 @@ from typing_extensions import Tuple
 
 from config import settings
 from core.types import FileContentType
+from pin_sphere.content.exceptions import ContentNotFoundError
+
+log = logging.getLogger(__name__)
 
 
 def get_content_key(username: str, ext: FileContentType) -> str:
@@ -34,7 +38,7 @@ s3_client = boto3.client(
 )
 
 
-def get_content(content_key: str) -> BinaryIO:
+def get_content(content_key: str) -> Tuple[BinaryIO, str]:
     """
     Fetches content from AWS S3 storage using the provided content key.
 
@@ -44,21 +48,45 @@ def get_content(content_key: str) -> BinaryIO:
     Returns:
         BinaryIO: A binary stream of the content retrieved from S3.
     """
-    return io.BytesIO(
-        s3_client.get_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=content_key)[
-            "Body"
-        ].read()
-    )  # type: ignore
+    try:
+        s3_object = s3_client.get_object(
+            Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=content_key
+        )
+        response = io.BytesIO(s3_object["Body"].read())  # type: ignore
+        return response, s3_object["ContentType"]  # type: ignore
+    except Exception as e:
+        log.error(e)
+        raise e
 
 
 def retrieve_blurhash_by_content_key(content_key: str) -> str:
-    image = Image.open(get_content(content_key)).convert("RGB")
-    return blurhash.encode(image, x_components=4, y_components=4)  # type:ignore
+    image, content_type = get_content(content_key)
+    image = Image.open(image).convert("RGB")
+    return (
+        blurhash.encode(image, x_components=4, y_components=4),  # type:ignore
+        content_type,
+    )
 
 
-def retrieve_blurhash_and_metadata(content_key: str) -> Tuple[str, dict[str, int]]:
-    image = Image.open(get_content(content_key)).convert("RGB")
+def retrieve_blurhash_and_metadata(
+    content_key: str,
+) -> Tuple[str, dict[str, int | str]]:
+    image, content_type = get_content(content_key)
+    image = Image.open(image).convert("RGB")
     return blurhash.encode(image, x_components=4, y_components=4), {  # type: ignore
         "width": image.size[0],
         "height": image.size[1],
+        "content_type": content_type,
     }
+
+
+def get_content_type_from_s3(content_key: str) -> str:
+    try:
+        return s3_client.get_object(
+            Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=content_key
+        )["ContentType"]
+    except s3_client.exceptions.NoSuchKey as e:
+        raise ContentNotFoundError(message=str(e))
+    except Exception as e:
+        log.error(e)
+        raise e

@@ -1,3 +1,4 @@
+import logging
 from typing import Any
 from uuid import UUID
 
@@ -18,6 +19,8 @@ from pin_sphere.content.exceptions import (
 from pin_sphere.content.utils import get_content_key
 
 from . import tasks
+
+log = logging.getLogger(__name__)
 
 
 async def get_content(
@@ -45,6 +48,7 @@ async def save_content(
     existing_content = await session.execute(stmt)
     if existing_content.scalar_one_or_none():
         raise ContentAlreadyExistsError
+
     content = Content(
         username=user.username,
         content_key=content_key,
@@ -54,6 +58,7 @@ async def save_content(
     session.add(content)
     await session.commit()
     await session.refresh(content)
+
     tasks.generate_blurhash.delay(content.id, content.content_key)  # type: ignore
     return content
 
@@ -86,4 +91,5 @@ def update_content(
         raise ContentNotFoundError
     for key, value in kwargs.items():
         setattr(content, key, value)
+
     session.commit()

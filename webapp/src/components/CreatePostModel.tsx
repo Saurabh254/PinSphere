@@ -3,6 +3,7 @@ import FileUploadPreview from "./FileUploadPreview";
 import api_client from "../api_client";
 import { upload_file } from "../utils";
 import { API_URL } from "../constants";
+import { FileContentType } from "../types";
 
 const toggleUploadContentModel = () => {
   const modal = document.getElementById("my_upload_model");
@@ -13,7 +14,7 @@ const toggleUploadContentModel = () => {
 
 const CreatePostModal = () => {
   const [file, setFile] = useState<File | null>(null);
-  const [fileExt, setFileExt] = useState<string | null>(null);
+  const [fileExt, setFileExt] = useState<FileContentType | null>(null);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState<{ type: string; message: string } | null>(
     null
@@ -32,12 +33,12 @@ const CreatePostModal = () => {
       const { data } = await api_client.get(
         `${API_URL}/content/upload_url?ext=${encodeURIComponent(fileExt)}`
       );
-      const uploadResponse = await upload_file(data, file);
+      const uploadResponse = await upload_file(data, file, fileExt);
       const postResponse =
         uploadResponse.status === 204
-          ? await api_client.post(
-              `${API_URL}/content?content_key=${data.fields.key}`
-            )
+          ? await api_client.post(`${API_URL}/content`, {
+              content_key: data.fields.key,
+            })
           : null;
       showToast(
         postResponse?.status === 201 ? "success" : "error",
@@ -84,6 +85,7 @@ const CreatePostModal = () => {
             fileExt={fileExt}
             setFile={setFile}
             setFileExt={setFileExt}
+            setToast={setToast}
           />
           <div className="flex justify-between gap-4">
             <button className="btn ml-auto" onClick={handleCancel}>

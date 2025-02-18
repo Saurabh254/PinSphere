@@ -18,9 +18,11 @@
     "axios": "^1.7.9",
     "blurhash": "^2.0.5",
     "react": "^18.3.1",
+    "react-audio-player": "^0.17.0",
     "react-blurhash": "^0.3.0",
     "react-dom": "^18.3.1",
     "react-image-crop": "^11.0.7",
+    "react-player": "^2.16.0",
     "react-router": "^7.1.5",
     "react-router-dom": "^7.1.5",
     "tailwindcss": "^4.0.3"
