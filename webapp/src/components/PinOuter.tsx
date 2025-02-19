@@ -1,6 +1,10 @@
 import { RiChat3Fill, RiHeart2Fill } from "@remixicon/react";
 
-const Pin = ({ children }) => {
+interface PinProps {
+  children: React.ReactNode;
+}
+
+const Pin = ({ children }: PinProps) => {
   return (
     <div className="bg-gray-100 p-3 break-inside-avoid rounded-xl shadow-md w-fit aspect-auto">
       {/* User Info */}
