@@ -7,18 +7,14 @@ type PreSignedUrlType = {
     [key: string]: string;
   };
 };
-export const upload_file = async (
-  data: PreSignedUrlType,
-  file: File,
-  fileExt: FileContentType
-) => {
+export const upload_file = async (data: PreSignedUrlType, file: File) => {
   const formdata = new FormData();
 
   // Ensure fields (key, policy, etc.) come before the file
   Object.entries(data.fields).forEach(([key, val]) => {
     formdata.append(key, val);
   });
-  formdata.append("Content-Type", fileExt);
+  formdata.append("Content-Type", file.type);
 
   // Append the file correctly (no need for "image.png" as the third argument)
   formdata.append("file", file);

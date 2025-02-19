@@ -3,7 +3,6 @@ import FileUploadPreview from "./FileUploadPreview";
 import api_client from "../api_client";
 import { upload_file } from "../utils";
 import { API_URL } from "../constants";
-import { FileContentType } from "../types";
 
 const toggleUploadContentModel = () => {
   const modal = document.getElementById("my_upload_model");
@@ -14,7 +13,7 @@ const toggleUploadContentModel = () => {
 
 const CreatePostModal = () => {
   const [file, setFile] = useState<File | null>(null);
-  const [fileExt, setFileExt] = useState<FileContentType | null>(null);
+  const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState<{ type: string; message: string } | null>(
     null
@@ -26,18 +25,19 @@ const CreatePostModal = () => {
   };
 
   const handleUpload = async () => {
-    if (!file || !fileExt)
+    if (!file)
       return showToast("info", "Please select a file before uploading.");
     setLoading(true);
     try {
       const { data } = await api_client.get(
-        `${API_URL}/content/upload_url?ext=${encodeURIComponent(fileExt)}`
+        `${API_URL}/content/upload_url?ext=${file.type}`
       );
-      const uploadResponse = await upload_file(data, file, fileExt);
+      const uploadResponse = await upload_file(data, file);
       const postResponse =
         uploadResponse.status === 204
           ? await api_client.post(`${API_URL}/content`, {
               content_key: data.fields.key,
+              description: description,
             })
           : null;
       showToast(
@@ -57,7 +57,6 @@ const CreatePostModal = () => {
   };
   const handleCancel = async () => {
     setFile(null);
-    setFileExt(null);
     setLoading(false);
     toggleUploadContentModel();
   };
@@ -82,10 +81,10 @@ const CreatePostModal = () => {
         <div className="modal-box max-h-[80vh] flex flex-col">
           <FileUploadPreview
             file={file}
-            fileExt={fileExt}
             setFile={setFile}
-            setFileExt={setFileExt}
             setToast={setToast}
+            description={description}
+            setDescription={setDescription}
           />
           <div className="flex justify-between gap-4">
             <button className="btn ml-auto" onClick={handleCancel}>
