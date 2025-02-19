@@ -1,11 +1,10 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-/* import 'remixicon/fonts/remixicon.css'; */
 /* import "@pqina/pintura/pintura.css"; */
 
 @theme {
-    --color-primary: #6A42C2;
+    --color-primary: #615fff;
     --color-primary-content: #fff;
 
     --color-base: #213555;

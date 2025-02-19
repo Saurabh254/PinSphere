@@ -8,7 +8,10 @@ interface ImageWithBlurhashParm {
 
 const ImageWithBlurhash = ({ image }: ImageWithBlurhashParm) => {
   const [loaded, setLoaded] = useState(false);
-  const aspectRatio = image.metadata.width / image.metadata.height;
+  let aspectRatio = 480 / 480;
+  if (image.metadata) {
+    aspectRatio = image.metadata.width / image.metadata.height;
+  }
 
   return (
     <div
