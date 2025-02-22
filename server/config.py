@@ -22,6 +22,7 @@ class Settings(BaseSettings):
     AWS_SESSION_TOKEN: str = "saurabh_prod"
     AWS_SIGNATURE_VERSION: str = "s3v4"
     AWS_ENDPOINT_URL: str = "http://localhost:9000"
+    REFRESH_TOKEN_EXPIRATION_SECONDS: int = 60 * 60 * 24 * 15  # 15 days
     RABBIT_MQ_URL: str = "amqp://pin_sphere:pin_sphere_prod@localhost:5672/"
 
     def get_database_dsn(self, driver: Literal["asyncpg", "psycopg"]) -> PostgresDsn:

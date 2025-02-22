@@ -22,3 +22,10 @@ class UserAlreadyExists(ServerError):
         super().__init__(400, message)
         self.status_code = 400
         self.message = message
+
+
+class InvalidRefreshToken(ServerError):
+    def __init__(self, message: str = "Invalid refresh token"):
+        super().__init__(400, message)
+        self.status_code = 400
+        self.message = message

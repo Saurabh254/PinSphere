@@ -1,18 +1,15 @@
 # type: ignore
 
 
-import logging
-
 from celery_app import app
 from core.boto3_client import s3_client
 from core.database.session_manager import get_sync_session
 from core.models.content import ContentProcessingStatus
+from logging_conf import log
 from pin_sphere.content import service
 from pin_sphere.content.utils import (
     retrieve_blurhash_and_metadata,
 )
-
-log = logging.getLogger(__name__)
 
 
 @app.task
@@ -27,10 +24,7 @@ def generate_blurhash(image_id: str, image_key: str):
     try:
         with next(get_sync_session()) as session:
             blurhash_encoding, metadata = retrieve_blurhash_and_metadata(image_key)
-            log.error(
-                f"create error: {metadata}",
-                extra={"blurhash_encoding": blurhash_encoding, "metadata": metadata},
-            )
+
             service.update_content(
                 image_id,
                 session,
