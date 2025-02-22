@@ -1,4 +1,4 @@
-import logging
+from logging_conf import log
 
 import uvicorn
 from asgi_correlation_id import CorrelationIdMiddleware
@@ -8,11 +8,9 @@ from starlette.middleware.cors import CORSMiddleware
 
 from pin_sphere import api
 from pin_sphere.exception_handling import add_exception_handler
-from setup_logging import setup_logging
 
-setup_logging()
-log = logging.getLogger(__name__)
 app = FastAPI(
+    debug=True,
     title="PinSphere API",
     description="PinSphere API (version api/v1)",
 )

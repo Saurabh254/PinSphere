@@ -15,3 +15,6 @@ class LoginResponse(BaseModel):
 
 class SignupUser(UserCreate):
     pass
+
+class RefreshToken(BaseModel):
+    refresh_token: str

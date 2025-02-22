@@ -1,4 +1,4 @@
-import logging
+from logging_conf import log
 from typing import BinaryIO
 
 import boto3  # type: ignore
@@ -9,7 +9,6 @@ from config import settings
 
 from .types import FileContentType
 
-log = logging.getLogger("main")
 
 s3_client: BaseClient = boto3.client(  # type: ignore
     "s3",

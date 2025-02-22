@@ -1,5 +1,5 @@
 import io
-import logging
+from logging_conf import log
 import uuid
 from typing import BinaryIO
 
@@ -12,7 +12,6 @@ from config import settings
 from core.types import FileContentType
 from pin_sphere.content.exceptions import ContentNotFoundError
 
-log = logging.getLogger(__name__)
 
 
 def get_content_key(username: str, ext: FileContentType) -> str:
@@ -59,7 +58,7 @@ def get_content(content_key: str) -> Tuple[BinaryIO, str]:
         raise e
 
 
-def retrieve_blurhash_by_content_key(content_key: str) -> str:
+def retrieve_blurhash_by_content_key(content_key: str) -> Tuple[str, str]:
     image, content_type = get_content(content_key)
     image = Image.open(image).convert("RGB")
     return (

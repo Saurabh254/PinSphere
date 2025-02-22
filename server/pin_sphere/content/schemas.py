@@ -57,5 +57,4 @@ class ContentResponse(BaseModel):
 
     @computed_field
     def metadata(self) -> Optional[ContentMeta]:
-        print("okkk this is ", self.raw_metadata)
         return ContentMeta(**self.raw_metadata) if self.raw_metadata else None

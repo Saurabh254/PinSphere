@@ -1,4 +1,4 @@
-import logging
+from logging_conf import log
 from typing import Any
 from uuid import UUID
 
@@ -20,7 +20,7 @@ from pin_sphere.content.utils import get_content_key
 
 from . import tasks
 
-log = logging.getLogger(__name__)
+
 
 
 async def get_content(
