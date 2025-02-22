@@ -1,8 +1,8 @@
 import { useState } from "react";
 import FileUploadPreview from "./FileUploadPreview";
 import api_client from "../api_client";
-import { upload_file } from "../utils";
 import { API_URL } from "../constants";
+import { upload_file } from "../service/file_handler_service";
 
 const toggleUploadContentModel = () => {
   const modal = document.getElementById("my_upload_model");
