@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { API_URL } from "../constants";
 import api_client from "../api_client";
-import { Route, Routes, useNavigate } from "react-router";
+import { Route, Routes } from "react-router";
 import Header from "../components/Header";
 import { Content } from "../types";
 import ContentWithBlurhash from "../components/ContentWithBlurhash";
@@ -15,7 +15,6 @@ type Page<T> = {
 };
 
 const MainView = () => {
-  const navigate = useNavigate();
   const [contents, setContents] = useState<Page<Content> | null>(null);
   useEffect(() => {
     const api_call = async () => {
@@ -31,10 +30,6 @@ const MainView = () => {
     api_call();
   }, []);
 
-  const token = localStorage.getItem("access_token");
-  if (!token) {
-    navigate("/login");
-  }
   return (
     <div className="columns-2 md:columns-4 gap-4 space-y-4 mt-8 mx-4">
       {contents &&

@@ -1,4 +1,4 @@
-import { isValidContentType } from "../service/file_upload_utils";
+import { isValidContentType } from "../service/file_handler_service";
 import FileDropZone from "./FileUploadDropZone";
 interface FileUploadPreviewProps {
   file: File | null;

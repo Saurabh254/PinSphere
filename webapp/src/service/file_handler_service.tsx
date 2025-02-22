@@ -1,4 +1,9 @@
+import { FileContentType } from "../types";
 import axios from "axios";
+
+export function isValidContentType(value: string): boolean {
+  return Object.values(FileContentType).includes(value as FileContentType);
+}
 
 type PreSignedUrlType = {
   url: string;
@@ -6,6 +11,7 @@ type PreSignedUrlType = {
     [key: string]: string;
   };
 };
+
 export const upload_file = async (data: PreSignedUrlType, file: File) => {
   const formdata = new FormData();
 

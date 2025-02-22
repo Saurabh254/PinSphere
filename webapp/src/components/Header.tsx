@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { removeTokenFromStorage } from "../service/TokenManager";
+import { removeTokenFromStorage } from "../service/token_service";
 import { RiLogoutCircleLine } from "@remixicon/react";
 
 const toggleUploadContentModel = () => {
