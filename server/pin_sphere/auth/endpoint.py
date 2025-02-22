@@ -1,12 +1,11 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Body, Cookie, Depends, HTTPException, Header
+from fastapi import APIRouter, Body, Cookie, Depends, HTTPException
 from fastapi.responses import ORJSONResponse
-from fastapi.security import HTTPBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.responses import Response
 
-from core.authflow.auth import is_valid_refresh_token
 from core.database.session_manager import get_async_session
 
 from . import schemas, service
@@ -25,18 +24,22 @@ router = APIRouter(
 
 @router.post("/login")
 async def login(
-        response: Response,
+    response: Response,
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     session: AsyncSession = Depends(get_async_session),
 ):
-    return await service.login_user(form_data,response, session)
+    return await service.login_user(form_data, response, session)
 
 
 @router.post("/refresh")
-async def refresh_access_token(token: str = Cookie(None, alias='refresh_token'), db: AsyncSession = Depends(get_async_session)) -> dict[str, str]:
+async def refresh_access_token(
+    token: str | None = Cookie(None, alias="refresh_token"),
+    db: AsyncSession = Depends(get_async_session),
+) -> dict[str, str]:
     if token is None:
         raise HTTPException(status_code=401, detail="Invalid token")
     return await service.refresh_access_token(token, db)
+
 
 @router.post("/signup", status_code=204)
 async def signup(

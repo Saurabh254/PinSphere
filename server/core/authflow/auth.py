@@ -1,9 +1,9 @@
-from logging_conf import log
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
+from enum import Enum
 from typing import Annotated, Any
-from datetime import UTC
+
 import jwt
-from fastapi import Depends, HTTPException, Header
+from fastapi import Depends, Header, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -11,10 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from config import settings
 from core.database.session_manager import get_async_session
 from core.models import User
-from enum import Enum
-
-from core.redis_utils import get_redis_client
-
+from logging_conf import log
 
 
 class TokenType(str, Enum):
@@ -34,16 +31,22 @@ async def create_access_token(
     encode = jwt.encode(data, settings.AUTH_SECRET, algorithm=settings.ALGORITHM)  # type: ignore
     return encode
 
-async def create_refresh_token(data: dict[str, Any], expires_delta: timedelta | None = None) -> str:
+
+async def create_refresh_token(
+    data: dict[str, Any], expires_delta: timedelta | None = None
+) -> str:
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now(UTC).replace(tzinfo=None) + expires_delta
     else:
-        expire = datetime.now(UTC).replace(tzinfo=None) + timedelta(days=settings.REFRESH_TOKEN_EXPIRATION_SECONDS)
+        expire = datetime.now(UTC).replace(tzinfo=None) + timedelta(
+            days=settings.REFRESH_TOKEN_EXPIRATION_SECONDS
+        )
     to_encode.update({"exp": expire, "token_type": TokenType.REFRESH})
-    encoded_jwt: str = jwt.encode(to_encode, settings.AUTH_SECRET, algorithm=settings.ALGORITHM)
+    encoded_jwt: str = jwt.encode(  # type: ignore
+        to_encode, settings.AUTH_SECRET, algorithm=settings.ALGORITHM
+    )
     return encoded_jwt
-
 
 
 def decode_access_token(token: str) -> dict[str, Any] | None:
@@ -62,25 +65,26 @@ def decode_access_token(token: str) -> dict[str, Any] | None:
         log.error(e)
         raise e
 
-get_refresh_token_key = lambda x: f"refresh_tokens:{x}"
 
-async def is_valid_refresh_token(token: str) -> dict[str, str]:
+def get_refresh_token_key(x: str):
+    return f"refresh_tokens:{x}"
+
+
+async def verify_and_return_refresh_token_payload(token: str) -> dict[str, str] | None:
     try:
-        decoded = decode_access_token(token)
-        if decoded is None:
-            return False
+        return decode_access_token(token)
+
     except jwt.ExpiredSignatureError:
-        return False
+        return None
     except jwt.InvalidTokenError:
-        return False
-    jti = decoded.get('jti' )
-    user_id: str = decoded.get('sub')
+        return None
+    # TODO: Store and check revoked tokens from redis
 
-    redis_client = await anext(get_redis_client())
-    spacename = get_refresh_token_key(user_id)
-    key = await redis_client.hget(spacename, jti)
-    return decoded
-
+    # jti = decoded.get("jti")
+    # user_id: str = decoded.get("sub")
+    # redis_client = await anext(get_redis_client())
+    # spacename = get_refresh_token_key(user_id)
+    # key = await redis_client.hget(spacename, jti)
 
 
 oauth2_scheme = OAuth2PasswordBearer(
@@ -116,12 +120,15 @@ async def get_current_user(
         raise HTTPException(status_code=401, detail="User not found")
     return user
 
-def get_auth_token(authorization: Annotated[str, Header(alias='Authorization')]) -> str:
+
+def get_auth_token(authorization: Annotated[str, Header(alias="Authorization")]) -> str:
     scheme, token = authorization.split(" ", 1)
     if scheme != "Bearer":
         return token
     raise HTTPException(status_code=401, detail="Unauthorized")
 
     ...
+
+
 if __name__ == "__main__":
     print(create_access_token({"username": "test", "password": "<PASSWORD>"}))

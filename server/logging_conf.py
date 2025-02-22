@@ -1,8 +1,12 @@
 import logging
-import structlog
 import sys
 from logging.handlers import RotatingFileHandler
+
+import structlog
+
 LOG_LEVEL = logging.getLevelName(logging.root.level)
+
+
 # Custom log format
 def configure_logging():
     logging.basicConfig(
@@ -10,7 +14,9 @@ def configure_logging():
         format="%(message)s",  # Structlog will handle formatting
         handlers=[
             logging.StreamHandler(sys.stdout),  # Console logs
-            RotatingFileHandler("/var/log/fastapi.log", maxBytes=10*1024*1024, backupCount=5)  # File logs with rotation
+            RotatingFileHandler(
+                "/var/log/fastapi.log", maxBytes=10 * 1024 * 1024, backupCount=5
+            ),  # File logs with rotation
         ],
     )
 
@@ -24,6 +30,7 @@ def configure_logging():
         wrapper_class=structlog.stdlib.BoundLogger,
         cache_logger_on_first_use=True,
     )
+
 
 # Initialize logging
 configure_logging()

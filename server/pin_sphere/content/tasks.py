@@ -1,17 +1,15 @@
 # type: ignore
 
 
-from logging_conf import log
-
 from celery_app import app
 from core.boto3_client import s3_client
 from core.database.session_manager import get_sync_session
 from core.models.content import ContentProcessingStatus
+from logging_conf import log
 from pin_sphere.content import service
 from pin_sphere.content.utils import (
     retrieve_blurhash_and_metadata,
 )
-
 
 
 @app.task

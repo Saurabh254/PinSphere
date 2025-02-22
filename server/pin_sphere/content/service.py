@@ -1,4 +1,3 @@
-from logging_conf import log
 from typing import Any
 from uuid import UUID
 
@@ -19,8 +18,6 @@ from pin_sphere.content.exceptions import (
 from pin_sphere.content.utils import get_content_key
 
 from . import tasks
-
-
 
 
 async def get_content(

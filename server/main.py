@@ -1,5 +1,3 @@
-from logging_conf import log
-
 import uvicorn
 from asgi_correlation_id import CorrelationIdMiddleware
 from fastapi import FastAPI

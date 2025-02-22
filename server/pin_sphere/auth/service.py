@@ -1,22 +1,25 @@
 import time
 import uuid
-from logging_conf import log
 
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
-from starlette.responses import JSONResponse, Response
+from starlette.responses import Response
 
-from core.authflow.auth import create_access_token, create_refresh_token, is_valid_refresh_token
+from core.authflow.auth import (
+    create_access_token,
+    create_refresh_token,
+    verify_and_return_refresh_token_payload,
+)
 from core.authflow.service import verify_password
 from core.models import User
+from logging_conf import log
 from pin_sphere.users import service as user_service
 
 from . import exceptions, schemas
 
 
-
 async def login_user(
-        credentials: OAuth2PasswordRequestForm, response: Response, session: AsyncSession
+    credentials: OAuth2PasswordRequestForm, response: Response, session: AsyncSession
 ):
     user: User = await user_service.get_user(session, credentials.username)
     if not user:
@@ -47,21 +50,24 @@ async def login_user(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-async def refresh_access_token(
-        token: str, session: AsyncSession
-):
-    validation_result = await is_valid_refresh_token(token)
+async def refresh_access_token(token: str, session: AsyncSession):
+    validation_result = await verify_and_return_refresh_token_payload(token)
     if not validation_result:
         raise exceptions.InvalidRefreshToken()
     data = {
-        "sub": validation_result.get('sub'),
+        "sub": validation_result.get("sub"),
         "role": ["user"],
-        "jti": str(validation_result.get('jti')),
+        "jti": str(validation_result.get("jti")),
     }
     access_token = await create_access_token(data)
-    log.debug(f'Refresh access token for the user [{validation_result.get("sub")}]',
-              extra={'access_token': access_token, 'token_type': 'bearer',
-                     'refresh_token': token})
+    log.debug(
+        f"Refresh access token for the user [{validation_result.get('sub')}]",
+        extra={
+            "access_token": access_token,
+            "token_type": "bearer",
+            "refresh_token": token,
+        },
+    )
     return {"access_token": access_token, "token_type": "bearer"}
 
 
