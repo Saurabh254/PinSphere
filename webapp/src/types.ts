@@ -4,11 +4,23 @@ interface Metadata {
   content_type: FileContentType;
 }
 
+export interface User {
+
+  username: string,
+  name: string,
+  email: string,
+  bio: string | null,
+  created_at: Date,
+  url: string | null,
+}
 export interface Content {
   id: string;
   url: string;
   blurhash: string;
+  username: string;
   description: string;
+  likes: number;
+  user: User
   metadata: Metadata;
 }
 

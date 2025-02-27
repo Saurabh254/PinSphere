@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 import { removeTokenFromStorage } from "../service/token_service";
 import { RiLogoutCircleLine } from "@remixicon/react";
+import { doesUserLoggedIn } from "../service/login_service";
 
 const toggleUploadContentModel = () => {
   const modal = document.getElementById("my_upload_model");
@@ -10,31 +12,32 @@ const toggleUploadContentModel = () => {
 };
 
 const Header = () => {
+  const loggedIn = doesUserLoggedIn();
   return (
-    <div className="bg-gray-800 text-white px-4 py-3">
+    <div className="bg-gray-800 text-white px-4 py-3 w-full sticky z-50 top-0 left-0 right-0">
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center">
           <span className="text-lg font-semibold">PinSphere</span>
         </div>
 
         <nav className="hidden md:flex space-x-6 ml-auto mr-8">
-          <a href="#" className="hover:text-gray-300">
+          <Link to="/" className="hover:text-gray-300">
             Home
-          </a>
-          <a href="#" className="hover:text-gray-300">
+          </Link>
+          <Link to="/profile-update" className="hover:text-gray-300">
             Profile
-          </a>
-          <a href="#" className="hover:text-gray-300">
+          </Link>
+          <Link to="#" className="hover:text-gray-300">
             About
-          </a>
-          <a
+          </Link>
+          <span
             onClick={toggleUploadContentModel}
             className="hover:text-gray-300 cursor-pointer"
           >
             Create
-          </a>
+          </span>
         </nav>
-        <a
+        <span
           onClick={toggleUploadContentModel}
           className="hover:text-gray-300 md:hidden items-center gap-2 flex cursor-pointer"
         >
@@ -47,7 +50,7 @@ const Header = () => {
             <path d="M4 19H20V12H22V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V12H4V19ZM13 9V16H11V9H6L12 3L18 9H13Z"></path>
           </svg>
           Upload
-        </a>
+        </span>
         <div className="hidden md:flex items-center space-x-4">
           <div className="relative">
             <input
@@ -74,7 +77,7 @@ const Header = () => {
           </div>
 
           <div className="md:flex hidden">
-            <LogoutDialog />
+            {loggedIn ? <LogoutDialog /> : <LoginDialog />}
           </div>
         </div>
       </div>
@@ -90,7 +93,6 @@ const LogoutDialog = () => {
   };
   return (
     <>
-      {/* Open the modal using document.getElementById('ID').showModal() method */}
       <button
         className="btn btn-primary flex items-center justify-center"
         onClick={() => {
@@ -108,11 +110,7 @@ const LogoutDialog = () => {
       >
         <div className="modal-box flex flex-col w-fit items-center py-12">
           <div className="h-16 w-16 bg-red-100 rounded-full outline-8 outline-red-100 mb-4 items-center justify-center flex">
-            <RiLogoutCircleLine
-              size={48} // set custom `width` and `height`
-              color="red" // set `fill` color
-              className="my-icon" // add custom class name
-            />
+            <RiLogoutCircleLine size={48} color="red" className="my-icon" />
           </div>
           <p className=" text-black pb-8 mt-4">
             Are you sure you want to log out?
@@ -120,7 +118,6 @@ const LogoutDialog = () => {
           <div className="flex items-center justify-center p-0 gap-4">
             <div className="modal-action mt-0 ml-auto">
               <form method="dialog">
-                {/* if there is a button in form, it will close the modal */}
                 <button className="btn btn-primary">Cancel</button>
               </form>
             </div>
@@ -134,6 +131,22 @@ const LogoutDialog = () => {
           </div>
         </div>
       </dialog>
+    </>
+  );
+};
+
+const LoginDialog = () => {
+  const navigator = useNavigate();
+  return (
+    <>
+      <button
+        className="btn btn-primary flex items-center justify-center"
+        onClick={() => {
+          navigator("/login");
+        }}
+      >
+        Login
+      </button>
     </>
   );
 };
