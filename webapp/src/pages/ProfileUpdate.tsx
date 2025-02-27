@@ -36,10 +36,7 @@ const ProfileEdit = () => {
         const upload_url_response = await api_client.get(
           `${API_URL}/users/upload_url?ext=${profile_image.type}`
         );
-        const response = await upload_file(
-          upload_url_response.data,
-          profile_image
-        );
+        await upload_file(upload_url_response.data, profile_image);
 
         request_body["image_key"] = upload_url_response.data.fields.key;
       } catch (error) {
@@ -99,9 +96,9 @@ const ProfileEdit = () => {
             {profile.url || profile_image ? (
               <img
                 src={
-                  profile_image
+                  profile_image != null && profile_image
                     ? URL.createObjectURL(profile_image)
-                    : profile.url
+                    : profile.url || undefined
                 }
                 alt=""
                 className="rounded-full w-[450px] h-[450px] ring-1 ring-primary border-4 border-white"
