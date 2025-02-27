@@ -7,7 +7,7 @@ const Signup = lazy(() => import("./pages/signup"));
 const CreatePostModel = lazy(() => import("./components/CreatePostModel"));
 const App = () => {
   return (
-    <>
+    <div className="h-full w-full flex flex-col items-center justify-center relative">
       <Suspense fallback={<h1>Loading</h1>}>
         <CreatePostModel />
       </Suspense>
@@ -38,7 +38,7 @@ const App = () => {
           }
         />
       </Routes>
-    </>
+    </div>
   );
 };
 

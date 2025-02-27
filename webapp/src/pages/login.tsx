@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { API_URL } from "../constants";
 import { Link, useNavigate } from "react-router";
 
@@ -12,6 +12,7 @@ const Login = () => {
   });
 
   const [error, setError] = useState("");
+  const [showToast, setShowToast] = useState(false);
 
   interface FormData {
     username: string;
@@ -27,6 +28,18 @@ const Login = () => {
       checked: boolean;
     };
   }
+
+  // Effect to handle showing and automatically hiding the toast
+  useEffect(() => {
+    if (error) {
+      setShowToast(true);
+      const timer = setTimeout(() => {
+        setShowToast(false);
+      }, 3000); // Hide toast after 3 seconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   const handleChange = (e: ChangeEvent) => {
     const { id, value, type, checked } = e.target;
@@ -62,9 +75,19 @@ const Login = () => {
       }
     }
   };
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-base">
+    <div className="min-h-screen w-full flex items-center justify-center bg-base relative">
+      {/* DaisyUI Toast */}
+      {showToast && (
+        <div className="toast toast-top toast-end z-50">
+          <div className="alert alert-error">
+            <div>
+              <span>{error}</span>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="bg-white border-1 border-black text-color-primary rounded-lg shadow-lg p-6 max-w-lg w-full">
         <div className="flex justify-center mb-6 bg-base rounded-md">
           <img src="/pin_rect.png" alt="Flowbite Logo" className="h-36" />
@@ -102,7 +125,6 @@ const Login = () => {
             <label
               htmlFor="username"
               className="block text-sm font-medium mb-2"
-              style={{ color: error.includes("username") ? "red" : "black" }}
             >
               Username
             </label>
@@ -113,9 +135,6 @@ const Login = () => {
               placeholder="Enter your username"
               className="w-full bg-color-accent text-color-accent-content rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
             />
-            {error.includes("username") && (
-              <p className="text-red-500 text-sm mt-1">{error}</p>
-            )}
           </div>
 
           <div className="mb-4">
@@ -133,9 +152,6 @@ const Login = () => {
               placeholder="Enter your password"
               className="w-full bg-color-accent text-color-accent-content rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
             />
-            {error.includes("password") && (
-              <p className="text-red-500 text-sm mt-1">{error}</p>
-            )}
           </div>
 
           <div className="flex items-center justify-between mb-6">

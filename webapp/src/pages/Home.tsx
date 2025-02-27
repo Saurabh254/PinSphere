@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 import { API_URL } from "../constants";
 import api_client from "../api_client";
 import { Route, Routes } from "react-router";
 import Header from "../components/Header";
 import { Content } from "../types";
 import ContentWithBlurhash from "../components/ContentWithBlurhash";
+const ProfileUpdate = lazy(() => import("./ProfileUpdate.tsx"));
 
 type Page<T> = {
   items: T[];
@@ -31,7 +32,7 @@ const MainView = () => {
   }, []);
 
   return (
-    <div className="columns-2 md:columns-4 gap-4 space-y-4 mt-8 mx-4">
+    <div className="columns-2 w-full md:columns-4 gap-4 space-y-4 mt-8 mx-4 ">
       {contents &&
         contents.items.map((content) => (
           <ContentWithBlurhash content={content} key={content.id} />
@@ -46,6 +47,7 @@ const Home = () => {
       <Header />
       <Routes>
         <Route index element={<MainView />} />
+        <Route path="profile-update" element={<ProfileUpdate />} />
       </Routes>
     </>
   );

@@ -14,7 +14,7 @@ const ContentWithBlurhash = ({ content }: ContentWithBlurhashProps) => {
     content.metadata.content_type == FileContentType.GIF
   ) {
     return (
-      <Pin>
+      <Pin content={content}>
         <ImageWithBlurhash image={content} key={content.id} />{" "}
       </Pin>
     );
@@ -24,13 +24,13 @@ const ContentWithBlurhash = ({ content }: ContentWithBlurhashProps) => {
     content.metadata.content_type == FileContentType.OGG
   ) {
     return (
-      <Pin>
+      <Pin content={content}>
         <Audio content={content} key={content.id} />
       </Pin>
     );
   } else {
     return (
-      <Pin>
+      <Pin content={content}>
         <video src={content.url} controls className="rounded-lg" />
       </Pin>
     );

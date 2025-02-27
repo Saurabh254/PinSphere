@@ -2,7 +2,7 @@
 
 from uuid import UUID
 
-from fastapi import APIRouter, Body, Depends, Query
+from fastapi import APIRouter, Body, Depends, Path, Query
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
@@ -19,7 +19,7 @@ router = APIRouter(prefix="/content", tags=["content"])
 
 
 @router.post(
-    "", status_code=status.HTTP_201_CREATED, response_model=schemas.ContentResponse
+    "", status_code=status.HTTP_201_CREATED, response_model=schemas.SlimContentResponse
 )
 async def upload_content(
     content_key: str = Body(),
@@ -57,29 +57,42 @@ def get_pre_signed_url(
     return service.get_content_pre_signed_url(user, ext)
 
 
-@router.get("/{content_key}", response_model=schemas.ContentResponse)
+@router.get("/{content_id}", response_model=schemas.ContentResponse)
 async def get_image_by_id(
-    content_key: UUID,
+    content_id: UUID,
     session: AsyncSession = Depends(get_async_session),
     current_user: User = Depends(auth.get_current_user),
 ):
     """
     Get image details by ID
     """
-    image = await service.get_content(content_key, session, current_user)  # type: ignore
+    image = await service.get_content(content_id, session, current_user)  # type: ignore
     if not image:
         raise ContentNotFoundError()
     return image  # type: ignore
 
 
-@router.delete("/{content_key}", status_code=204)
+@router.delete("/{content_id}", status_code=204)
 async def delete_image(
-    content_key: UUID,
+    content_id: UUID,
     session: AsyncSession = Depends(get_async_session),
     current_user: User = Depends(auth.get_current_user),
 ):
     """
     Delete an image by ID
     """
-    await service.delete_image(current_user, content_key, session)  # type: ignore
+    await service.delete_image(current_user, content_id, session)  # type: ignore
     return {"status": "success"}
+
+
+@router.post("/{content_id}/like", status_code=status.HTTP_201_CREATED)
+async def toggle_like_content(
+    content_id: str = Path(description="id of the content "),
+    like: bool = Query(True),
+    session: AsyncSession = Depends(get_async_session),
+):
+    """
+    Like or dislike an image
+
+    """
+    await service.toggle_like(content_id, like, session)

@@ -52,7 +52,7 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-base">
+    <div className="min-h-screen flex items-center justify-center bg-base w-full">
       <div className="bg-white border-1 border-black text-color-primary rounded-lg shadow-lg p-6 max-w-lg w-full">
         <div className="flex justify-center mb-6 bg-base rounded-md">
           <img src="/pin_rect.png" alt="Flowbite Logo" className="h-36" />

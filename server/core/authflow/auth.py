@@ -51,7 +51,12 @@ async def create_refresh_token(
 
 def decode_access_token(token: str) -> dict[str, Any] | None:
     try:
-        return jwt.decode(token, settings.AUTH_SECRET, algorithms=settings.ALGORITHM)  # type: ignore
+        return jwt.decode(  # type: ignore
+            token,
+            settings.AUTH_SECRET,
+            algorithms=settings.ALGORITHM,
+            options={"verify_exp": False},
+        )
     except jwt.DecodeError as e:
         log.debug("Error decoding access token: %s", e)
         return None
@@ -105,7 +110,7 @@ async def get_optional_current_user(
     decoded: dict[str, Any] | None = decode_access_token(token)
     if decoded is None:
         raise HTTPException(status_code=401, detail="Invalid token")
-    stmt = select(User).filter(User.username == decoded.get("sub"))
+    stmt = select(User).filter(User.id == decoded.get("sub"))
     result = await session.execute(stmt)
     return result.scalars().first()
 
