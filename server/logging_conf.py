@@ -7,6 +7,7 @@ import structlog
 LOG_LEVEL = logging.getLevelName(logging.root.level)
 LOG_FILENAME = "/var/log/fastapi.log" if LOG_LEVEL == logging.INFO else "fastapi.log"
 
+
 # Custom log format
 def configure_logging():
     logging.basicConfig(

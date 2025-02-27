@@ -8,9 +8,11 @@ from sqlalchemy import (
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from core.database.base_model import RecordModel
+
 # from .content import  Content
 if typing.TYPE_CHECKING:
-    from .content import  Content
+    from .content import Content
+
 
 class ImageStatus(enum.Enum):
     PROCESSING = "PROCESSING"
@@ -20,7 +22,9 @@ class ImageStatus(enum.Enum):
 class User(RecordModel):
     __tablename__ = "users"
 
-    username: Mapped[str] = mapped_column(String(50), nullable=False,index=True, unique=True)
+    username: Mapped[str] = mapped_column(
+        String(50), nullable=False, index=True, unique=True
+    )
     name: Mapped[str] = mapped_column(String(50), nullable=True)
     email: Mapped[str] = mapped_column(String(50), nullable=False)
     password: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)

@@ -9,9 +9,10 @@ from core.models import User
 from core.types import FileContentType
 from pin_sphere.users.service import get_user_by_username
 
+from . import service
 from .schemas import UserResponse, UserUpdate
 from .service import delete_user, get_user, get_users, update_user
-from . import service
+
 # Create an API router for users-related endpoints
 router = APIRouter(
     prefix="/users",
@@ -30,6 +31,7 @@ async def get_me(
     session: AsyncSession = Depends(get_async_session),
 ):
     return await get_user(session, current_user.username)
+
 
 # Fetch all users with optional pagination
 @router.get(
@@ -98,10 +100,17 @@ async def delete_account(
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
-@router.get("/upload_url", summary="Upload URL for profile photo", tags=["Account Operations"])
-async def retrive_upload_url(ext: Literal['image/png','image/jpeg'], current_user: User = Depends(auth.get_current_user) ):
+
+@router.get(
+    "/upload_url", summary="Upload URL for profile photo", tags=["Account Operations"]
+)
+async def retrive_upload_url(
+    ext: Literal["image/png", "image/jpeg"],
+    current_user: User = Depends(auth.get_current_user),
+):
     ext_ = FileContentType(ext)
     return service.get_upload_url(current_user, ext=ext_)
+
 
 # Fetch a specific users by username
 @router.get(

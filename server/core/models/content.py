@@ -1,4 +1,7 @@
 import enum
+
+# from .user import User
+import typing
 from typing import Dict
 
 from sqlalchemy import Boolean, ForeignKey, Integer, String
@@ -9,11 +12,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from config import settings
 from core.database.base_model import RecordModel
-# from .user import User
-import typing
 
 if typing.TYPE_CHECKING:
     from .user import User
+
 
 class ContentProcessingStatus(enum.Enum):
     PROCESSING = "PROCESSING"
@@ -34,7 +36,8 @@ class Content(RecordModel):
     description: Mapped[str] = mapped_column(String, nullable=True)
     deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     _metadata: Mapped[Dict[str, str | int | bool]] = mapped_column(JSONB, nullable=True)
-    user: Mapped["User"] = relationship('User', back_populates='contents')
+    user: Mapped["User"] = relationship("User", back_populates="contents")
+
     @hybrid_property
     def url(self):
         return f"{settings.AWS_ENDPOINT_URL}/{settings.AWS_STORAGE_BUCKET_NAME}/{self.image_key}"

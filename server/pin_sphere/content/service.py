@@ -92,9 +92,7 @@ def update_content(
     session.commit()
 
 
-
-
-async def toggle_like(content_id: UUID , like: bool , session: AsyncSession, /) -> None:
+async def toggle_like(content_id: UUID, like: bool, session: AsyncSession, /) -> None:
     content = await get_content(content_id, session, None)
 
     if not content:

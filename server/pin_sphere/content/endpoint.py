@@ -84,10 +84,15 @@ async def delete_image(
     await service.delete_image(current_user, content_id, session)  # type: ignore
     return {"status": "success"}
 
+
 @router.post("/{content_id}/like", status_code=status.HTTP_201_CREATED)
-async def toggle_like_content(content_id: str = Path(description="id of the content "),like: bool = Query(True), session: AsyncSession = Depends(get_async_session)):
+async def toggle_like_content(
+    content_id: str = Path(description="id of the content "),
+    like: bool = Query(True),
+    session: AsyncSession = Depends(get_async_session),
+):
     """
     Like or dislike an image
 
     """
-    await service.toggle_like(content_id,like, session)
+    await service.toggle_like(content_id, like, session)

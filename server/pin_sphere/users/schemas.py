@@ -15,10 +15,10 @@ class UserCreate(BaseModel):
 
 # Schema for updating a users (optional fields)
 class UserUpdate(BaseModel):
-    username: Optional[str] = Field(None) # Allow username to be updated, if needed
-    name: Optional[str]= Field(None)
-    email: Optional[EmailStr]= Field(None)
-    profile_photo_key: Optional[str]= Field(None, alias="image_key")
+    username: Optional[str] = Field(None)  # Allow username to be updated, if needed
+    name: Optional[str] = Field(None)
+    email: Optional[EmailStr] = Field(None)
+    profile_photo_key: Optional[str] = Field(None, alias="image_key")
 
 
 # Schema for returning users information
@@ -27,7 +27,7 @@ class UserResponse(BaseModel):
     name: str
     email: EmailStr
     created_at: datetime
-    profile_photo_key: str|None = Field(None, exclude=True)
+    profile_photo_key: str | None = Field(None, exclude=True)
 
     @computed_field
     def url(self) -> HttpUrl | None:

@@ -61,5 +61,6 @@ class SlimContentResponse(BaseModel):
     def metadata(self) -> Optional[ContentMeta]:
         return ContentMeta(**self.raw_metadata) if self.raw_metadata else None
 
+
 class ContentResponse(SlimContentResponse):
     user: UserResponse = Field(description="Associated user response")

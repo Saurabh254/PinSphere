@@ -51,7 +51,12 @@ async def create_refresh_token(
 
 def decode_access_token(token: str) -> dict[str, Any] | None:
     try:
-        return jwt.decode(token, settings.AUTH_SECRET, algorithms=settings.ALGORITHM ,options={"verify_exp": False})  # type: ignore
+        return jwt.decode( # type: ignore
+            token,
+            settings.AUTH_SECRET,
+            algorithms=settings.ALGORITHM,
+            options={"verify_exp": False},
+        )
     except jwt.DecodeError as e:
         log.debug("Error decoding access token: %s", e)
         return None

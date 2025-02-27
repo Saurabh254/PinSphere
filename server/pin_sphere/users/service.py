@@ -11,8 +11,8 @@ from core.authflow.service import hash_password
 from core.models import Content, User
 from core.types import FileContentType
 
-from .schemas import UserCreate, UserUpdate
 from ..base_exception import ServerError
+from .schemas import UserCreate, UserUpdate
 
 
 # Service to fetch a single users by username
@@ -76,7 +76,6 @@ async def update_user(db: AsyncSession, user: User, user_update: UserUpdate):
     if "username" in update_data.keys():
         return
 
-
     # Update only the fields that are provided
     for key, value in update_data.items():
         setattr(user, key, value)
@@ -85,11 +84,11 @@ async def update_user(db: AsyncSession, user: User, user_update: UserUpdate):
     return user
 
 
-async def move_assets_to_new_User(db: AsyncSession, user: User, new_username: str) -> User:
+async def move_assets_to_new_User(
+    db: AsyncSession, user: User, new_username: str
+) -> User:
     # First check if the new username already exists
-    existing_user = await db.execute(
-        select(User).where(User.username == new_username)
-    )
+    existing_user = await db.execute(select(User).where(User.username == new_username))
     existing_user = existing_user.scalars().first()
 
     if existing_user:
@@ -129,7 +128,6 @@ async def move_assets_to_new_User(db: AsyncSession, user: User, new_username: st
     return user
 
 
-
 # Service to delete a users by username
 async def delete_user(db: AsyncSession, username: str):
     result = await db.execute(select(User).filter(User.username == username))
@@ -149,12 +147,15 @@ async def get_user_by_username(db: AsyncSession, username: str):
         return result.scalars().first()
     except NoResultFound:
         return None
-def get_user_profile_key(username: str, ext: FileContentType)-> str:
+
+
+def get_user_profile_key(username: str, ext: FileContentType) -> str:
     return f"profile/{username}/{uuid.uuid4()}.{ext.name.casefold()}"
 
+
 def get_upload_url(user: User, ext: FileContentType):
-        content_key = get_user_profile_key(user.username, ext)
-        res = storage.create_presigned_post(content_key, ext)
-        if not res:
-            raise ServerError(status_code=500, message="Failed to create presigned URL")
-        return res
+    content_key = get_user_profile_key(user.username, ext)
+    res = storage.create_presigned_post(content_key, ext)
+    if not res:
+        raise ServerError(status_code=500, message="Failed to create presigned URL")
+    return res
