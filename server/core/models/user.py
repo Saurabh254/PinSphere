@@ -1,4 +1,5 @@
 import enum
+import typing
 
 from sqlalchemy import (
     LargeBinary,
@@ -6,8 +7,10 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from core.database.base_model import RecordModel, TimeStampModel
+from core.database.base_model import RecordModel
 # from .content import  Content
+if typing.TYPE_CHECKING:
+    from .content import  Content
 
 class ImageStatus(enum.Enum):
     PROCESSING = "PROCESSING"

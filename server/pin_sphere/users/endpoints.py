@@ -1,6 +1,6 @@
 from typing import Literal
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.authflow import auth
@@ -100,8 +100,8 @@ async def delete_account(
 
 @router.get("/upload_url", summary="Upload URL for profile photo", tags=["Account Operations"])
 async def retrive_upload_url(ext: Literal['image/png','image/jpeg'], current_user: User = Depends(auth.get_current_user) ):
-    ext = FileContentType(ext)
-    return service.get_upload_url(current_user, ext=ext)
+    ext_ = FileContentType(ext)
+    return service.get_upload_url(current_user, ext=ext_)
 
 # Fetch a specific users by username
 @router.get(

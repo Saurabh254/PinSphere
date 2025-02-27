@@ -10,7 +10,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from config import settings
 from core.database.base_model import RecordModel
 # from .user import User
+import typing
 
+if typing.TYPE_CHECKING:
+    from .user import User
 
 class ContentProcessingStatus(enum.Enum):
     PROCESSING = "PROCESSING"
