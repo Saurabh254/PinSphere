@@ -1,1 +1,1 @@
-export const API_URL: string = "http://localhost:8000/api/v1";
+export const API_URL: string = "https://pinsphere.saurabhvishwakarma.in/api/v1";
