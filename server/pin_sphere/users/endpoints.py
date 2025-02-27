@@ -1,14 +1,17 @@
-from fastapi import APIRouter, Depends, HTTPException
+from typing import Literal
+
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.authflow import auth
 from core.database.session_manager import get_async_session
 from core.models import User
+from core.types import FileContentType
 from pin_sphere.users.service import get_user_by_username
 
 from .schemas import UserResponse, UserUpdate
 from .service import delete_user, get_user, get_users, update_user
-
+from . import service
 # Create an API router for users-related endpoints
 router = APIRouter(
     prefix="/users",
@@ -27,7 +30,6 @@ async def get_me(
     session: AsyncSession = Depends(get_async_session),
 ):
     return await get_user(session, current_user.username)
-
 
 # Fetch all users with optional pagination
 @router.get(
@@ -76,7 +78,7 @@ async def check_username_availability(
 
 # Account deletion route
 @router.delete(
-    "/delete/{username}",
+    "/{username}",
     response_model=UserResponse,
     summary="Delete an account by username",
     tags=["Account Operations"],
@@ -96,6 +98,10 @@ async def delete_account(
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
+@router.get("/upload_url", summary="Upload URL for profile photo", tags=["Account Operations"])
+async def retrive_upload_url(ext: Literal['image/png','image/jpeg'], current_user: User = Depends(auth.get_current_user) ):
+    ext = FileContentType(ext)
+    return service.get_upload_url(current_user, ext=ext)
 
 # Fetch a specific users by username
 @router.get(
@@ -122,13 +128,12 @@ async def read_user(
 
 # Update an existing users
 @router.put(
-    "/{username}",
+    "",
     response_model=UserResponse,
-    summary="Update a users",
+    summary="Update a user",
     tags=["Account Operations"],
 )
 async def update_existing_user(
-    username: str,
     user_update: UserUpdate,
     db: AsyncSession = Depends(get_async_session),
     current_user: User = Depends(auth.get_current_user),
@@ -139,7 +144,7 @@ async def update_existing_user(
     - **username**: The username of the users to update.
     - **user_update**: JSON payload containing the fields to update (name, email).
     """
-    user = await update_user(db, username=username, user_update=user_update)
+    user = await update_user(db, current_user, user_update=user_update)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user

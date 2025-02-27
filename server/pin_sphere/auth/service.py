@@ -31,12 +31,12 @@ async def login_user(
         raise exceptions.InvalidUsernameOrPassword()
     jti = uuid.uuid4()
     access_token_data = {
-        "sub": credentials.username,
+        "sub": str(user.id),
         "jti": str(jti),
         "role": ["user"],
     }
     refresh_token_data = {
-        "sub": credentials.username,
+        "sub": str(user.id),
         "jti": str(jti),
         "iat": int(time.time()),
         "scope": ["user"],

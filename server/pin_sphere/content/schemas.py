@@ -6,6 +6,7 @@ from uuid import UUID
 from pydantic import BaseModel, Field, HttpUrl, computed_field
 
 from config import settings
+from pin_sphere.users.schemas import UserResponse
 
 
 class ContentStatus(str, Enum):
@@ -27,7 +28,7 @@ class ContentMeta(BaseModel):
     content_type: Optional[str] = "okkk"
 
 
-class ContentResponse(BaseModel):
+class SlimContentResponse(BaseModel):
     id: UUID = Field(..., description="Unique identifier of the content")
     username: str = Field(..., description="Username of the content owner")
     content_key: str = Field(
@@ -39,6 +40,7 @@ class ContentResponse(BaseModel):
     blurhash: Optional[str] = Field(
         None, description="Blurhash for fast loading previews"
     )
+    likes: int = Field(0, description="Number of likes")
     description: Optional[str] = Field(
         "No description provided", description="Content description"
     )
@@ -58,3 +60,6 @@ class ContentResponse(BaseModel):
     @computed_field
     def metadata(self) -> Optional[ContentMeta]:
         return ContentMeta(**self.raw_metadata) if self.raw_metadata else None
+
+class ContentResponse(SlimContentResponse):
+    user: UserResponse = Field(description="Associated user response")

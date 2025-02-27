@@ -90,3 +90,14 @@ def update_content(
         setattr(content, key, value)
 
     session.commit()
+
+
+
+
+async def toggle_like(content_id: str, like: bool , session: AsyncSession, /) -> None:
+    content = await get_content(content_id, session, None)
+
+    if not content:
+        raise ContentNotFoundError
+    content += 1
+    await session.commit()
