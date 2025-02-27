@@ -51,7 +51,7 @@ async def create_refresh_token(
 
 def decode_access_token(token: str) -> dict[str, Any] | None:
     try:
-        return jwt.decode( # type: ignore
+        return jwt.decode(  # type: ignore
             token,
             settings.AUTH_SECRET,
             algorithms=settings.ALGORITHM,
