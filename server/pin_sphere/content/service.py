@@ -4,7 +4,7 @@ from uuid import UUID
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from core import storage
 from core.models import Content, User
@@ -71,6 +71,7 @@ def get_content_pre_signed_url(user: User, ext: FileContentType) -> dict[str, st
 async def get_contents(username: str | None, session: AsyncSession):
     stmt = (
         select(Content)
+        .options(joinedload(Content.user))
         .filter_by(deleted=False)
         .filter_by(status=ContentProcessingStatus.PROCESSED)
         .order_by(Content.created_at.desc())
