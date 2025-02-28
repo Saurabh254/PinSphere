@@ -17,13 +17,13 @@ class Settings(BaseSettings):
     )
     AWS_STORAGE_BUCKET_NAME: str = "pinsphere"
     AWS_REGION: str = "us-east-1"
-    AWS_SECRET_ACCESS_KEY: str = "lzBdlQOBsAREMnmBD0LaUOm6NUTZO5i5awjf6Bkw"
-    AWS_ACCESS_KEY_ID: str = "uGPRISlXZ7rBkB3PahjU"
+    AWS_SECRET_ACCESS_KEY: str = "wx0AHiNqPnJbiPTj55Fz2fR81EU3jdpPjyAPeZ6y"
+    AWS_ACCESS_KEY_ID: str = "Q9LPDloAiLJODVTEinQQ"
     AWS_SESSION_TOKEN: str = "saurabh_prod"
     AWS_SIGNATURE_VERSION: str = "s3v4"
-    AWS_ENDPOINT_URL: str = "http://localhost:9000"
     REFRESH_TOKEN_EXPIRATION_SECONDS: int = 60 * 60 * 24 * 15  # 15 days
-    RABBIT_MQ_URL: str = "amqp://pin_sphere:pin_sphere_prod@localhost:5672/"
+    AWS_ENDPOINT_URL: str = "https://minio.saurabhvishwakarma.in"
+    RABBIT_MQ_URL: str = "redis://localhost:6379/0"
 
     def get_database_dsn(self, driver: Literal["asyncpg", "psycopg"]) -> PostgresDsn:
         return PostgresDsn(
