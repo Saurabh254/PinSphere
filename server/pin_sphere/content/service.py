@@ -39,24 +39,32 @@ async def delete_content(user: User, content_id: UUID, session: AsyncSession) ->
 
 
 async def save_content(
-    user: User, content_key: str, session: AsyncSession, description: str | None = None
+    user: User,
+    content_key: str,
+    session: AsyncSession,
+    ext: FileContentType,
+    description: str | None = None,
 ) -> Content:
     stmt = select(Content).filter_by(content_key=content_key)
     existing_content = await session.execute(stmt)
     if existing_content.scalar_one_or_none():
         raise ContentAlreadyExistsError
-
     content = Content(
         username=user.username,
         content_key=content_key,
-        status=ContentProcessingStatus.PROCESSING,
+        status=ContentProcessingStatus.PROCESSED,
         description=description,
     )
+    if ext in [ext.PNG, ext.JPEG, ext.GIF]:
+        content.status = ContentProcessingStatus.PROCESSING
+    else:
+        content._metadata = {"width": 400, "height": 200, "content_type": ext.value}  # type: ignore
     session.add(content)
     await session.commit()
     await session.refresh(content)
 
-    tasks.generate_blurhash.delay(content.id, content.content_key)  # type: ignore
+    if ext.PNG or ext.JPEG or ext.GIF:
+        tasks.generate_blurhash.delay(content.id, content.content_key)  # type: ignore
     return content
 
 

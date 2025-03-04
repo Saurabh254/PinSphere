@@ -24,6 +24,7 @@ router = APIRouter(prefix="/content", tags=["content"])
 async def upload_content(
     content_key: str = Body(),
     description: str | None = Body(None),
+    ext: FileContentType = Body(),
     session: AsyncSession = Depends(get_async_session),
     current_user: User = Depends(auth.get_current_user),
 ):
@@ -31,7 +32,7 @@ async def upload_content(
     Upload a new image for a user
     """
     return await service.save_content(
-        current_user, content_key, description=description, session=session
+        current_user, content_key, description=description, session=session, ext=ext
     )  # type: ignore
 
 
