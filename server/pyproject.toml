@@ -49,3 +49,6 @@ target-version = "py310"
 
 [tool.uv.sources]
 blurhash-python = { git = "https://github.com/woltapp/blurhash-python" }
+
+[tool.pyright]
+PYRIGHT_PYTHON_FORCE_VERSION = 'latest'

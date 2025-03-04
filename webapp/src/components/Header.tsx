@@ -3,11 +3,22 @@ import { Link } from "react-router-dom";
 import { removeTokenFromStorage } from "../service/token_service";
 import { RiLogoutCircleLine } from "@remixicon/react";
 import { doesUserLoggedIn } from "../service/login_service";
+import { toast, ToastContainer } from "react-toastify";
+import axios from "axios";
+import { API_URL } from "../constants";
 
-const toggleUploadContentModel = () => {
-  const modal = document.getElementById("my_upload_model");
-  if (modal) {
-    (modal as HTMLDialogElement).showModal();
+const toggleUploadContentModel = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/users/me`);
+    if (response.status === 200) {
+      const modal = document.getElementById("my_upload_model");
+      if (modal) {
+        (modal as HTMLDialogElement).showModal();
+      }
+    }
+  } catch (error) {
+    toast.error("Please login to create content");
+    console.error(error);
   }
 };
 
@@ -15,6 +26,7 @@ const Header = () => {
   const loggedIn = doesUserLoggedIn();
   return (
     <div className="bg-gray-800 text-white px-4 py-3 w-full sticky z-50 top-0 left-0 right-0">
+      <ToastContainer />
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center">
           <span className="text-lg font-semibold">PinSphere</span>
@@ -47,7 +59,7 @@ const Header = () => {
             viewBox="0 0 24 24"
             fill="#fff"
           >
-            <path d="M4 19H20V12H22V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V12H4V19ZM13 9V16H11V9H6L12 3L18 9H13Z"></path>
+            <path d="M4 19H20V12H22V20C22 20.5523 21 21 21 21H3C2.44772 21 2 20 2 20V12H4V19ZM13 9V16H11V9H6L12 3L18 9H13Z"></path>
           </svg>
           Upload
         </span>

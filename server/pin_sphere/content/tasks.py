@@ -19,7 +19,6 @@ def generate_blurhash(image_id: str, image_key: str):
     Args:
         image_id (str): The ID of the image.
         image_key: S3 object key (path in bucket).
-        quality: Compression quality (0-100, higher is better) default to 60.
     """
     try:
         with next(get_sync_session()) as session:

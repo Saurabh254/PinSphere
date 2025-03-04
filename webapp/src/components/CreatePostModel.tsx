@@ -38,6 +38,7 @@ const CreatePostModal = () => {
           ? await api_client.post(`${API_URL}/content`, {
               content_key: data.fields.key,
               description: description,
+              ext: file.type,
             })
           : null;
       showToast(

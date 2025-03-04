@@ -32,7 +32,7 @@ const MainView = () => {
   }, []);
 
   return (
-    <div className="columns-2 w-full md:columns-4 gap-4 space-y-4 mt-8 mx-4 ">
+    <div className="columns-2 w-full md:columns-4 gap-4 space-y-4 mt-8 mx-4 px-8 ">
       {contents &&
         contents.items.map((content) => (
           <ContentWithBlurhash content={content} key={content.id} />
