@@ -13,15 +13,28 @@ export interface User {
   created_at: Date,
   url: string | null,
 }
-export interface Content {
+
+export interface SlimContent {
   id: string;
   url: string;
   blurhash: string;
-  username: string;
+  user_id: string;
   description: string;
   likes: number;
-  user: User
   metadata: Metadata;
+
+}
+export interface Content extends SlimContent {
+  user: User
+}
+
+export type Page<T> = {
+  items: T[];
+  pages: number;
+  page: number;
+  total: number;
+  size: number;
+
 }
 
 export enum FileContentType {

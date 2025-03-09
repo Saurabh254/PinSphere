@@ -2,7 +2,7 @@ import api_client from "../api_client";
 import { API_URL } from "../constants";
 import { getTokenFromStorage } from "./token_service";
 
-export function doesUserLoggedIn() {
+export function isUserLoggedIn() {
   return getTokenFromStorage() !== null;
 }
 

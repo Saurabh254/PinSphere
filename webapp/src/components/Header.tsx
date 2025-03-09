@@ -2,7 +2,7 @@ import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { removeTokenFromStorage } from "../service/token_service";
 import { RiLogoutCircleLine } from "@remixicon/react";
-import { doesUserLoggedIn } from "../service/login_service";
+import { isUserLoggedIn } from "../service/login_service";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import { API_URL } from "../constants";
@@ -23,7 +23,7 @@ const toggleUploadContentModel = async () => {
 };
 
 const Header = () => {
-  const loggedIn = doesUserLoggedIn();
+  const loggedIn = isUserLoggedIn();
   return (
     <div className="bg-gray-800 text-white px-4 py-3 w-full sticky z-50 top-0 left-0 right-0">
       <ToastContainer />
@@ -36,7 +36,7 @@ const Header = () => {
           <Link to="/" className="hover:text-gray-300">
             Home
           </Link>
-          <Link to="/profile-update" className="hover:text-gray-300">
+          <Link to="/user-profile" className="hover:text-gray-300">
             Profile
           </Link>
           <Link to="#" className="hover:text-gray-300">
