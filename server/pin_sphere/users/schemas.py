@@ -1,7 +1,15 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr, Field, HttpUrl, SecretStr, computed_field
+from pydantic import (
+    UUID4,
+    BaseModel,
+    EmailStr,
+    Field,
+    HttpUrl,
+    SecretStr,
+    computed_field,
+)
 
 from config import settings
 
@@ -23,6 +31,7 @@ class UserUpdate(BaseModel):
 
 # Schema for returning users information
 class UserResponse(BaseModel):
+    id: UUID4
     username: str  # Replaced `id` with `username`
     name: str
     email: EmailStr

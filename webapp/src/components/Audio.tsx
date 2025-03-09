@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import ReactAudioPlayer from "react-audio-player";
 import { RiPauseFill, RiPlayFill } from "@remixicon/react";
-import { Content } from "../types";
+import { SlimContent } from "../types";
 
 interface AudioPlayerProps {
-  content: Content;
+  content: SlimContent;
 }
 
 const AudioPlayer = ({ content }: AudioPlayerProps) => {

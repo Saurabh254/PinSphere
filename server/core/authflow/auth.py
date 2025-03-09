@@ -136,4 +136,4 @@ def get_auth_token(authorization: Annotated[str, Header(alias="Authorization")])
 
 
 if __name__ == "__main__":
-    print(create_access_token({"username": "test", "password": "<PASSWORD>"}))
+    print(create_access_token({"user_id": "test", "password": "<PASSWORD>"}))

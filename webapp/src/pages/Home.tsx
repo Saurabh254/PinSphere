@@ -5,8 +5,7 @@ import { Route, Routes } from "react-router";
 import Header from "../components/Header";
 import { Content } from "../types";
 import ContentWithBlurhash from "../components/ContentWithBlurhash";
-const ProfileUpdate = lazy(() => import("./ProfileUpdate.tsx"));
-
+const ProfileViewRouter = lazy(() => import("./ProfileView.tsx"));
 type Page<T> = {
   items: T[];
   total: number;
@@ -32,7 +31,7 @@ const MainView = () => {
   }, []);
 
   return (
-    <div className="columns-2 w-full md:columns-4 gap-4 space-y-4 mt-8 mx-4 px-8 ">
+    <div className="columns-2 w-full lg:columns-4 gap-4 space-y-4 mt-8 mx-4 px-8 ">
       {contents &&
         contents.items.map((content) => (
           <ContentWithBlurhash content={content} key={content.id} />
@@ -47,7 +46,8 @@ const Home = () => {
       <Header />
       <Routes>
         <Route index element={<MainView />} />
-        <Route path="profile-update" element={<ProfileUpdate />} />
+
+        <Route path="user-profile/*" element={<ProfileViewRouter />} />
       </Routes>
     </>
   );

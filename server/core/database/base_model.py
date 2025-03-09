@@ -1,5 +1,6 @@
 import uuid
 
+from pydantic import UUID4
 from sqlalchemy import UUID, Column, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Mapped, mapped_column
@@ -30,6 +31,6 @@ class RecordModel(TimeStampModel):
     __abstract__ = True
 
     # Common fields
-    id: Mapped[int] = mapped_column(
+    id: Mapped[UUID4] = mapped_column(
         UUID, primary_key=True, index=True, default=lambda: uuid.uuid4()
     )

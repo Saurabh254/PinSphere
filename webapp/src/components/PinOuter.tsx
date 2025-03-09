@@ -24,7 +24,7 @@ const Pin = ({ children, content }: PinProps) => {
         ) : (
           <RiAccountCircleLine className="w-5 h-5 rounded-full" />
         )}
-        <span className="text-sm font-semibold">{content.username}</span>
+        <span className="text-sm font-semibold">{`${content.user.name} • @${content.user.username}`}</span>
       </div>
 
       {/* Pin Image */}

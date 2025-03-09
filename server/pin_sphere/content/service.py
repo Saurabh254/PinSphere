@@ -1,5 +1,4 @@
 from typing import Any
-from uuid import UUID
 
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import select
@@ -8,7 +7,7 @@ from sqlalchemy.orm import Session, joinedload
 
 from core import storage
 from core.models import Content, User
-from core.models.content import ContentProcessingStatus
+from core.models.content import ContentLikes, ContentProcessingStatus
 from core.types import FileContentType
 from pin_sphere.base_exception import ServerError
 from pin_sphere.content.exceptions import (
@@ -21,18 +20,18 @@ from . import tasks
 
 
 async def get_content(
-    content_id: UUID, session: AsyncSession, user: User | None = None
+    content_id: str, session: AsyncSession, user: User | None = None
 ) -> Content | None:
     stmt = select(Content).filter_by(id=content_id, deleted=False)
     if user:
-        stmt = stmt.filter_by(username=user.username)
+        stmt = stmt.filter_by(user_id=user.id)
     result = await session.execute(stmt)
     return result.scalar_one_or_none()
 
 
-async def delete_content(user: User, content_id: UUID, session: AsyncSession) -> None:
+async def delete_content(user: User, content_id: str, session: AsyncSession) -> None:
     content = await get_content(content_id, session, user)
-    if not content or content.username != user.username:
+    if not content or content.user_id != user.id:
         raise ContentNotFoundError
     content.deleted = True
     await session.commit()
@@ -50,7 +49,7 @@ async def save_content(
     if existing_content.scalar_one_or_none():
         raise ContentAlreadyExistsError
     content = Content(
-        username=user.username,
+        user_id=user.id,
         content_key=content_key,
         status=ContentProcessingStatus.PROCESSED,
         description=description,
@@ -79,13 +78,15 @@ def get_content_pre_signed_url(user: User, ext: FileContentType) -> dict[str, st
 async def get_contents(username: str | None, session: AsyncSession):
     stmt = (
         select(Content)
-        .options(joinedload(Content.user))
-        .filter_by(deleted=False)
+        .options(
+            joinedload(Content.user)  # Corrected
+        )
         .filter_by(status=ContentProcessingStatus.PROCESSED)
         .order_by(Content.created_at.desc())
     )
+
     if username:
-        stmt = stmt.filter_by(username=username)
+        stmt = stmt.filter(Content.user.has(username=username))
     return await paginate(session, stmt)
 
 
@@ -101,10 +102,29 @@ def update_content(
     session.commit()
 
 
-async def toggle_like(content_id: UUID, like: bool, session: AsyncSession, /) -> None:
+async def toggle_like(
+    user: User, content_id: str, like: bool, session: AsyncSession, /
+) -> None:
     content = await get_content(content_id, session, None)
 
     if not content:
         raise ContentNotFoundError
     content.likes += 1
+    stmt = select(ContentLikes).filter(
+        ContentLikes.content_id == content_id,
+        ContentLikes.user_id == user.id,
+    )
+    result = await session.execute(stmt)
+    content_like_model: ContentLikes = result.scalar_one_or_none()
+    if content_like_model:
+        content_like_model.toggle_likes()
+    else:
+        content_like_model = ContentLikes(content_id=content_id, user_id=user.id)
+        session.add(content_like_model)
+
     await session.commit()
+
+
+def get_user_contents(user: User, session: AsyncSession):
+    stmt = select(Content).filter_by(user_id=user.id)
+    return paginate(session, stmt)

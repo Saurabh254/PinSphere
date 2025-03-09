@@ -4,7 +4,7 @@ import enum
 import typing
 from typing import Dict
 
-from sqlalchemy import Boolean, ForeignKey, Integer, String
+from sqlalchemy import UUID, Boolean, ForeignKey, Integer, String, UniqueConstraint
 from sqlalchemy import Enum as SAEnum
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -24,9 +24,7 @@ class ContentProcessingStatus(enum.Enum):
 
 class Content(RecordModel):
     __tablename__ = "contents"
-    username: Mapped[str] = mapped_column(
-        String(50), ForeignKey("users.username"), nullable=False
-    )
+    user_id: Mapped[str] = mapped_column(UUID, ForeignKey("users.id"), nullable=False)
     blurhash: Mapped[str] = mapped_column(String(50), nullable=True)
     content_key: Mapped[str] = mapped_column(String(256), nullable=False)
     status: Mapped[ContentProcessingStatus] = mapped_column(
@@ -40,4 +38,18 @@ class Content(RecordModel):
 
     @hybrid_property
     def url(self):
-        return f"{settings.AWS_ENDPOINT_URL}/{settings.AWS_STORAGE_BUCKET_NAME}/{self.image_key}"
+        return f"{settings.AWS_ENDPOINT_URL}/{settings.AWS_STORAGE_BUCKET_NAME}/{self.content_key}"
+
+
+class ContentLikes(RecordModel):
+    __tablename__ = "contentlikes"
+
+    user_id: Mapped[str] = mapped_column(UUID, ForeignKey("users.id"), nullable=False)
+    content_id: Mapped[str] = mapped_column(
+        UUID, ForeignKey("contents.id"), nullable=False
+    )
+    liked: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    __table_args__ = (UniqueConstraint("user_id", "content_id"),)
+
+    def toggle_likes(self):
+        self.liked = not self.liked
