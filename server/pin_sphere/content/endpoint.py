@@ -1,5 +1,5 @@
 # type: ignore
-
+from typing import Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Body, Depends, Path, Query
@@ -39,12 +39,23 @@ async def upload_content(
 @router.get("", response_model=Page[schemas.ContentResponse])
 async def get_contents(
     session: AsyncSession = Depends(get_async_session),
-    username: str | None = Query(None, description="Username or None"),
+    username: Optional[str] = Query(None, description="Username or None"),
 ):
     """
     Get all images for a user
     """
     return await service.get_contents(username, session)
+
+
+@router.get("/me", response_model=Page[schemas.SlimContentResponse])
+async def get_user_contents(
+    current_user: User = Depends(auth.get_current_user),
+    session: AsyncSession = Depends(get_async_session),
+):
+    """
+    Get all contents of a user
+    """
+    return await service.get_user_contents(current_user, session)
 
 
 @router.get("/upload_url")
@@ -88,6 +99,7 @@ async def delete_image(
 
 @router.post("/{content_id}/like", status_code=status.HTTP_201_CREATED)
 async def toggle_like_content(
+    current_user: User = Depends(auth.get_current_user),
     content_id: str = Path(description="id of the content "),
     like: bool = Query(True),
     session: AsyncSession = Depends(get_async_session),
@@ -96,4 +108,4 @@ async def toggle_like_content(
     Like or dislike an image
 
     """
-    await service.toggle_like(content_id, like, session)
+    await service.toggle_like(current_user, content_id, like, session)

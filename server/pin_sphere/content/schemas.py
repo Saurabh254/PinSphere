@@ -3,7 +3,7 @@ from enum import Enum
 from typing import Any, Optional
 from uuid import UUID
 
-from pydantic import BaseModel, Field, HttpUrl, computed_field
+from pydantic import UUID4, BaseModel, Field, HttpUrl, computed_field
 
 from config import settings
 from pin_sphere.users.schemas import UserResponse
@@ -15,7 +15,7 @@ class ContentStatus(str, Enum):
 
 
 class ContentCreate(BaseModel):
-    username: str
+    user_id: UUID4
     content_uuid: UUID
     description: Optional[str] = Field(
         "No description provided", description="Description of the content"
@@ -25,12 +25,12 @@ class ContentCreate(BaseModel):
 class ContentMeta(BaseModel):
     height: int
     width: int
-    content_type: Optional[str] = "okkk"
+    content_type: Optional[str] = None
 
 
 class SlimContentResponse(BaseModel):
     id: UUID = Field(..., description="Unique identifier of the content")
-    username: str = Field(..., description="Username of the content owner")
+    user_id: UUID = Field(..., description="Username of the content owner")
     content_key: str = Field(
         ..., description="Key of the content in storage", exclude=True
     )
