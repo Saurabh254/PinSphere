@@ -51,3 +51,14 @@ async def signup(
     - **body**: credentials to log in with pin_sphere.
     """
     return await service.signup_user(credentials, session)
+
+
+@router.post("/google")
+async def google_auth(
+    postBody: schemas.GoogleOauthPostBody,
+    session: AsyncSession = Depends(get_async_session),
+):
+    """
+    Exchange Google auth code for tokens, verify user, and return JWT
+    """
+    return await service.exchange_google_auth(postBody.code, session)

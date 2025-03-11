@@ -1,5 +1,6 @@
 __all__ = ["settings"]
 
+from pathlib import Path
 from typing import Literal
 
 from pydantic import PostgresDsn, RedisDsn
@@ -18,9 +19,15 @@ class Settings(BaseSettings):
     AWS_SIGNATURE_VERSION: str
     REFRESH_TOKEN_EXPIRATION_SECONDS: int
     AWS_ENDPOINT_URL: str
-    RABBIT_MQ_URL: str
+    CELERY_QUEUE_URL: str
+    ENVIRONMENT: str
+    GOOGLE_OAUTH2_CLIENT_ID: str
+    GOOGLE_OAUTH2_CLIENT_SECRET: str
+    GOOGLE_OAUTH2_REDIRECT_URI: str
 
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+    model_config = SettingsConfigDict(
+        env_file=Path(__file__).parent / ".env", env_file_encoding="utf-8"
+    )
 
     def get_database_dsn(self, driver: Literal["asyncpg", "psycopg"]) -> PostgresDsn:
         return PostgresDsn(

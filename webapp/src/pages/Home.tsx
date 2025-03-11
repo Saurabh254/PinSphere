@@ -47,7 +47,7 @@ const Home = () => {
       <Routes>
         <Route index element={<MainView />} />
 
-        <Route path="user-profile/*" element={<ProfileViewRouter />} />
+        <Route path="profile/*" element={<ProfileViewRouter />} />
       </Routes>
     </>
   );

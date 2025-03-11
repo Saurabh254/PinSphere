@@ -19,3 +19,7 @@ class SignupUser(UserCreate):
 
 class RefreshToken(BaseModel):
     refresh_token: str
+
+
+class GoogleOauthPostBody(BaseModel):
+    code: str

@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router";
 import { lazy, Suspense } from "react";
+import { GoogleCallback } from "./components/GoogleAuth";
 
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/login"));
@@ -37,6 +38,7 @@ const App = () => {
             </Suspense>
           }
         />
+        <Route path="/auth/google" element={<GoogleCallback />} />
       </Routes>
     </div>
   );

@@ -16,6 +16,9 @@ dependencies = [
     "fastapi-pagination>=0.12.34",
     "fastapi[all]>=0.115.6",
     "flower>=2.0.1",
+    "google-auth>=2.38.0",
+    "google-auth-oauthlib>=1.2.1",
+    "httpx>=0.28.1",
     "passlib[bcrypt]>=1.7.4",
     "pillow>=11.1.0",
     "psycopg>=3.2.4",
@@ -24,6 +27,7 @@ dependencies = [
     "pytest>=8.3.4",
     "python-json-logger>=3.2.1",
     "redis>=5.2.1",
+    "requests>=2.32.3",
     "sqlalchemy>=2.0.37",
     "structlog>=25.1.0",
 ]
@@ -46,6 +50,37 @@ reapply_migrations = {cmd = "alembic downgrade base && alembic upgrade head && e
 
 [tool.ruff]
 target-version = "py310"
+exclude = [
+    "tests",
+    "env",
+    "scripts",
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+]
 
 [tool.uv.sources]
 blurhash-python = { git = "https://github.com/woltapp/blurhash-python" }
