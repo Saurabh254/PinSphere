@@ -12,14 +12,16 @@ from config import settings
 from core.database.session_manager import get_async_session
 from core.models import User
 from logging_conf import log
-
+from google.oauth2 import id_token
+from google.auth.transport import requests
+from fastapi import HTTPException
 
 class TokenType(str, Enum):
     ACCESS = "access"
     REFRESH = "refresh"
 
 
-async def create_access_token(
+def create_access_token(
     data: dict[str, Any], expires_delta: timedelta = timedelta(minutes=30)
 ) -> str:
     """Create JWT access token
@@ -32,7 +34,7 @@ async def create_access_token(
     return encode
 
 
-async def create_refresh_token(
+def create_refresh_token(
     data: dict[str, Any], expires_delta: timedelta | None = None
 ) -> str:
     to_encode = data.copy()
@@ -97,23 +99,25 @@ oauth2_scheme = OAuth2PasswordBearer(
 )
 
 
+
+GOOGLE_CLIENT_ID = "your-google-client-id.apps.googleusercontent.com"
+
+
+
 async def get_optional_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],
     session: AsyncSession = Depends(get_async_session),
 ) -> User | None:
     """
-    Get current user from token
-    :param token: token
-    :param session: session
-
+    Get current user from JWT (issued by your system).
     """
-    decoded: dict[str, Any] | None = decode_access_token(token)
-    if decoded is None:
-        raise HTTPException(status_code=401, detail="Invalid token")
-    stmt = select(User).filter(User.id == decoded.get("sub"))
-    result = await session.execute(stmt)
-    return result.scalars().first()
+    decoded = decode_access_token(token)
+    if decoded:
+        stmt = select(User).filter(User.id == decoded.get("sub"))
+        result = await session.execute(stmt)
+        return result.scalars().first()
 
+    raise HTTPException(status_code=401, detail="Invalid token")
 
 async def get_current_user(
     user: User | None = Depends(get_optional_current_user),

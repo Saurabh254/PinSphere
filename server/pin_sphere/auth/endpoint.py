@@ -3,10 +3,14 @@ from typing import Annotated
 from fastapi import APIRouter, Body, Cookie, Depends, HTTPException
 from fastapi.responses import ORJSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.responses import Response
 
+from config import settings
+from core.authflow.auth import create_access_token
 from core.database.session_manager import get_async_session
+from core.models import User
 
 from . import schemas, service
 
@@ -51,3 +55,11 @@ async def signup(
     - **body**: credentials to log in with pin_sphere.
     """
     return await service.signup_user(credentials, session)
+
+
+@router.post("/google")
+async def google_auth(postBody: schemas.GoogleOauthPostBody, session: AsyncSession = Depends(get_async_session)):
+    """
+    Exchange Google auth code for tokens, verify user, and return JWT
+    """
+    return await service.exchange_google_auth(postBody.code, session)
