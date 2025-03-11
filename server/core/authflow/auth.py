@@ -12,9 +12,7 @@ from config import settings
 from core.database.session_manager import get_async_session
 from core.models import User
 from logging_conf import log
-from google.oauth2 import id_token
-from google.auth.transport import requests
-from fastapi import HTTPException
+
 
 class TokenType(str, Enum):
     ACCESS = "access"
@@ -99,9 +97,7 @@ oauth2_scheme = OAuth2PasswordBearer(
 )
 
 
-
 GOOGLE_CLIENT_ID = "your-google-client-id.apps.googleusercontent.com"
-
 
 
 async def get_optional_current_user(
@@ -118,6 +114,7 @@ async def get_optional_current_user(
         return result.scalars().first()
 
     raise HTTPException(status_code=401, detail="Invalid token")
+
 
 async def get_current_user(
     user: User | None = Depends(get_optional_current_user),

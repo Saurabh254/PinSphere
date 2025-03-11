@@ -1,11 +1,12 @@
 import time
 import uuid
+from typing import Any
 
 import faker
 import httpx
-import requests
 from fastapi import HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
+from google.auth.transport import requests as google_requests
 from google.oauth2 import id_token
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -26,6 +27,7 @@ from pin_sphere.users import service as user_service
 from . import exceptions, schemas
 
 fake = faker.Faker()
+
 
 async def login_user(
     credentials: OAuth2PasswordRequestForm, response: Response, session: AsyncSession
@@ -86,58 +88,70 @@ async def signup_user(credentials: schemas.SignupUser, session: AsyncSession) ->
         raise exceptions.UserAlreadyExists()
 
     await user_service.create_user(session, credentials)
-from google.auth.transport import requests as google_requests
 
-async def verify_google_token(token: str) -> dict | None:
+
+async def verify_google_token(token: str) -> Any | None:
     """
     Verify Google ID Token and return user data
     """
     try:
-        return id_token.verify_oauth2_token(token, google_requests.Request(), settings.GOOGLE_OAUTH2_CLIENT_ID)
+        return id_token.verify_oauth2_token(  # type: ignore
+            token, google_requests.Request(), settings.GOOGLE_OAUTH2_CLIENT_ID
+        )
     except ValueError:
         return None
 
-async def exchange_google_auth(code, session):
 
-        # Exchange code for tokens
-        token_url = "https://oauth2.googleapis.com/token"
-        data = {
-            "code": code,
-            "client_id": settings.GOOGLE_OAUTH2_CLIENT_ID,
-            "client_secret": settings.GOOGLE_OAUTH2_CLIENT_SECRET,
-            "redirect_uri": settings.GOOGLE_OAUTH2_REDIRECT_URI,
-            "grant_type": "authorization_code",
+async def exchange_google_auth(code: str, session: AsyncSession):
+    # Exchange code for tokens
+    token_url = "https://oauth2.googleapis.com/token"
+    data = {
+        "code": code,
+        "client_id": settings.GOOGLE_OAUTH2_CLIENT_ID,
+        "client_secret": settings.GOOGLE_OAUTH2_CLIENT_SECRET,
+        "redirect_uri": settings.GOOGLE_OAUTH2_REDIRECT_URI,
+        "grant_type": "authorization_code",
+    }
+
+    async with httpx.AsyncClient() as client:
+        response = await client.post(token_url, data=data)
+        token_data = response.json()
+
+    if "id_token" not in token_data:
+        raise HTTPException(status_code=400, detail="Invalid Google token")
+
+    # Verify ID Token and extract user info
+    id_token_info = await verify_google_token(token_data["id_token"])
+    if not id_token_info:
+        raise HTTPException(status_code=401, detail="Invalid Google token")
+
+    email: str = id_token_info.get("email")  # type: ignore
+    full_name: str = id_token_info.get("name")  # type: ignore
+
+    # Check if user exists, if not create
+    stmt = select(User).filter(User.email == email)  # type: ignore
+    result = await session.execute(stmt)
+    user = result.scalars().first()
+
+    if not user:
+        user = User(
+            email=email,
+            username=fake.user_name(),
+            name=full_name,
+            auth_type=AuthType.google,
+        )
+        session.add(user)
+        await session.commit()
+
+    # Generate JWT token for authentication
+
+    jwt_token = create_access_token(
+        {
+            "sub": str(user.id),
+            "jti": str(uuid.uuid4()),
+            "iat": int(time.time()),
+            "scope": ["user"],
         }
+    )
 
-        async with httpx.AsyncClient() as client:
-            response = await client.post(token_url, data=data)
-            token_data = response.json()
-
-        if "id_token" not in token_data:
-            raise HTTPException(status_code=400, detail="Invalid Google token")
-
-        # Verify ID Token and extract user info
-        id_token_info = await verify_google_token(token_data["id_token"])
-        if not id_token_info:
-            raise HTTPException(status_code=401, detail="Invalid Google token")
-
-        email = id_token_info.get("email")
-        full_name = id_token_info.get("name")
-
-        # Check if user exists, if not create
-        stmt = select(User).filter(User.email == email)
-        result = await session.execute(stmt)
-        user = result.scalars().first()
-
-        if not user:
-            user = User(email=email, username=fake.user_name(),name=full_name, auth_type=AuthType.google)
-            session.add(user)
-            await session.commit()
-
-        # Generate JWT token for authentication
-
-        jwt_token = create_access_token({"sub": str(user.id), "jti": str(uuid.uuid4()),
-        "iat": int(time.time()),
-        "scope": ["user"],})
-
-        return {"access_token": jwt_token}
+    return {"access_token": jwt_token}
