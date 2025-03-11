@@ -82,15 +82,6 @@ const ProfileView: React.FC = () => {
   );
 };
 
-const ProfileViewRouter: React.FC = () => {
-  return (
-    <Routes>
-      <Route index element={<ProfileView />} />
-      <Route path="profile-update" element={<ProfileUpdate />} />
-    </Routes>
-  );
-};
-
 const PostComponent: React.FC<{ currentUser: User }> = ({ currentUser }) => {
   const [posts, setPosts] = useState<Page<SlimContent> | null>(null);
 
@@ -210,4 +201,12 @@ const ContentComponent: React.FC<{ post: SlimContent; user: User }> = ({
   }
 };
 
+const ProfileViewRouter: React.FC = () => {
+  return (
+    <Routes>
+      <Route index element={<ProfileView />} />
+      <Route path="profile-update" element={<ProfileUpdate />} />
+    </Routes>
+  );
+};
 export default ProfileViewRouter;

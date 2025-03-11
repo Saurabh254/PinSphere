@@ -182,7 +182,7 @@ const UserDetailsEditForm = ({
     <div className="flex flex-col gap-4 w-[600px]">
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Display name?</legend>
-        <div className="flex items-center w-full">
+        <div className="flex items-center w-full border-2 px-4 rounded-lg">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 16 16"
@@ -193,7 +193,7 @@ const UserDetailsEditForm = ({
           </svg>
           <input
             type="text"
-            className="input grow"
+            className="input grow  focus:outline-0"
             placeholder={profile.name}
             value={formdata.name}
             onChange={(e) => setFormdata({ ...formdata, name: e.target.value })}
@@ -209,7 +209,7 @@ const UserDetailsEditForm = ({
       </fieldset>
       <fieldset className="fieldset">
         <legend className="fieldset-legend"> Current Username</legend>
-        <div className="flex items-center w-full">
+        <div className="flex items-center w-full border-2 px-4 rounded-lg">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 16 16"
@@ -220,7 +220,7 @@ const UserDetailsEditForm = ({
           </svg>
           <input
             type="text"
-            className="input grow"
+            className="input grow  focus:outline-0"
             placeholder={profile.username}
             value={formdata.username}
             onChange={(e) =>
@@ -241,7 +241,7 @@ const UserDetailsEditForm = ({
       </fieldset>
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Email Address</legend>
-        <div className="flex items-center w-full">
+        <div className="flex items-center w-full border-2 px-4 rounded-lg">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 16 16"
@@ -253,7 +253,7 @@ const UserDetailsEditForm = ({
           </svg>
           <input
             type="text"
-            className="input grow"
+            className="input grow  focus:outline-0"
             placeholder={profile.email}
             value={formdata.email}
             onChange={(e) =>
@@ -270,13 +270,13 @@ const UserDetailsEditForm = ({
         </div>
       </fieldset>
 
-      <fieldset className="fieldset">
+      <fieldset className="fieldset ">
         <legend className="fieldset-legend">Your Bio</legend>
-        <div className="flex items-center w-full">
+        <div className="flex items-center border-2 px-4 rounded-lg w-full">
           <RiBook3Line className="h-4 w-4 opacity-70 mr-2" />
           <input
             type="text"
-            className="input grow"
+            className="input grow focus:outline-0"
             value={formdata.bio}
             onChange={(e) => setFormdata({ ...formdata, bio: e.target.value })}
             placeholder={profile.bio || "Enter Your Bio"}

@@ -2,6 +2,8 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { API_URL } from "../constants";
 import { Link, useNavigate } from "react-router";
+import { GoogleAuth } from "@/components/GoogleAuth";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -97,14 +99,9 @@ const Login = () => {
         </h2>
 
         <div className="flex gap-4 mb-4">
-          <button className="flex-1 bg-base hover:bg-opacity-90 text-primary-content py-2 px-4 rounded-lg flex items-center justify-center text-nowrap font-semibold">
-            <img
-              src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-              alt="Google Logo"
-              className="h-5 mr-2"
-            />
-            Log in with Google
-          </button>
+          <GoogleOAuthProvider clientId="738619260855-aad32jgbdkioqjmabv2ot2njssigql3n.apps.googleusercontent.com">
+            <GoogleAuth />
+          </GoogleOAuthProvider>
           <button className="flex-1 bg-base hover:bg-opacity-90 text-primary-content py-2 px-4 rounded-lg flex items-center justify-center text-nowrap font-semibold">
             <img
               src="https://img.icons8.com/?size=100&id=30840&format=png&color=FFFFFF"
