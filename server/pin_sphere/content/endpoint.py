@@ -1,4 +1,4 @@
-# type: ignore
+
 from typing import Optional
 from uuid import UUID
 

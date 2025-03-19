@@ -8,10 +8,10 @@ from sqlalchemy import UUID, Boolean, ForeignKey, Integer, String, UniqueConstra
 from sqlalchemy import Enum as SAEnum
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, backref, mapped_column, relationship
 
 from config import settings
-from core.database.base_model import RecordModel
+from core.database.base_model import Base, RecordModel
 
 if typing.TYPE_CHECKING:
     from .user import User
@@ -53,3 +53,23 @@ class ContentLikes(RecordModel):
 
     def toggle_likes(self):
         self.liked = not self.liked
+
+
+class Comment(RecordModel):
+    __tablename__ = "comments"
+
+    content_id = mapped_column(UUID(as_uuid=True), ForeignKey("contents.id", ondelete="CASCADE"))
+    user_id = mapped_column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"))
+    text = mapped_column(String, nullable=False)
+    parent_id = mapped_column(UUID(as_uuid=True), ForeignKey("comments.id", ondelete="CASCADE"), nullable=True)
+
+    user = relationship("User")
+    replies = relationship("Comment", backref=backref("parent", remote_side="Comment.id"), cascade="all, delete-orphan")
+
+
+
+class CommentLike(Base):
+    __tablename__ = "comment_likes"
+
+    user_id = mapped_column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
+    comment_id = mapped_column(UUID(as_uuid=True), ForeignKey("comments.id", ondelete="CASCADE"), primary_key=True)
