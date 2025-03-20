@@ -1,7 +1,8 @@
-from uuid import UUID
 from datetime import datetime
+from typing import List, Optional
+from uuid import UUID
+
 from pydantic import BaseModel
-from typing import Optional, List
 
 
 class CommentBase(BaseModel):
@@ -11,6 +12,7 @@ class CommentBase(BaseModel):
 class CommentCreate(CommentBase):
     content_id: UUID
 
+
 class SlimCommentResponse(CommentBase):
     id: UUID
     user_id: UUID
@@ -19,8 +21,9 @@ class SlimCommentResponse(CommentBase):
     created_at: datetime
     updated_at: datetime
 
+
 class CommentResponse(SlimCommentResponse):
-    replies: List["SlimCommentResponse"]  = []
+    replies: List["SlimCommentResponse"] = []
 
     class Config:
         orm_mode = True

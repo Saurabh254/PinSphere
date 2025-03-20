@@ -1,4 +1,3 @@
-
 from uuid import UUID
 
 from fastapi import APIRouter, Body, Depends, Path, Query
@@ -9,7 +8,6 @@ from starlette import status
 from core.authflow import auth
 from core.database.session_manager import get_async_session
 from core.models import User
-from .errors import CommentNotFoundError
 
 from . import schemas, service
 

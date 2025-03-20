@@ -134,7 +134,5 @@ def get_auth_token(authorization: Annotated[str, Header(alias="Authorization")])
     raise HTTPException(status_code=401, detail="Unauthorized")
 
 
-
-
 if __name__ == "__main__":
     print(create_access_token({"user_id": "test"}))
