@@ -24,7 +24,7 @@ const MainView = () => {
 
   return (
     // <div className="grid grid-cols-2 md:grid-cols-3 [&>*]:h-auto w-full h-full overflow-scroll gap-4 space-y-4 mt-8  px-4 md:px-8 ">
-    <div className="columns-2 gap-x-2 lg:columns-4 space-y-2  px-2 pt-2">
+    <div className="columns-2 gap-x-2 bg-background lg:columns-4 space-y-2  px-2 pt-2 text-light ">
       {contents &&
         contents.items.map((content) => (
           <ContentWithBlurhash content={content} key={content.id} />

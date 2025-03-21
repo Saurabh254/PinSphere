@@ -21,6 +21,7 @@ export interface SlimContent {
   user_id: string;
   description: string;
   likes: number;
+  comments_count: number;
   metadata: Metadata;
 
 }

@@ -36,7 +36,7 @@ const ImageWithBlurhash = ({ image }: ImageWithBlurhashParm) => {
         src={image.url}
         onLoad={() => setLoaded(true)}
         alt="Loaded Content"
-        className={`absolute top-0 left-0 w-full h-full rounded-xl object-cover transition-opacity duration-500 ${
+        className={`absolute top-0 left-0 w-full h-full rounded-lg object-cover transition-opacity duration-500 ${
           loaded ? "opacity-100" : "opacity-0"
         }`}
       />
