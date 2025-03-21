@@ -1,55 +1,32 @@
 import { lazy, useEffect, useState } from "react";
-import { API_URL } from "../constants";
-import api_client from "../api_client";
 import { Route, Routes } from "react-router";
 import Header from "../components/Header";
-import { Content } from "../types";
-import ContentWithBlurhash from "../components/ContentWithBlurhash";
+import { User } from "../types";
+import ContentPage from "./ContentPage.tsx";
+import MobileMenu from "@/components/MobileMenu.tsx";
+import { getLoggedInUser } from "@/service/user_service.tsx";
+import { UserContext } from "@/hooks/get_user.tsx";
+import MainView from "@/components/MainView.tsx";
 const ProfileViewRouter = lazy(() => import("./ProfileView.tsx"));
-type Page<T> = {
-  items: T[];
-  total: number;
-  page: number;
-  size: number;
-  pages: number;
-};
-
-const MainView = () => {
-  const [contents, setContents] = useState<Page<Content> | null>(null);
-  useEffect(() => {
-    const api_call = async () => {
-      await api_client
-        .get(API_URL + "/content")
-        .then((result) => {
-          setContents(result.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-    api_call();
-  }, []);
-
-  return (
-    <div className="columns-2 w-full lg:columns-4 gap-4 space-y-4 mt-8 mx-4 px-8 ">
-      {contents &&
-        contents.items.map((content) => (
-          <ContentWithBlurhash content={content} key={content.id} />
-        ))}
-    </div>
-  );
-};
 
 const Home = () => {
+  const [user, setUser] = useState<User | null>(null);
+  useEffect(() => {
+    const get_user = async () => {
+      setUser(await getLoggedInUser());
+    };
+    get_user();
+  }, []);
   return (
-    <>
+    <UserContext.Provider value={{ user, setUser }}>
       <Header />
+      <MobileMenu />
       <Routes>
         <Route index element={<MainView />} />
-
         <Route path="profile/*" element={<ProfileViewRouter />} />
+        <Route path="content/:content_id" element={<ContentPage />} />
       </Routes>
-    </>
+    </UserContext.Provider>
   );
 };
 

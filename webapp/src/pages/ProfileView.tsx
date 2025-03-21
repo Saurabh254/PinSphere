@@ -6,6 +6,7 @@ import { FileContentType, Page, SlimContent } from "@/types";
 import { User } from "@/types";
 import { RiContactsBook2Line } from "@remixicon/react";
 import Audio from "../components/Audio";
+
 const ProfileView: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 

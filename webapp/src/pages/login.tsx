@@ -158,7 +158,7 @@ const Login = () => {
                 id="rememberMe"
                 checked={formData.rememberMe}
                 onChange={handleChange}
-                className="form-checkbox bg-color-accent text-color-accent-content h-4 w-4 mr-2"
+                className=" checkbox-primary checkbox outline-1 outline-primary h-4 w-4 mr-2"
               />
               Remember me
             </label>
@@ -173,7 +173,7 @@ const Login = () => {
           <button
             type="submit"
             onClick={handleSubmit}
-            className="w-full bg-base text-base-light hover:bg-opacity-90 text-color-primary-content py-2 px-4 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-base-light"
+            className="w-full bg-base text-base-light hover:bg-opacity-90 text-color-primary-content py-2 px-4 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-base-light hover:bg-black cursor-pointer"
           >
             Sign in to your account
           </button>
