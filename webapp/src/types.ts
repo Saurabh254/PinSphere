@@ -47,3 +47,17 @@ export enum FileContentType {
   WAV = "audio/wav",
   OGG = "audio/ogg",
 }
+export interface SlimCommentType {
+  text: string;
+  id: string;
+  user_id: string;
+  content_id: string;
+  parent_id: string;
+  created_at: Date;
+  updated_at: Date;
+  user: User;
+  likes: number;
+}
+export interface CommentType extends SlimCommentType {
+  replies: SlimCommentType[];
+}
