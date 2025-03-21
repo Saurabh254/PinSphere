@@ -15,7 +15,7 @@ const Header = () => {
     }
   };
   return (
-    <div className="bg-gray-800  text-white px-4 py-3 w-full sticky z-50 top-0 left-0 right-0">
+    <div className="bg-primary  text-white px-4 py-3 w-full sticky z-50 top-0 left-0 right-0">
       <ToastContainer />
       <div className="w-full relative">
         <div className="container mx-auto flex items-center justify-between">

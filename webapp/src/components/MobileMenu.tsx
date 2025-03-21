@@ -26,7 +26,7 @@ const MobileMenu = () => {
 
   return (
     <div
-      className="bg-gray-800 items-left pl-8 md:hidden   flex z-10 flex-col w-full overflow-hidden transition-[height] duration-300 fixed h-0 text-primary-content"
+      className="bg-background items-left pl-8 md:hidden   flex z-10 flex-col w-full overflow-hidden transition-[height] duration-300 fixed h-0 text-foreground"
       id="mobile_menu"
     >
       {/* profile  */}
@@ -36,7 +36,7 @@ const MobileMenu = () => {
             <img
               src={user.url}
               alt="profile"
-              className="w-16 h-16 rounded-full outline-4 outline-indigo-600"
+              className="w-16 h-16 rounded-full outline-4 outline-primary"
             />
           )}
         </div>
@@ -53,17 +53,15 @@ const MobileMenu = () => {
       <span className="text-xl font-bold border-b-2 border-gray-600 mr-8 pb-2 pl-2 mt-8 ">
         Menu
       </span>
-      <ul className="[&>*]:mb-4 mt-8 flex w-full pr-8 flex-col h-full items-center [&>*]:w-full  text-gray-300  ">
+      <ul className="[&>*]:mb-4 mt-8 flex w-full pr-8 flex-col h-full items-center [&>*]:w-full  text-foreground ">
         <li onClick={closeMenu}>
           <Link
             to="/"
-            className="flex items-center gap-8  px-4  py-2 rounded-3xl"
-            style={{
-              fontWeight:
-                windowPath === "/" || windowPath === "" ? "bold" : "normal",
-              backgroundColor:
-                windowPath === "" || windowPath === "/" ? "var(--primary)" : "",
-            }}
+            className={`flex items-center gap-8 px-4 py-2 rounded-3xl ${
+              windowPath === "/" || windowPath === ""
+                ? "font-bold bg-primary text-white"
+                : "font-normal"
+            }`}
           >
             <RiHomeSmileLine />
             Home
@@ -72,12 +70,11 @@ const MobileMenu = () => {
         <li onClick={closeMenu}>
           <Link
             to="/dashboard"
-            className="flex items-center gap-8  px-4  py-2 rounded-3xl"
-            style={{
-              fontWeight: windowPath === "/dashboard" ? "bold" : "normal",
-              backgroundColor:
-                windowPath === "/dashboard" ? "var(--primary)" : "",
-            }}
+            className={`flex items-center gap-8  px-4  py-2 rounded-3xl ${
+              windowPath === "/dashboard"
+                ? "font-bold bg-primary text-white"
+                : "font-normal"
+            }`}
           >
             <RiDashboard3Line />
             Dashboard
@@ -86,11 +83,11 @@ const MobileMenu = () => {
         <li onClick={closeMenu}>
           <Link
             to="/about"
-            className="flex items-center gap-8  px-4  py-2 rounded-3xl"
-            style={{
-              fontWeight: windowPath === "/about" ? "bold" : "normal",
-              backgroundColor: windowPath === "/about" ? "var(--primary)" : "",
-            }}
+            className={`flex items-center gap-8  px-4  py-2 rounded-3xl ${
+              windowPath === "/about"
+                ? "font-bold bg-primary text-white"
+                : "font-normal"
+            }`}
           >
             <RiGitRepositoryLine /> About
           </Link>
@@ -112,12 +109,11 @@ const MobileMenu = () => {
         <li onClick={closeMenu}>
           <Link
             to="/settings"
-            className="flex items-center gap-8  px-4  py-2 rounded-3xl"
-            style={{
-              fontWeight: windowPath === "/settings" ? "bold" : "normal",
-              backgroundColor:
-                windowPath === "/settings" ? "var(--primary)" : "",
-            }}
+            className={`flex items-center gap-8  px-4  py-2 rounded-3xl ${
+              windowPath === "/settings"
+                ? "font-bold bg-primary text-white"
+                : "font-normal"
+            }`}
           >
             <RiSettings6Line />
             Settings
@@ -125,24 +121,31 @@ const MobileMenu = () => {
         </li>
         <li
           onClick={closeMenu}
-          className=" border-gray-700 w-full py-2 pl-8 rounded-3xl pr-2 border-2 "
+          className=" border-gray-700 w-full py-2 pl-8 rounded-lg pr-2 border-2 "
         >
           <div className="w-full flex ">
-            <span className="ml-4"> Appearance</span>
-            <label className="toggle cursor-pointer h-6 text-base-content rounded-full outline-2 ml-auto  outline-white checked:bg-gray-800 ">
-              <input type="checkbox" className="rounded-full " />
+            <span className="ml-0"> Appearance</span>
+            <label className="toggle cursor-pointer h-6 text-base-content rounded-lg p-0 mr-4  outline-2 ml-auto  dark:outline-primary w-14 checked:bg-gray-800 py-3">
+              <input
+                type="checkbox"
+                className="rounded-xl h-full "
+                onClick={() => {
+                  document.querySelector("html")?.classList.toggle("dark");
+                  document.querySelector("html")?.classList.toggle("light");
+                }}
+              />
 
-              <RiContrast2Line aria-label="enabled" />
+              <RiContrast2Line aria-label="enabled" className=" " />
 
               <RiSunLine
                 aria-label="disabled"
-                className="rounded-full border-none p-1 outline-none "
+                className="rounded-full  border-none p-1 outline-none "
               />
             </label>
           </div>
         </li>
         <li onClick={closeMenu} className="border-none mt-auto ">
-          <Link to="/login" className="flex items-center gap-4">
+          <Link to="/login" className="flex items-center gap-4 px-4 py-2 ">
             <RiLogoutCircleLine color="red" />
             {user ? "Logout" : "Login"}
           </Link>
