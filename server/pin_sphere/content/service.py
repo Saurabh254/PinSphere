@@ -22,7 +22,11 @@ from . import tasks
 async def get_content(
     content_id: str, session: AsyncSession, user: User | None = None
 ) -> Content | None:
-    stmt = select(Content).options(joinedload(Content.user)).filter_by(id=content_id, deleted=False)
+    stmt = (
+        select(Content)
+        .options(joinedload(Content.user))
+        .filter_by(id=content_id, deleted=False)
+    )
     if user:
         stmt = stmt.filter_by(user_id=user.id)
     result = await session.execute(stmt)

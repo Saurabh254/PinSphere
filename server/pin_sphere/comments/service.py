@@ -86,7 +86,13 @@ async def toggle_like_comment(
 
     await session.commit()
 
+
 async def get_posts_comments(content_id: UUID, session: AsyncSession):
-    stmt = select(Comment).options(joinedload(Comment.user)).where(Comment.content_id == content_id).order_by(Comment.created_at.desc())
+    stmt = (
+        select(Comment)
+        .options(joinedload(Comment.user))
+        .where(Comment.content_id == content_id)
+        .order_by(Comment.created_at.desc())
+    )
     await session.execute(stmt)
     return await paginate(session, stmt)

@@ -4,7 +4,6 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
-from core.models import User
 from pin_sphere.users.schemas import UserResponse
 
 
@@ -24,6 +23,7 @@ class SlimCommentResponse(CommentBase):
     created_at: datetime
     updated_at: datetime
     user: UserResponse
+
 
 class CommentResponse(SlimCommentResponse):
     replies: List["SlimCommentResponse"] = []

@@ -26,8 +26,9 @@ class UserUpdate(BaseModel):
     username: Optional[str] = Field(None)  # Allow username to be updated, if needed
     name: Optional[str] = Field(None)
     email: Optional[EmailStr] = Field(None)
-    bio: Optional[str]  = Field(None)
+    bio: Optional[str] = Field(None)
     profile_photo_key: Optional[str] = Field(None, alias="image_key")
+
 
 # Schema for returning users information
 class UserResponse(BaseModel):
