@@ -35,6 +35,7 @@ class User(RecordModel):
     )
     name: Mapped[str] = mapped_column(String(50), nullable=True)
     email: Mapped[str] = mapped_column(String(50), nullable=False)
+    bio: Mapped[str] = mapped_column(String(100), nullable=True)
     password: Mapped[bytes] = mapped_column(LargeBinary, nullable=True)
     password_salt: Mapped[bytes] = mapped_column(LargeBinary, nullable=True)
     profile_photo_key: Mapped[str] = mapped_column(String(100), nullable=True)

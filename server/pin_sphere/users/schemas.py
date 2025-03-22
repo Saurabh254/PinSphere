@@ -26,6 +26,7 @@ class UserUpdate(BaseModel):
     username: Optional[str] = Field(None)  # Allow username to be updated, if needed
     name: Optional[str] = Field(None)
     email: Optional[EmailStr] = Field(None)
+    bio: Optional[str] = Field(None)
     profile_photo_key: Optional[str] = Field(None, alias="image_key")
 
 
@@ -34,6 +35,7 @@ class UserResponse(BaseModel):
     id: UUID4
     username: str  # Replaced `id` with `username`
     name: str
+    bio: str | None = None
     email: EmailStr
     created_at: datetime
     profile_photo_key: str | None = Field(None, exclude=True)

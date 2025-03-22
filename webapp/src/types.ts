@@ -9,6 +9,8 @@ export interface User {
   username: string,
   name: string,
   email: string,
+  likes: number,
+  comments_count: number;
   bio: string | null,
   created_at: Date,
   url: string | null,

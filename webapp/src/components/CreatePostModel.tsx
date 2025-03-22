@@ -71,7 +71,10 @@ const CreatePostModal = () => {
           </div>
         </div>
       ) : null}
-      <dialog id="my_upload_model" className="modal">
+      <dialog
+        id="my_upload_model"
+        className="modal bg-background text-primary-foreground"
+      >
         {toast && (
           <div className="toast toast-end fixed z-50">
             <div className={`alert alert-${toast.type}`}>
@@ -88,10 +91,17 @@ const CreatePostModal = () => {
             setDescription={setDescription}
           />
           <div className="flex justify-between gap-4">
-            <button className="btn ml-auto" onClick={handleCancel}>
+            <button
+              className="btn ml-auto ring-2 ring-gray-600"
+              onClick={handleCancel}
+            >
               Cancel
             </button>
-            <button className="btn" onClick={handleUpload} disabled={loading}>
+            <button
+              className="btn ring-2 ring-gray-600"
+              onClick={handleUpload}
+              disabled={loading}
+            >
               {loading ? (
                 <span className="loading loading-spinner"></span>
               ) : (

@@ -15,14 +15,14 @@ export const GoogleAuth = () => {
   return (
     <button
       onClick={loginWithGoogle}
-      className="flex-1 bg-base hover:bg-opacity-90 text-primary-content py-2 px-4 rounded-lg flex items-center justify-center text-nowrap font-semibold cursor-pointer hover:bg-[#000]"
+      className="flex-1 bg-primary  hover:bg-opacity-90  py-3 px-4 rounded-lg flex items-center justify-center text-nowrap text-normal  cursor-pointer hover:bg-[#000]"
     >
       <img
         src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
         alt="Google Logo"
         className="h-5 mr-2"
       />
-      Log in with Google
+      Continue with Google Account
     </button>
   );
 };

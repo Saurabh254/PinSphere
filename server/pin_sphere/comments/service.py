@@ -40,7 +40,7 @@ async def create_reply(user: User, comment_id: UUID, text: str, session: AsyncSe
     await session.commit()
 
 
-async def get_comment(comment_id: UUID, session: AsyncSession, user: User):
+async def get_comment(comment_id: UUID, session: AsyncSession):
     query = (
         select(Comment)
         .options(joinedload(Comment.replies), joinedload(Comment.user))
@@ -85,3 +85,14 @@ async def toggle_like_comment(
             await session.delete(existing_like)
 
     await session.commit()
+
+
+async def get_posts_comments(content_id: UUID, session: AsyncSession):
+    stmt = (
+        select(Comment)
+        .options(joinedload(Comment.user))
+        .where(Comment.content_id == content_id)
+        .order_by(Comment.created_at.desc())
+    )
+    await session.execute(stmt)
+    return await paginate(session, stmt)

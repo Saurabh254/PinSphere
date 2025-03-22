@@ -30,7 +30,7 @@ export default function FileUploadPreview({
     }
   };
   return (
-    <div className="flex flex-col items-center p-4 rounded-lg w-auto mx-8 max-h-full">
+    <div className="flex flex-col  items-center p-4 rounded-lg w-auto mx-8 max-h-full">
       {!file && <FileDropZone handleFileChange={handleFileChange} />}
       {file && (
         <div className="mt-4 flex-col flex  items-center max-h-[60vh] ">
