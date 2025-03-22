@@ -50,17 +50,23 @@ async def reply_to_comment(
     """
     await service.create_reply(current_user, comment_id, text, session)  # type: ignore
 
+@router.get("/{content_id}/all", response_model=Page[schemas.CommentResponse])
+async def get_all_posts(
+        content_id: UUID = Path(..., description="ID of the content"),
+    session: AsyncSession = Depends(get_async_session),
+):
+    return await service.get_posts_comments(content_id,session)
 
 @router.get("/{comment_id}", response_model=schemas.CommentResponse)
 async def get_comment_by_id(
     comment_id: UUID,
     session: AsyncSession = Depends(get_async_session),
-    current_user: User = Depends(auth.get_current_user),
+    # current_user: User = Depends(auth.get_current_user),
 ):
     """
     Get comment details by ID
     """
-    return await service.get_comment(comment_id, session, current_user)  # type: ignore
+    return await service.get_comment(comment_id, session)  # type: ignore
 
 
 @router.delete("/{comment_id}", status_code=204)

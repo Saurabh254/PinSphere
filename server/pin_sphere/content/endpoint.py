@@ -72,12 +72,11 @@ def get_pre_signed_url(
 async def get_image_by_id(
     content_id: UUID,
     session: AsyncSession = Depends(get_async_session),
-    current_user: User = Depends(auth.get_current_user),
 ):
     """
     Get image details by ID
     """
-    image = await service.get_content(content_id, session, current_user)  # type: ignore
+    image = await service.get_content(content_id, session)  # type: ignore
     if not image:
         raise ContentNotFoundError()
     return image  # type: ignore
