@@ -52,45 +52,23 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-base w-full">
-      <div className="bg-white border-1 border-black text-color-primary rounded-lg shadow-lg p-6 max-w-lg w-full">
-        <div className="flex justify-center mb-6 bg-base rounded-md">
+    <div className="min-h-screen flex items-center justify-center w-full">
+      <div className="bg-primary  rounded-lg  p-6 max-w-lg w-full">
+        <div className="flex justify-center  mb-6 bg-primary rounded-md">
           <img src="/pin_rect.png" alt="Flowbite Logo" className="h-36" />
         </div>
         <h2 className="text-2xl font-semibold text-center mb-6">
           Create your account
         </h2>
 
-        <div className="flex gap-4 mb-4">
-          <button className="flex-1 bg-base hover:bg-opacity-90 text-primary-content py-2 px-4 rounded-lg flex items-center justify-center text-nowrap font-semibold">
-            <img
-              src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-              alt="Google Logo"
-              className="h-5 mr-2"
-            />
-            Sign up with Google
-          </button>
-          <button className="flex-1 bg-base hover:bg-opacity-90 text-primary-content py-2 px-4 rounded-lg flex items-center justify-center text-nowrap font-semibold">
-            <img
-              src="https://img.icons8.com/?size=100&id=30840&format=png&color=FFFFFF"
-              alt="Apple Logo"
-              className="h-5 mr-2"
-            />
-            Sign up with Apple
-          </button>
-        </div>
-
-        <div className="relative flex items-center justify-center mb-4">
-          <span className="absolute bg-white px-2">or</span>
-          <div className="w-full h-px bg-base"></div>
-        </div>
-
         <div>
           <div className="mb-4">
             <label
               htmlFor="username"
-              className="block text-sm font-medium mb-2"
-              style={{ color: error.includes("username") ? "red" : "black" }}
+              className="block text-foreground text-sm font-medium mb-2"
+              style={{
+                color: error.includes("username") ? "red" : "var(--foreground)",
+              }}
             >
               Username
             </label>
@@ -100,7 +78,7 @@ const Signup = () => {
               onChange={handleChange}
               autoComplete="new-password"
               placeholder="Enter your username"
-              className="w-full bg-color-accent text-color-accent-content rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
+              className="w-full light:bg-white bg-primary text-foreground rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
             />
             {error.includes("username") && (
               <p className="text-red-500 text-sm mt-1">{error}</p>
@@ -111,7 +89,9 @@ const Signup = () => {
             <label
               htmlFor="email"
               className="block text-sm font-medium mb-2"
-              style={{ color: error.includes("email") ? "red" : "black" }}
+              style={{
+                color: error.includes("email") ? "red" : "var(--foreground)",
+              }}
             >
               Email
             </label>
@@ -121,7 +101,7 @@ const Signup = () => {
               onChange={handleChange}
               autoComplete="new-password"
               placeholder="Enter your email"
-              className="w-full bg-color-accent text-color-accent-content rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
+              className="w-full bg-primary text-foreground rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
             />
             {error.includes("email") && (
               <p className="text-red-500 text-sm mt-1">{error}</p>
@@ -142,7 +122,7 @@ const Signup = () => {
               onChange={handleChange}
               autoComplete="new-password"
               placeholder="Enter your password"
-              className="w-full bg-color-accent text-color-accent-content rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
+              className="w-full bg-primary text-foreground rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
             />
             {error.includes("password") && (
               <p className="text-red-500 text-sm mt-1">{error}</p>
@@ -156,7 +136,7 @@ const Signup = () => {
                 id="rememberMe"
                 checked={formData.rememberMe}
                 onChange={handleChange}
-                className="form-checkbox bg-color-accent text-color-accent-content h-4 w-4 mr-2"
+                className="checkbox bg-primary text-color-accent-content h-4 w-4 mr-2"
               />
               Remember me
             </label>
@@ -171,7 +151,7 @@ const Signup = () => {
           <button
             type="submit"
             onClick={handleSubmit}
-            className="w-full bg-base text-base-light hover:bg-opacity-90 text-color-primary-content py-2 px-4 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-base-light"
+            className="w-full bg-primary text-base-light hover:bg-opacity-90 text-color-primary-content py-2 px-4 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-base-light"
           >
             Sign up for your account
           </button>

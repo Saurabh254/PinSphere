@@ -18,7 +18,7 @@ const FileDropzone = ({
 
   return (
     <div
-      className="border-dashed border-2 border-primary rounded-lg p-6 text-center cursor-pointer"
+      className="border-dashed border-2 border-primary-foreground rounded-lg p-6 text-center cursor-pointer"
       onDragOver={handleDragOver}
       onDrop={handleDrop}
     >
@@ -28,7 +28,7 @@ const FileDropzone = ({
         <p className="text-sm text-gray-400">
           JPEG, PNG, GIF, and MP4 formats, up to 50MB
         </p>
-        <label className="mt-4 inline-block cursor-pointer px-4 py-2 border rounded-lg text-sm font-medium bg-gray-100 hover:bg-gray-200">
+        <label className="mt-4 inline-block cursor-pointer px-4 py-2 border rounded-lg text-sm font-medium bg-background text-foreground hover:scale-105 duration-300">
           Browse File
           <input
             type="file"
