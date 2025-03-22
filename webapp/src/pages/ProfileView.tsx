@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, Route, Routes } from "react-router";
 import ProfileUpdate from "./ProfileUpdate";
-import { getUserContents } from "@/service/user_service";
 import { FileContentType, Page, SlimContent } from "@/types";
 import { User } from "@/types";
 import { RiContactsBook2Line } from "@remixicon/react";
@@ -88,7 +87,7 @@ export const PostComponent: React.FC<{ user: User }> = ({ user }) => {
       setPosts(contents.data);
     };
     call_api();
-  }, []);
+  }, [user.username]);
 
   if (posts == null) return <h1>loading posts ...</h1>;
   return (

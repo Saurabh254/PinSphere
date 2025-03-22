@@ -1,6 +1,6 @@
 import api_client from "@/api_client";
 import { API_URL } from "@/constants";
-import { Page, SlimContent, User } from "@/types";
+import { User } from "@/types";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { PostComponent } from "./ProfileView";
