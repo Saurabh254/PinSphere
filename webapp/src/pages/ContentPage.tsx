@@ -27,7 +27,7 @@ const ContentPage = () => {
   return (
     <div className="w-full bg-background lg:px-12">
       <div className="w-full ">
-        <div className="">
+        <div className="w-full">
           <div className="flex items-center py-4 px-4 gap-4 border-b-2 border-gray-400 ">
             <Link to="/">
               <RiArrowLeftLine />
@@ -130,7 +130,17 @@ const ContentPage = () => {
                 </span>
 
                 <span className="text-xs text-gray-500 px-6 mt-4 block">
-                  Posted on: <strong>17 July 2025</strong>
+                  Posted on:{" "}
+                  <strong>
+                    {new Date(content.created_at).toLocaleString("en-US", {
+                      weekday: "long",
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </strong>
                 </span>
                 {/* this is tags */}
                 <div className="w-full">

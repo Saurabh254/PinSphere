@@ -122,7 +122,6 @@ async def retrive_upload_url(
 async def read_user(
     username: str,
     db: AsyncSession = Depends(get_async_session),
-    current_user: User = Depends(auth.get_current_user),
 ):
     """
     Fetch a single users by their unique username.

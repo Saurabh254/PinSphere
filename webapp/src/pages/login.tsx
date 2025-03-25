@@ -89,7 +89,7 @@ const Login = () => {
         </div>
       )}
 
-      <div className="bg-background dark:border-2 dark:border-white text-primary-foreground rounded-lg  p-4 md:p-6 max-w-lg w-full">
+      <div className="bg-background md:dark:border-2 dark:border-white text-primary-foreground rounded-lg  p-4 md:p-6 max-w-lg w-full">
         <div className="flex justify-center mb-6 bg-primary rounded-md">
           <img src="/pin_rect.png" alt="Flowbite Logo" className="h-36" />
         </div>
@@ -127,7 +127,7 @@ const Login = () => {
               value={formData.username}
               onChange={handleChange}
               placeholder="Enter your username"
-              className="w-full bg-input text-primary-foreground placeholder:text-foreground ring-1 ring-primary rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
+              className="w-full bg-input text-primary  placeholder:text-foreground ring-1 ring-primary rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
             />
           </div>
 
@@ -145,7 +145,7 @@ const Login = () => {
               onChange={handleChange}
               placeholder="Enter your password"
               style={{ color: "#000" }}
-              className="w-full bg-input text-primary-foreground placeholder:text-foreground  autofill:text-primary ring-primary ring-1 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
+              className="w-full bg-input text-primary placeholder:text-foreground  autofill:text-primary ring-primary ring-1 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
             />
           </div>
 
