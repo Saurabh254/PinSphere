@@ -18,19 +18,19 @@ const ProfileView: React.FC = () => {
   return (
     <>
       {user ? (
-        <div className="w-full items-center bg-background justify-center flex flex-col">
-          <div className="p-8 flex items-center gap-24">
+        <div className="w-full items-center bg-background justify-center flex  flex-col">
+          <div className="p-8 flex items-center flex-col md:flex-row gap-12 md:gap-24">
             {/* User Image */}
 
             <div>
               <img
-                className="rounded-full h-98 w-98"
+                className="rounded-full h-48 w-48 border-2 border-gray-200 md:h-98 md:w-98"
                 src={user.url ? user.url : "/person.svg"}
                 alt=""
               />
             </div>
             {/* User Info */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col items-center md:items-start gap-4">
               <span className="text-lg font-bold ">@{user.username}</span>
               <span className="flex gap-2">
                 <span>{user.name}</span>
@@ -42,8 +42,12 @@ const ProfileView: React.FC = () => {
                   <span>posts</span>
                 </div>
                 <div className="flex flex-col items-center ">
-                  <span>15</span>
+                  <span>{user.likes ? user.likes : 0}</span>
                   <span>likes</span>
+                </div>
+                <div className="flex flex-col items-center ">
+                  <span>{user.comments_count ? user.comments_count : 0}</span>
+                  <span>comments</span>
                 </div>
               </div>
               <span className="flex gap-2 text-sm text-gray-700">
@@ -52,7 +56,7 @@ const ProfileView: React.FC = () => {
               </span>
 
               <div className="flex gap-2">
-                <Link to="profile-update" className="btn-primary btn btn-sm">
+                <Link to="profile-update" className="btn-primary  btn btn-sm">
                   Edit Profile
                 </Link>
                 <button className="bg-gray-600 border-gray-600 text-white  btn btn-sm">

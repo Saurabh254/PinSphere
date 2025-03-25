@@ -132,6 +132,11 @@ const MobileMenu = () => {
                 onClick={() => {
                   document.querySelector("html")?.classList.toggle("dark");
                   document.querySelector("html")?.classList.toggle("light");
+                  if (localStorage.getItem("current_theme") == "light") {
+                    localStorage.setItem("current_theme", "dark");
+                  } else {
+                    localStorage.setItem("current_theme", "light");
+                  }
                 }}
               />
 

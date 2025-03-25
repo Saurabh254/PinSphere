@@ -11,17 +11,17 @@ const ProfileView: React.FC = () => {
   useEffect(() => {
     const api_call = async () => {
       try {
-        const user = await api_client.get(API_URL + "/users/" + username);
-        setUser(user.data);
+        const user_data = await api_client.get(API_URL + "/users/" + username);
+        setUser(user_data.data);
       } catch (err) {
         console.log(err);
       }
     };
     api_call();
-  }, [username, user]);
+  }, [username]);
   if (user == null) return <h1>loading...</h1>;
 
-  if (username == null) return <h1>profiel doesn't exists...</h1>;
+  if (username == null) return <h1>profile doesn't exists...</h1>;
   return (
     <div className="w-full bg-background lg:px-12">
       <div className="flex gap-4 items-center flex-col mt-8">

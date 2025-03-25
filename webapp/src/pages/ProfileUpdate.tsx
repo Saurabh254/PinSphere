@@ -92,7 +92,7 @@ const ProfileEdit = () => {
           </div>
         </div>
       ) : null}
-      <div className="w-full h-[80vh] p-8 ">
+      <div className="w-full h-full lg:h-[80vh] p-8  ">
         <div className="flex items-center mb-4 gap-2">
           <RiArrowLeftLine
             className="cursor-pointer"

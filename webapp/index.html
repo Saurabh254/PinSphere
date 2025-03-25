@@ -5,6 +5,15 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./src/style.css" />
+    <script>
+      const theme = localStorage.getItem("current_theme");
+      if (theme) {
+        document.querySelector("html").classList.remove("light");
+        document.querySelector("html").classList.toggle("dark");
+      } else {
+        document.querySelector("html").classList.add("light");
+      }
+    </script>
     <title>PinSphere</title>
   </head>
   <body class="h-full w-full">

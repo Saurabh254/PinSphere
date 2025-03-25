@@ -23,6 +23,8 @@ export interface SlimContent {
   user_id: string;
   description: string;
   likes: number;
+  created_at: Date;
+  updated_at: Date;
   comments_count: number;
   metadata: Metadata;
 

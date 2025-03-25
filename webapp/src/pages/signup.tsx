@@ -41,9 +41,9 @@ const Signup = () => {
         if (err.response.status === 404) {
           setError("Invalid username");
         } else if (err.response.status === 400) {
-          setError("Incorrect password");
+          setError("User Already Exists");
         } else {
-          setError("Something went wrong. Please try again.");
+          setError(err.response.data.detail);
         }
       } else {
         setError("Network error. Please check your connection.");
@@ -52,20 +52,25 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center w-full">
-      <div className="bg-primary  rounded-lg  p-6 max-w-lg w-full">
+    <div className="min-h-screen bg-background flex items-center justify-center  w-full">
+      <div className="bg-background  rounded-lg  p-6 max-w-lg w-full">
         <div className="flex justify-center  mb-6 bg-primary rounded-md">
           <img src="/pin_rect.png" alt="Flowbite Logo" className="h-36" />
         </div>
-        <h2 className="text-2xl font-semibold text-center mb-6">
+        <h2 className="text-2xl font-semibold text-center mb-2">
           Create your account
         </h2>
+        {error && (
+          <div className="w-full mb-6  text-error-content bg-error rounded-md px-2 text-center py-2">
+            {error}
+          </div>
+        )}
 
         <div>
           <div className="mb-4">
             <label
               htmlFor="username"
-              className="block text-foreground text-sm font-medium mb-2"
+              className="block text-primary-foreground  text-sm font-medium mb-2"
               style={{
                 color: error.includes("username") ? "red" : "var(--foreground)",
               }}
@@ -78,7 +83,7 @@ const Signup = () => {
               onChange={handleChange}
               autoComplete="new-password"
               placeholder="Enter your username"
-              className="w-full light:bg-white bg-primary text-foreground rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
+              className="w-full light:bg-white bg-input text-foreground rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
             />
             {error.includes("username") && (
               <p className="text-red-500 text-sm mt-1">{error}</p>
@@ -101,7 +106,7 @@ const Signup = () => {
               onChange={handleChange}
               autoComplete="new-password"
               placeholder="Enter your email"
-              className="w-full bg-primary text-foreground rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
+              className="w-full bg-input text-foreground rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
             />
             {error.includes("email") && (
               <p className="text-red-500 text-sm mt-1">{error}</p>
@@ -122,7 +127,7 @@ const Signup = () => {
               onChange={handleChange}
               autoComplete="new-password"
               placeholder="Enter your password"
-              className="w-full bg-primary text-foreground rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
+              className="w-full bg-input text-foreground rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
             />
             {error.includes("password") && (
               <p className="text-red-500 text-sm mt-1">{error}</p>
@@ -136,7 +141,7 @@ const Signup = () => {
                 id="rememberMe"
                 checked={formData.rememberMe}
                 onChange={handleChange}
-                className="checkbox bg-primary text-color-accent-content h-4 w-4 mr-2"
+                className="checkbox bg-input  text-primary h-4 w-4 mr-2"
               />
               Remember me
             </label>
@@ -151,7 +156,7 @@ const Signup = () => {
           <button
             type="submit"
             onClick={handleSubmit}
-            className="w-full bg-primary text-base-light hover:bg-opacity-90 text-color-primary-content py-2 px-4 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-base-light"
+            className="w-full bg-primary text-primary-foreground hover:bg-opacity-90 text-color-primary-content py-2 px-4 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-base-light"
           >
             Sign up for your account
           </button>
