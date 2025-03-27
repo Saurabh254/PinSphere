@@ -4,6 +4,7 @@ import enum
 import typing
 from typing import Dict
 
+from pgvector.sqlalchemy import Vector
 from sqlalchemy import UUID, Boolean, ForeignKey, Integer, String, UniqueConstraint
 from sqlalchemy import Enum as SAEnum
 from sqlalchemy.dialects.postgresql import JSONB
@@ -32,6 +33,7 @@ class Content(RecordModel):
     )
     likes: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     description: Mapped[str] = mapped_column(String, nullable=True)
+    embedding: Mapped[list[float]] = mapped_column(Vector, nullable=True)
     deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     _metadata: Mapped[Dict[str, str | int | bool]] = mapped_column(JSONB, nullable=True)
     user: Mapped["User"] = relationship("User", back_populates="contents")

@@ -1,6 +1,8 @@
+import io
 from typing import BinaryIO
 
 import boto3  # type: ignore
+from PIL import Image
 from botocore.client import BaseClient  # type: ignore
 from botocore.exceptions import BotoCoreError, ClientError  # type: ignore
 
@@ -9,7 +11,7 @@ from logging_conf import log
 
 from .types import FileContentType
 
-s3_client: BaseClient = boto3.client(  # type: ignore
+s3_client = boto3.client(  # type: ignore
     "s3",
     region_name=settings.AWS_REGION,
     aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
@@ -17,6 +19,28 @@ s3_client: BaseClient = boto3.client(  # type: ignore
     endpoint_url=settings.AWS_ENDPOINT_URL,
     verify=False,
 )
+
+
+def get_image( s3_key: str) -> Image:
+    """
+    Fetches an image from S3, extracts its bytes, and gets contextual information using LangChain Ollama (LLaMA 3.2).
+
+    Args:
+        s3_key (str): Key (path) of the image in S3.
+
+    Returns:
+        str: Contextual description of the image.
+    """
+    # Initialize Boto3 S3 client
+
+
+    # Fetch image from S3
+
+    response = s3_client.get_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=s3_key)
+    image_data = response['Body'].read()
+
+    # Convert image to a format suitable for processing
+    return Image.open(io.BytesIO(image_data))
 
 
 def upload_content(

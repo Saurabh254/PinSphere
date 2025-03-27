@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     GOOGLE_OAUTH2_CLIENT_ID: str
     GOOGLE_OAUTH2_CLIENT_SECRET: str
     GOOGLE_OAUTH2_REDIRECT_URI: str
-
+    SBERT_MODEL_NAME: str
     model_config = SettingsConfigDict(
         env_file=Path(__file__).parent / ".env", env_file_encoding="utf-8"
     )

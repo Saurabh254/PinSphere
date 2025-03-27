@@ -68,6 +68,7 @@ async def save_content(
 
     if ext.PNG or ext.JPEG or ext.GIF:
         tasks.generate_blurhash.delay(content.id, content.content_key)  # type: ignore
+        tasks.generate_content_embedding_and_save.delay(content.content_key)
     return content
 
 
