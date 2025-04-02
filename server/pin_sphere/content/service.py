@@ -1,8 +1,11 @@
-import logging
+# type: ignore
 from typing import Any
 
 import numpy
-from fastapi_pagination.ext.sqlalchemy import paginate
+import torch
+from fastapi_pagination import Page
+from fastapi_pagination.ext.async_sqlalchemy import paginate
+from sentence_transformers import util
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session, joinedload
@@ -138,19 +141,11 @@ def get_user_contents(user: User, session: AsyncSession):
     return paginate(session, stmt)
 
 
-from fastapi_pagination import Page
-from fastapi_pagination.ext.async_sqlalchemy import paginate
-from sqlalchemy import select, func
-from sqlalchemy.ext.asyncio import AsyncSession
-from sentence_transformers import util
-import torch
-
-
 async def search_content_by_context(
-        text: str,
-        session: AsyncSession,
-        page_size: int = 10,
-        page: int = 1,
+    text: str,
+    session: AsyncSession,
+    page_size: int = 10,
+    page: int = 1,
 ) -> Page[Content]:
     """
     Search for similar documents based on embedding similarity and return paginated results.
@@ -177,12 +172,13 @@ async def search_content_by_context(
     fetch_size = page_size * buffer_multiplier
 
     # Perform vector similarity search with a larger result set
-    query = select(Content).filter(
-        Content.deleted == False,
-        Content.embedding.is_not(None)
-    ).options(joinedload(Content.user)).order_by(
-        Content.embedding.cosine_distance(query_embedding)
-    ).limit(fetch_size)
+    query = (
+        select(Content)
+        .filter(Content.deleted.is_(False), Content.embedding.is_not(None))
+        .options(joinedload(Content.user))
+        .order_by(Content.embedding.cosine_distance(query_embedding))
+        .limit(fetch_size)
+    )
 
     # Execute initial query
     result = await session.execute(query)
@@ -209,12 +205,9 @@ async def search_content_by_context(
     # Manual pagination on filtered results
     start_idx = (page - 1) * page_size
     end_idx = min(start_idx + page_size, total_count)
-    paginated_docs = filtered_docs[start_idx:end_idx] if start_idx < total_count else []
+    paginated_docs = filtered_docs[start_idx:end_idx] if start_idx < total_count else []  # type: ignore
 
     # Create custom Page object
-    return Page(
-        items=paginated_docs,
-        total=total_count,
-        page=page,
-        size=page_size
+    return Page[Content](
+        items=paginated_docs, total=total_count, page=page, size=page_size
     )

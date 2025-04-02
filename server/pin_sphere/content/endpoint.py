@@ -14,7 +14,6 @@ from pin_sphere.content.exceptions import ContentNotFoundError
 
 from . import schemas, service
 
-
 router = APIRouter(prefix="/content", tags=["content"])
 
 
@@ -44,18 +43,21 @@ async def get_contents(
     """
     Get all images for a user
     """
-    return await service.get_contents(username,  session)
+    return await service.get_contents(username, session)
+
+
 @router.get("/search", response_model=Page[schemas.ContentResponse])
 async def search_content_using_context(
-                                       size: int = Query(10),
-                                       page: int = Query(1),
-                                       text: str = Query(),
-        session: AsyncSession = Depends(get_async_session),
-                                       ):
+    size: int = Query(10),
+    page: int = Query(1),
+    text: str = Query(),
+    session: AsyncSession = Depends(get_async_session),
+):
     """
     Get all images for a user
     """
-    return await service.search_content_by_context(text,session, size,page)
+    return await service.search_content_by_context(text, session, size, page)
+
 
 @router.get("/me", response_model=Page[schemas.SlimContentResponse])
 async def get_user_contents(

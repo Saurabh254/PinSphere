@@ -4,7 +4,7 @@ import enum
 import typing
 from typing import Dict
 
-from pgvector.sqlalchemy import Vector
+from pgvector.sqlalchemy import Vector  # type: ignore
 from sqlalchemy import UUID, Boolean, ForeignKey, Integer, String, UniqueConstraint
 from sqlalchemy import Enum as SAEnum
 from sqlalchemy.dialects.postgresql import JSONB
