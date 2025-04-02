@@ -29,10 +29,7 @@ def convert_image_to_text(key: str) -> str:
             'images': [img_bytes]
         }]
     )
-    logging.info("generated the text: {}".format(response))
-    logging.info(response)
-    logging.info("content of the image is {}".format(response["message"]))
-    # Extract and return the response
+    logging.info("Generated the text: {}".format(response))
     return response['message']['content']
 
 def generate_embeddings(query: str) -> List[float]:

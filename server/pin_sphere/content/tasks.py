@@ -20,11 +20,10 @@ def generate_content_embedding_and_save(content_key: str):
             if content is None:
                 return
 
-            # embeddings = embedding_generation.generate_embeddings( embedding_generation.convert_image_to_text(content_key))
-            embeddings = embedding_generation.generate_embeddings( "A Shiba Inu dog wearing a green Yoda hat.")
+            embeddings = embedding_generation.generate_embeddings( embedding_generation.convert_image_to_text(content_key))
             content.embedding = embeddings
             session.commit()
-            log.info("Created Embedding successfully,  embeddings {}".format(embeddings))
+            log.info("Created Embedding successfully,  embeddings {0}".format(str(embeddings)[:10]))
 
     except Exception as e:
         log.error(e)

@@ -1,11 +1,14 @@
+import logging
 from typing import Any
 
+import numpy
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session, joinedload
 
 from core import storage
+from core.embedding_generation import generate_embeddings
 from core.models import Content, User
 from core.models.content import ContentLikes, ContentProcessingStatus
 from core.types import FileContentType
@@ -133,3 +136,85 @@ async def toggle_like(
 def get_user_contents(user: User, session: AsyncSession):
     stmt = select(Content).filter_by(user_id=user.id)
     return paginate(session, stmt)
+
+
+from fastapi_pagination import Page
+from fastapi_pagination.ext.async_sqlalchemy import paginate
+from sqlalchemy import select, func
+from sqlalchemy.ext.asyncio import AsyncSession
+from sentence_transformers import util
+import torch
+
+
+async def search_content_by_context(
+        text: str,
+        session: AsyncSession,
+        page_size: int = 10,
+        page: int = 1,
+) -> Page[Content]:
+    """
+    Search for similar documents based on embedding similarity and return paginated results.
+    Uses sentence-BERT to filter out non-relevant content based on a similarity threshold.
+    Also filters out items that have a similarity score above max_similarity_threshold.
+
+    Args:
+        text: The search text to find similar content
+        session: Database session
+        page_size: Number of items per page
+        page: Current page number
+        similarity_threshold: Minimum similarity score for content to be included
+        max_similarity_threshold: Maximum similarity score for content to be included
+
+    Returns:
+        Paginated Content objects filtered by embedding similarity
+    """
+    # Generate embedding for query
+    query_embedding = generate_embeddings(text)
+
+    # First, fetch more results than needed to allow for filtering
+    # Using a buffer multiplier to ensure we have enough data to filter
+    buffer_multiplier = 3
+    fetch_size = page_size * buffer_multiplier
+
+    # Perform vector similarity search with a larger result set
+    query = select(Content).filter(
+        Content.deleted == False,
+        Content.embedding.is_not(None)
+    ).options(joinedload(Content.user)).order_by(
+        Content.embedding.cosine_distance(query_embedding)
+    ).limit(fetch_size)
+
+    # Execute initial query
+    result = await session.execute(query)
+    candidate_docs = result.scalars().all()
+
+    # Convert query embedding to tensor
+    query_tensor = torch.tensor([query_embedding], dtype=torch.float)
+
+    # Filter candidates using sentence-BERT similarity scores
+    filtered_docs = []
+    prev = -1
+    for doc in candidate_docs:
+        doc_tensor = torch.tensor(numpy.array(doc.embedding), dtype=torch.float)
+        similarity = util.pytorch_cos_sim(query_tensor, doc_tensor).item()
+
+        # Only include documents with similarity between thresholds
+        if prev == -1 or prev - similarity < 0.1:
+            filtered_docs.append(doc)
+            prev = similarity
+
+    # Calculate total filtered count for pagination
+    total_count = len(filtered_docs)
+
+    # Manual pagination on filtered results
+    start_idx = (page - 1) * page_size
+    end_idx = min(start_idx + page_size, total_count)
+    paginated_docs = filtered_docs[start_idx:end_idx] if start_idx < total_count else []
+
+    # Create custom Page object
+    return Page(
+        items=paginated_docs,
+        total=total_count,
+        page=page,
+        size=page_size
+    )
