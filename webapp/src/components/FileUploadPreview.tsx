@@ -30,7 +30,7 @@ export default function FileUploadPreview({
     }
   };
   return (
-    <div className="flex flex-col  items-center p-4 rounded-lg w-auto mx-8 max-h-full">
+    <div className="flex flex-col  items-center py-4 md:p-4 rounded-lg w-auto md:mx-8 max-h-full">
       {!file && <FileDropZone handleFileChange={handleFileChange} />}
       {file && (
         <div className="mt-4 flex-col flex  items-center max-h-[60vh] ">
@@ -45,7 +45,7 @@ export default function FileUploadPreview({
       {file && (
         <div className="w-full mt-8 space-y-3">
           <textarea
-            className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none max-h-48"
+            className="py-3 px-4 block w-full border-gray-200 border-1 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none max-h-48"
             rows={1}
             value={description}
             onChange={(e) => setDescription(e.target.value)}

@@ -1,15 +1,44 @@
 # type: ignore
 
-
 from celery_app import app
+from core import embedding_generation
 from core.boto3_client import s3_client
 from core.database.session_manager import get_sync_session
-from core.models.content import ContentProcessingStatus
+from core.models.content import Content, ContentProcessingStatus
 from logging_conf import log
 from pin_sphere.content import service
 from pin_sphere.content.utils import (
     retrieve_blurhash_and_metadata,
 )
+
+
+@app.task
+def generate_content_embedding_and_save(content_key: str):
+    try:
+        with next(get_sync_session()) as session:
+            content = (
+                session.query(Content)
+                .filter(Content.content_key == content_key)
+                .first()
+            )
+            if content is None:
+                return
+
+            embeddings = embedding_generation.generate_embeddings(
+                embedding_generation.convert_image_to_text(content_key)
+            )
+            content.embedding = embeddings
+            session.commit()
+            log.info(
+                "Created Embedding successfully,  embeddings {0}".format(
+                    str(embeddings)[:10]
+                )
+            )
+
+    except Exception as e:
+        log.error(e)
+        log.exception("Failed to generate content embedding")
+        return
 
 
 @app.task

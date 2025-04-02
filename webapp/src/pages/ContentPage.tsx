@@ -48,7 +48,7 @@ const ContentPage = () => {
           </div>
           <div className="lg:flex items-start">
             <div className="w-full flex flex-col md:flex-row lg:flex-col items-center justify-center md:gap-4">
-              <div className="mx-4 mt-6 w-fit rounded-2xl overflow-hidden border-primary outline-4 outline-background dark:outline-background border-3 md:max-w-1/2 ">
+              <div className="mx-4 mt-6 w-fit rounded-sm overflow-hidden border-primary outline-4 outline-background dark:outline-background border-3 md:max-w-1/2 ">
                 <img
                   className=" w-full h-full max-w-[500px]"
                   src={content.url}
