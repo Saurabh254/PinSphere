@@ -4,6 +4,7 @@ import { API_URL } from "../constants";
 import { Link, useNavigate } from "react-router";
 import { GoogleAuth } from "@/components/GoogleAuth";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import PasswordInput from "@/components/PasswordInput";
 
 interface FormData {
   username: string;
@@ -89,23 +90,59 @@ const Login = () => {
         </div>
       )}
 
-      <div className="bg-background md:dark:border-2 dark:border-white text-primary-foreground rounded-lg  p-4 md:p-6 max-w-lg w-full">
+      <div className="bg-background md:dark:border-2 dark:border-white text-primary-foreground rounded-lg px-8  p-4 md:p-6 max-w-lg w-full">
         <div className="flex justify-center mb-6 bg-primary rounded-md">
           <img src="/pin_rect.png" alt="Flowbite Logo" className="h-36" />
         </div>
         <h2 className="text-2xl font-sans text-center mb-6">Welcome back</h2>
-
-        <div className="flex flex-col gap-4 mb-4">
+        <hr />
+        <span className="py-3 block text-sm text-center">
+          Continue with third-party applications
+        </span>
+        <div className="flex  gap-4 mb-4 items-center justify-center [&>*]:h-full h-[44px]">
           <GoogleOAuthProvider clientId="738619260855-aad32jgbdkioqjmabv2ot2njssigql3n.apps.googleusercontent.com">
             <GoogleAuth />
           </GoogleOAuthProvider>
-          <button className="flex-1 bg-primary hover:bg-opacity-90 py-2 px-6 rounded-lg flex items-center justify-center text-nowrap ">
+          <button className=" bg-primary hover:bg-opacity-90 py-2 px-4 rounded-lg flex items-center justify-center text-nowrap ">
             <img
               src="https://img.icons8.com/?size=100&id=30840&format=png&color=FFFFFF"
               alt="Apple Logo"
-              className="h-5 mr-2"
+              className="h-5"
             />
-            Continue with Apple ID
+          </button>
+          <button className=" bg-primary hover:bg-opacity-90 py-2 px-4 rounded-lg flex items-center justify-center text-nowrap ">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              x="0px"
+              y="0px"
+              width="24"
+              height="24"
+              viewBox="0 0 48 48"
+            >
+              <path
+                fill="#039be5"
+                d="M24 5A19 19 0 1 0 24 43A19 19 0 1 0 24 5Z"
+              ></path>
+              <path
+                fill="#fff"
+                d="M26.572,29.036h4.917l0.772-4.995h-5.69v-2.73c0-2.075,0.678-3.915,2.619-3.915h3.119v-4.359c-0.548-0.074-1.707-0.236-3.897-0.236c-4.573,0-7.254,2.415-7.254,7.917v3.323h-4.701v4.995h4.701v13.729C22.089,42.905,23.032,43,24,43c0.875,0,1.729-0.08,2.572-0.194V29.036z"
+              ></path>
+            </svg>
+          </button>
+          <button className=" bg-primary hover:bg-opacity-90 py-2 px-4 rounded-lg flex items-center justify-center text-nowrap ">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              x="0px"
+              y="0px"
+              width="24"
+              height="24"
+              viewBox="0 0 48 48"
+            >
+              <path
+                fill="#00b0ff"
+                d="M20 25.026L5.011 25 5.012 37.744 20 39.818zM22 25.03L22 40.095 42.995 43 43 25.066zM20 8.256L5 10.38 5.014 23 20 23zM22 7.973L22 23 42.995 23 42.995 5z"
+              ></path>
+            </svg>
           </button>
         </div>
 
@@ -127,7 +164,7 @@ const Login = () => {
               value={formData.username}
               onChange={handleChange}
               placeholder="Enter your username"
-              className="w-full bg-input text-primary  placeholder:text-foreground ring-1 ring-primary rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
+              className="w-full bg-input dark:text-primary-content text-primary text-sm placeholder:text-foreground ring-1 ring-primary rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
             />
           </div>
 
@@ -138,15 +175,7 @@ const Login = () => {
             >
               Password
             </label>
-            <input
-              type="password"
-              id="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-              style={{ color: "#000" }}
-              className="w-full bg-input text-primary placeholder:text-foreground  autofill:text-primary ring-primary ring-1 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
-            />
+            <PasswordInput formData={formData} handleChange={handleChange} />
           </div>
 
           <div className="flex items-center justify-between mb-6">

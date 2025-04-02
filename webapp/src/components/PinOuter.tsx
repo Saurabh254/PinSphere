@@ -11,7 +11,7 @@ const Pin = ({ children, content }: PinProps) => {
   return (
     <Link
       to={`/content/${content.id}`}
-      className=" block hover:bg-gray-200 p-2  h-auto break-inside-avoid rounded-lg border-2 border-gray-300 dark:border-primary dark:text-foreground shadow-md w-full aspect-auto bg-background"
+      className=" block dark:hover:bg-gray-600 hover:bg-gray-200 p-2  h-auto break-inside-avoid rounded-lg border-2 border-gray-300 dark:border-primary dark:text-foreground shadow-md w-full aspect-auto bg-background"
     >
       {/* User Info */}
       <div className="flex items-center gap-2 mb-2">

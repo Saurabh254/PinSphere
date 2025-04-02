@@ -38,6 +38,7 @@ const App = () => {
             </Suspense>
           }
         />
+
         <Route path="/auth/google" element={<GoogleCallback />} />
       </Routes>
     </div>

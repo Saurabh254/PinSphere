@@ -1,7 +1,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { get_user_profile } from "../service/login_service";
 import { User } from "../types";
-import { RiArrowLeftLine, RiBook3Line, RiEditLine } from "@remixicon/react";
+import { RiArrowLeftLine, RiEditLine } from "@remixicon/react";
 import {
   FormDataRequestBody,
   update_user_profile,
@@ -10,6 +10,7 @@ import { upload_file } from "../service/file_handler_service";
 import { API_URL } from "../constants";
 import api_client from "../api_client";
 import { useNavigate } from "react-router";
+import ProfileImage from "@/components/ProfileImage";
 
 interface FormDataInterface {
   email: string;
@@ -92,38 +93,21 @@ const ProfileEdit = () => {
           </div>
         </div>
       ) : null}
-      <div className="w-full h-full lg:h-[80vh] p-8  ">
-        <div className="flex items-center mb-4 gap-2">
-          <RiArrowLeftLine
-            className="cursor-pointer"
-            onClick={() => navigator(-1)}
-          />
-          <h1 className="text-2xl font-bold ">Profile Edit</h1>
-        </div>
+      <div className="w-full bg-background lg:h-[80vh] p-8  ">
+        <span className="pb-3 flex items-center gap-2">
+          <RiArrowLeftLine onClick={() => navigator(-1)} />
+          Profile Update
+        </span>
         <hr />
         <div className=" mt-12 lg:h-full w-full flex-col lg:flex-row flex items-center justify-evenly">
           {/* Image div */}
-          <div className="items-center flex flex-col justify-center">
-            {profile.url || profile_image ? (
-              <img
-                src={
-                  profile_image != null && profile_image
-                    ? URL.createObjectURL(profile_image)
-                    : profile.url || undefined
-                }
-                alt=""
-                className="rounded-full w-[450px] h-[450px] ring-1 ring-primary border-4 border-white"
-              />
-            ) : (
-              <span className="w-[450px] h-[450px] rounded-full border-2 flex items-center justify-center">
-                NO image
-              </span>
-            )}
+          <div className="items-center  flex flex-col justify-center">
+            <ProfileImage profile={profile} profile_image={profile_image} />
             {/* <div> */}
             <div className="relative inline-block mt-8">
               <button
                 type="button"
-                className="px-4 py-2 bg-primary text-white rounded-lg"
+                className="px-4 py-2 bg-primary text-white text-xs rounded-lg"
               >
                 Change Photo
               </button>
@@ -140,9 +124,9 @@ const ProfileEdit = () => {
           </div>
 
           {/* Profile data div */}
-          <div className="my-12 lg:my-0">
+          <div className="my-12 lg:my-0 w-full">
             <h1>Update Information</h1>
-            <hr className="mb-8 mt-2" />
+            <hr className="mb-4 mt-2" />
             <UserDetailsEditForm
               profile={profile}
               formdata={formdata}
@@ -179,7 +163,7 @@ const UserDetailsEditForm = ({
   setFormdata,
 }: UserDetailsEditFormProps) => {
   return (
-    <div className="flex flex-col gap-4 w-[600px]">
+    <div className="flex flex-col gap-2 md:gap-4 md:w-[600px]">
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Display name?</legend>
         <div className="flex items-center w-full border-2 px-4 rounded-lg">
@@ -270,23 +254,16 @@ const UserDetailsEditForm = ({
         </div>
       </fieldset>
 
-      <fieldset className="fieldset ">
+      <fieldset className="fieldset">
         <legend className="fieldset-legend">Your Bio</legend>
-        <div className="flex items-center border-2 px-4 rounded-lg w-full">
-          <RiBook3Line className="h-4 w-4 opacity-70 mr-2" />
-          <input
-            type="text"
-            className="input grow focus:outline-0"
+        <div className="flex flex-col border-2 rounded-lg w-full">
+          <textarea
+            className="input grow w-full text-wrap h-full focus:outline-0 pt-2 resize-none"
             value={formdata.bio}
+            rows={8}
             onChange={(e) => setFormdata({ ...formdata, bio: e.target.value })}
             placeholder={profile.bio || "Enter Your Bio"}
             id="profile_edit_bio"
-          />
-          <RiEditLine
-            className="cursor-pointer ml-2"
-            onClick={() => {
-              document.getElementById("profile_edit_bio")?.focus();
-            }}
           />
         </div>
       </fieldset>

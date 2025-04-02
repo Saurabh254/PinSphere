@@ -52,7 +52,7 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center  w-full">
+    <div className="h-full bg-background flex items-center justify-center px-4 w-full">
       <div className="bg-background  rounded-lg  p-6 max-w-lg w-full">
         <div className="flex justify-center  mb-6 bg-primary rounded-md">
           <img src="/pin_rect.png" alt="Flowbite Logo" className="h-36" />
@@ -70,7 +70,7 @@ const Signup = () => {
           <div className="mb-4">
             <label
               htmlFor="username"
-              className="block text-primary-foreground  text-sm font-medium mb-2"
+              className="block text-primary-foreground  text-xs font-medium mb-2"
               style={{
                 color: error.includes("username") ? "red" : "var(--foreground)",
               }}
@@ -83,7 +83,7 @@ const Signup = () => {
               onChange={handleChange}
               autoComplete="new-password"
               placeholder="Enter your username"
-              className="w-full light:bg-white bg-input text-foreground rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
+              className="w-full text-sm light:bg-white bg-input text-foreground rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
             />
             {error.includes("username") && (
               <p className="text-red-500 text-sm mt-1">{error}</p>
@@ -93,7 +93,7 @@ const Signup = () => {
           <div className="mb-4">
             <label
               htmlFor="email"
-              className="block text-sm font-medium mb-2"
+              className="block text-xs font-medium mb-2"
               style={{
                 color: error.includes("email") ? "red" : "var(--foreground)",
               }}
@@ -106,7 +106,7 @@ const Signup = () => {
               onChange={handleChange}
               autoComplete="new-password"
               placeholder="Enter your email"
-              className="w-full bg-input text-foreground rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
+              className="w-full text-sm bg-input text-foreground rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
             />
             {error.includes("email") && (
               <p className="text-red-500 text-sm mt-1">{error}</p>
@@ -116,7 +116,7 @@ const Signup = () => {
           <div className="mb-4">
             <label
               htmlFor="password"
-              className="block text-sm font-medium mb-2"
+              className="block text-xs font-medium mb-2"
             >
               Password
             </label>
@@ -127,7 +127,7 @@ const Signup = () => {
               onChange={handleChange}
               autoComplete="new-password"
               placeholder="Enter your password"
-              className="w-full bg-input text-foreground rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
+              className="w-full text-sm bg-input text-foreground rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-color-secondary"
             />
             {error.includes("password") && (
               <p className="text-red-500 text-sm mt-1">{error}</p>
@@ -135,19 +135,19 @@ const Signup = () => {
           </div>
 
           <div className="flex items-center justify-between mb-6">
-            <label className="flex items-center">
+            <label className="flex items-center text-xs">
               <input
                 type="checkbox"
                 id="rememberMe"
                 checked={formData.rememberMe}
                 onChange={handleChange}
-                className="checkbox bg-input  text-primary h-4 w-4 mr-2"
+                className="checkbox bg-input text-primary h-4 w-4 mr-2"
               />
               Remember me
             </label>
             <a
               href="#"
-              className="text-color-secondary hover:underline text-sm"
+              className="text-color-secondary hover:underline text-xs"
             >
               Forgot password?
             </a>

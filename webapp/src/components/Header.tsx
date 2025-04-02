@@ -1,7 +1,13 @@
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { removeTokenFromStorage } from "../service/token_service";
-import { RiLogoutCircleLine, RiMenu2Line } from "@remixicon/react";
+import {
+  RiContrast2Line,
+  RiLogoutCircleLine,
+  RiMenu2Line,
+  RiSearch2Line,
+  RiSunLine,
+} from "@remixicon/react";
 import { isUserLoggedIn } from "../service/login_service";
 import { ToastContainer } from "react-toastify";
 import { toggleUploadContentModel } from "@/lib/utils";
@@ -73,9 +79,36 @@ const Header = () => {
               <div className="md:flex hidden">
                 {loggedIn ? <LogoutDialog /> : <LoginDialog />}
               </div>
+              <label className="toggle cursor-pointer h-6 text-base-content border-none rounded-lg p-0 mr-4  outline-2 ml-auto  dark:outline-primary w-14 checked:bg-gray-800 py-3 ">
+                <input
+                  type="checkbox"
+                  className="rounded-xl h-full p-0 m-0 bg-none"
+                  onClick={() => {
+                    document.querySelector("html")?.classList.toggle("dark");
+                    document.querySelector("html")?.classList.toggle("light");
+                    if (localStorage.getItem("current_theme") == "light") {
+                      localStorage.setItem("current_theme", "dark");
+                    } else {
+                      localStorage.setItem("current_theme", "light");
+                    }
+                  }}
+                />
+
+                <RiContrast2Line
+                  aria-label="enabled"
+                  className=" rotate-0 p-1  w-full h-full"
+                />
+
+                <RiSunLine
+                  aria-label="disabled"
+                  className="rounded-full  border-none w-full h-full p-1 outline-none rotate-0 "
+                />
+              </label>
             </div>
           </div>
-
+          <Link to="/search" className="ml-auto mr-4 cursor-pointer block">
+            <RiSearch2Line />
+          </Link>
           {/* mobile menu */}
           <RiMenu2Line
             className="md:hidden cursor-pointer"

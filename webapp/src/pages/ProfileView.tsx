@@ -67,7 +67,7 @@ const ProfileView: React.FC = () => {
           </div>
           <h1 className="text-lg font-semibold py-4 w-full pl-12">Posts</h1>
           <hr className="w-full" />
-          <div className="my-8 mx-8 ">
+          <div className="my-8 lg:mx-8 mx-4 ">
             <div className="lg:columns-4 columns-2 gap-4 ">
               <PostComponent user={user} />
             </div>
