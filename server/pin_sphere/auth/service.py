@@ -29,6 +29,7 @@ from . import exceptions, schemas
 fake = faker.Faker()
 log = logging.getLogger(__name__)
 
+
 async def login_user(
     credentials: OAuth2PasswordRequestForm, response: Response, session: AsyncSession
 ):

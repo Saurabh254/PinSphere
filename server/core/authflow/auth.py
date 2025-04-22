@@ -13,7 +13,6 @@ from config import settings
 from core.database.session_manager import get_async_session
 from core.models import User
 
-
 log = logging.getLogger(__name__)
 
 

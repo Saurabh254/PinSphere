@@ -1,4 +1,5 @@
 import io
+import logging
 from typing import BinaryIO
 
 import boto3  # type: ignore
@@ -9,7 +10,7 @@ from PIL.ImageFile import ImageFile
 from config import settings
 
 from .types import FileContentType
-import logging
+
 log = logging.getLogger(__name__)
 s3_client = boto3.client(  # type: ignore
     "s3",

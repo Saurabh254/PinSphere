@@ -10,16 +10,20 @@ from starlette.middleware.cors import CORSMiddleware
 
 from pin_sphere import api
 from pin_sphere.exception_handling import add_exception_handler
+
 log = logging.getLogger(__name__)
 
+
 @asynccontextmanager
-async def lifespan(app: FastAPI) :
+async def lifespan(app: FastAPI):
     log.info("Starting PinSphere API")
     yield
+
+
 app = FastAPI(
     title="PinSphere API",
     description="PinSphere API (version api/v1)",
-    lifespan=lifespan
+    lifespan=lifespan,
 )
 
 

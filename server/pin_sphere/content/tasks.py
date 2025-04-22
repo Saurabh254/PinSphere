@@ -1,17 +1,19 @@
 # type: ignore
 
+import logging
+
 from celery_app import app
 from core import embedding_generation
 from core.boto3_client import s3_client
 from core.database.session_manager import get_sync_session
 from core.models.content import Content, ContentProcessingStatus
-
 from pin_sphere.content import service
 from pin_sphere.content.utils import (
     retrieve_blurhash_and_metadata,
 )
-import logging
+
 log = logging.getLogger(__name__)
+
 
 @app.task
 def generate_content_embedding_and_save(content_key: str):
