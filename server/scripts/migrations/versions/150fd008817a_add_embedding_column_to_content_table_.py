@@ -19,6 +19,7 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
+    op.execute('CREATE EXTENSION vector;')
     op.add_column('contents', sa.Column('embedding', pgvector.sqlalchemy.vector.VECTOR(), nullable=True, index=True))
 
 
