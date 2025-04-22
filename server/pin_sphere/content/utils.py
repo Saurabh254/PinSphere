@@ -1,4 +1,5 @@
 import io
+import logging
 import uuid
 from typing import BinaryIO
 
@@ -9,8 +10,9 @@ from typing_extensions import Tuple
 
 from config import settings
 from core.types import FileContentType
-from logging_conf import log
 from pin_sphere.content.exceptions import ContentNotFoundError
+
+log = logging.getLogger(__name__)
 
 
 def get_content_key(username: str, ext: FileContentType) -> str:

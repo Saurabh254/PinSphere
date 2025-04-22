@@ -1,15 +1,18 @@
 # type: ignore
 
+import logging
+
 from celery_app import app
 from core import embedding_generation
 from core.boto3_client import s3_client
 from core.database.session_manager import get_sync_session
 from core.models.content import Content, ContentProcessingStatus
-from logging_conf import log
 from pin_sphere.content import service
 from pin_sphere.content.utils import (
     retrieve_blurhash_and_metadata,
 )
+
+log = logging.getLogger(__name__)
 
 
 @app.task

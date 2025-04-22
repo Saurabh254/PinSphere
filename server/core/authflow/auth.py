@@ -1,3 +1,4 @@
+import logging
 from datetime import UTC, datetime, timedelta
 from enum import Enum
 from typing import Annotated, Any
@@ -11,7 +12,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from config import settings
 from core.database.session_manager import get_async_session
 from core.models import User
-from logging_conf import log
+
+log = logging.getLogger(__name__)
 
 
 class TokenType(str, Enum):
