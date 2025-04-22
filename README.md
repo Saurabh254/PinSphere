@@ -5,11 +5,34 @@
 ---
 ### ScreenShots
 
-| Image 1 | Image 2 |
+| Desktop UI | Mobile UI |
 |---------|---------|
-| ![Alt1](public/screenshot_loginscreen.png) | ![Alt2](public/screenshot_homescreen.png) |
-| ![Alt3](public/screenshot_profile.png) | ![Alt4](public/screenshot_profileedit.png) |
-|![Alt5](public/screenshot_upload_content.png)| ![Alt6](public/screenshot_swagger_ui.png)|
+<table>
+    <tr>
+        <th>Desktop UI</th>
+        <th>Mobile UI</th>
+    </tr>
+  <tr>
+    <td><img src="public/screenshot_loginscreen.png" alt="Alt1" height="400px"></td>
+    <td><img src="public/loginscreen.png" alt="Alt6" height="400px"></td>
+  </tr>
+  <tr>
+    <td><img src="public/screenshot_homescreen.png" alt="Alt2" height="400px"></td>
+    <td><img src="public/feedscreen.png" alt="Alt6" height="400px"></td>
+  </tr>
+  <tr>
+    <td><img src="public/screenshot_profile.png" alt="Alt3" height="400px"></td>
+    <td><img src="public/postscreen.png" alt="Alt6" height="400px"></td>
+  </tr>
+  <tr>
+    <td><img src="public/screenshot_profileedit.png" alt="Alt4" height="400px"></td>
+    <td><img src="public/profilescreen.png" alt="Alt6" height="400px"></td>
+  </tr>
+  <tr>
+    <td><img src="public/screenshot_upload_content.png" alt="Alt5" height="400px"></td>
+    <td><img src="public/menuscreen.png" alt="Alt6" height="400px"></td>
+  </tr>
+</table>
 
 ---
 
