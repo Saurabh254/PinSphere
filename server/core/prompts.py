@@ -1,6 +1,7 @@
-__all__ = ['PROMPT_V1']
+__all__ = ["PROMPT_V1"]
 
 from string import Template
+
 from core.prompt_builder import PromptBuilder
 
 SYSTEM_PROMPT_V1 = Template("""You are a helpful, harmless, and precise vision assistant. Your task is to analyze images and provide concise, accurate descriptions in simple language.
@@ -24,6 +25,8 @@ Describe only the main objects, people, actions, and setting visible in the imag
 Important: Output ONLY the descriptive sentence without any introduction, explanation, or additional commentary. Your response should be immediately usable as search text.""")
 
 
-
-
-PROMPT_V1 = PromptBuilder(user_prompt=USER_PROMPT_V1.substitute(), version='v1', system_prompt=SYSTEM_PROMPT_V1.substitute())
+PROMPT_V1 = PromptBuilder(
+    user_prompt=USER_PROMPT_V1.substitute(),
+    version="v1",
+    system_prompt=SYSTEM_PROMPT_V1.substitute(),
+)
