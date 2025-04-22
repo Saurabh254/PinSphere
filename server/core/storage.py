@@ -7,10 +7,10 @@ from PIL import Image
 from PIL.ImageFile import ImageFile
 
 from config import settings
-from logging_conf import log
 
 from .types import FileContentType
-
+import logging
+log = logging.getLogger(__name__)
 s3_client = boto3.client(  # type: ignore
     "s3",
     region_name=settings.AWS_REGION,

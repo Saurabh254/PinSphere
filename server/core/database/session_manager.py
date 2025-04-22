@@ -14,7 +14,7 @@ from sqlalchemy.orm import sessionmaker
 from config import settings
 
 async_engine: AsyncEngine = create_async_engine(
-    str(settings.get_database_dsn("asyncpg")), echo=True
+    str(settings.get_database_dsn("asyncpg")), echo=False
 )
 sync_engine = create_engine(str(settings.get_database_dsn("psycopg")), echo=False)
 

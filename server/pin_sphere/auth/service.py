@@ -1,3 +1,4 @@
+import logging
 import time
 import uuid
 from typing import Any
@@ -21,13 +22,12 @@ from core.authflow.auth import (
 from core.authflow.service import verify_password
 from core.models import User
 from core.models.user import AuthType
-from logging_conf import log
 from pin_sphere.users import service as user_service
 
 from . import exceptions, schemas
 
 fake = faker.Faker()
-
+log = logging.getLogger(__name__)
 
 async def login_user(
     credentials: OAuth2PasswordRequestForm, response: Response, session: AsyncSession

@@ -1,4 +1,6 @@
+import logging
 import time
+from contextlib import asynccontextmanager
 
 import uvicorn
 from asgi_correlation_id import CorrelationIdMiddleware
@@ -8,12 +10,19 @@ from starlette.middleware.cors import CORSMiddleware
 
 from pin_sphere import api
 from pin_sphere.exception_handling import add_exception_handler
+log = logging.getLogger(__name__)
 
+@asynccontextmanager
+async def lifespan(app: FastAPI) :
+    log.info("Starting PinSphere API")
+    yield
 app = FastAPI(
-    debug=True,
     title="PinSphere API",
     description="PinSphere API (version api/v1)",
+    lifespan=lifespan
 )
+
+
 app.include_router(api.router)
 app.add_middleware(
     CORSMiddleware,

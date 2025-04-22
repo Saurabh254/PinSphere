@@ -9,10 +9,11 @@ from typing_extensions import Tuple
 
 from config import settings
 from core.types import FileContentType
-from logging_conf import log
+import logging
 from pin_sphere.content.exceptions import ContentNotFoundError
 
 
+log = logging.getLogger(__name__)
 def get_content_key(username: str, ext: FileContentType) -> str:
     """
     Generate a unique content key for the given username and extension.
