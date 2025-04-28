@@ -1,12 +1,12 @@
+import logging
 from typing import Optional
 
 from pydantic import BaseModel
+
 from pin_sphere.base_exception import ServerError
-import logging
 
 
 class CacheInitilizationError(ServerError):
-
     def __init__(
         self, namespace: Optional[str] = None, entity: Optional[BaseModel] = None
     ) -> None:

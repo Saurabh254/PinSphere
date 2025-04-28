@@ -1,5 +1,5 @@
 import json
-from typing import Literal, Self, Union, List
+from typing import List, Literal, Self, Union
 
 from core.baseErrors import CacheInitilizationError, InvalidEntity
 from core.models.content import Content
