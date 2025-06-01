@@ -26,7 +26,7 @@ const PrivacyAndSecuritySettings = () => {
         <input
           type="checkbox"
           className="toggle toggle-primary bg-black"
-          checked={profileType === 0 ? false : true}
+          checked={profileType !== 0}
           onClick={() => {
             setProfileType(profileType == 0 ? 1 : 0);
           }}
