@@ -8,8 +8,9 @@ import { getLoggedInUser } from "@/service/user_service.tsx";
 import { UserContext } from "@/hooks/get_user.tsx";
 import MainView from "@/components/MainView.tsx";
 import SearchContent from "./SearchContent.tsx";
-const ProfileViewRouter = lazy(() => import("./ProfileView.tsx"));
 
+const ProfileViewRouter = lazy(() => import("./ProfileView.tsx"));
+const Settings = lazy(() => import("./Settings.tsx"));
 const Home = () => {
   const [user, setUser] = useState<User | null>(null);
   useEffect(() => {
@@ -26,6 +27,7 @@ const Home = () => {
         <Route index element={<MainView />} />
         <Route path="/search" element={<SearchContent />} />
         <Route path="profile/*" element={<ProfileViewRouter />} />
+        <Route path="settings" element={<Settings />} />
         <Route path="content/:content_id" element={<ContentPage />} />
       </Routes>
     </UserContext.Provider>
