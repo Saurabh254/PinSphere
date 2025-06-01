@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 const accentColors = [
   "#3b82f6",
@@ -10,6 +10,7 @@ const accentColors = [
 ];
 
 const AppearanceSettings: React.FC = () => {
+  const [currAccent, setCurrAccent] = useState(accentColors[0]);
   return (
     <div className="p-0 px-6 space-y-6">
       <h2 className="text-lg dark:text-gray-200 font-semibold">
@@ -24,12 +25,12 @@ const AppearanceSettings: React.FC = () => {
             <button
               key={color}
               className={`w-8 h-8 rounded-full border-2 transition-all ${
-                color === "dark"
+                color === currAccent
                   ? "ring ring-offset-2 ring-primary"
                   : "border-gray-300"
               }`}
               style={{ backgroundColor: color }}
-              onClick={() => {}}
+              onClick={() => setCurrAccent(color)}
             ></button>
           ))}
         </div>
