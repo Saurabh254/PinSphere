@@ -40,8 +40,8 @@ const Header = () => {
               <Link to="/profile" className="hover:text-gray-300">
                 Profile
               </Link>
-              <Link to="#" className="hover:text-gray-300">
-                About
+              <Link to="/settings" className="hover:text-gray-300">
+                Settings
               </Link>
               <span
                 onClick={toggleUploadContentModel}
