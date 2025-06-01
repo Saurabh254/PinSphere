@@ -1,14 +1,5 @@
-import { Moon, Sun } from "lucide-react";
-import React, { useState, useEffect } from "react";
+import React from "react";
 
-const themes = [
-  "light",
-  "dark",
-  "cupcake",
-  "bumblebee",
-  "emerald",
-  "corporate",
-];
 const accentColors = [
   "#3b82f6",
   "#f59e0b",

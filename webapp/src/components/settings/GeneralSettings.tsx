@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 const languages = [
   { label: "English", value: "en" },
   { label: "Hindi", value: "hi" },
@@ -19,8 +17,6 @@ const timezones = [
 ];
 
 const GeneralSettings = () => {
-  const [profileType, setProfileType] = useState(0);
-
   return (
     <div className="px-4 py-0 dark:text-gray-200 text-black">
       <div className="rounded-xl p-2 py-0  text-sm">
