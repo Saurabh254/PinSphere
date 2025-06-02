@@ -2,6 +2,7 @@ from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette import status
 
 from core.authflow import auth
 from core.database.session_manager import get_async_session
@@ -10,6 +11,7 @@ from core.types import FileContentType
 from pin_sphere.users.service import get_user_by_username
 
 from . import service
+from .filters import SettingsFilter
 from .schemas import UserResponse, UserUpdate
 from .service import delete_user, get_user, get_users, update_user
 
@@ -132,6 +134,15 @@ async def read_user(
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user
+
+
+@router.put("/settings", status_code=status.HTTP_204_NO_CONTENT)
+async def update_settings(
+    current_user: User = Depends(auth.get_current_user),
+    settings: SettingsFilter = Depends(),
+    session: AsyncSession = Depends(get_async_session),
+):
+    await service.update_settings(current_user, settings, session)
 
 
 # Update an existing users
