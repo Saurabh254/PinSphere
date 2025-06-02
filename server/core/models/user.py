@@ -8,9 +8,11 @@ from sqlalchemy import (
     LargeBinary,
     String,
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from core.database.base_model import RecordModel
+from pin_sphere.constants import DefaultSettings
 
 # from .content import  Content
 if typing.TYPE_CHECKING:
@@ -41,5 +43,8 @@ class User(RecordModel):
     profile_photo_key: Mapped[str] = mapped_column(String(100), nullable=True)
     auth_type: Mapped[AuthType] = mapped_column(
         SAEnum(AuthType), nullable=False, default=AuthType.local
+    )
+    settings: Mapped[dict[str, str | bool | int]] = mapped_column(
+        JSONB, nullable=True, default=DefaultSettings, deferred=True
     )
     contents: Mapped["Content"] = relationship("Content", back_populates="user")
