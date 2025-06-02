@@ -1,16 +1,23 @@
-from pydantic import BaseModel
+from typing import List, Literal, Optional
 
-from pydantic import BaseModel, Field
-from typing import Optional, Literal, List
 import pytz
+from pydantic import BaseModel, Field
 
 
 # ---------- Nested Setting Models ----------
 class GeneralSettingsFilter(BaseModel):
-    language: Optional[str] = Field(default=None, description="Language code like 'en', 'fr'.")
-    timezone: Optional[str] = Field(default=None, description="Timezone like 'Asia/Kolkata'.")
-    background_sync: Optional[bool] = Field(default=None, description="Enable background sync.")
-    autoplay_media: Optional[bool] = Field(default=None, description="Autoplay media setting.")
+    language: Optional[str] = Field(
+        default=None, description="Language code like 'en', 'fr'."
+    )
+    timezone: Optional[str] = Field(
+        default=None, description="Timezone like 'Asia/Kolkata'."
+    )
+    background_sync: Optional[bool] = Field(
+        default=None, description="Enable background sync."
+    )
+    autoplay_media: Optional[bool] = Field(
+        default=None, description="Autoplay media setting."
+    )
 
     @classmethod
     def validate_timezone(cls, value: Optional[str]) -> Optional[str]:
@@ -24,28 +31,44 @@ class GeneralSettingsFilter(BaseModel):
 
 
 class NotificationSettingsFilter(BaseModel):
-    updates_notification: Optional[bool] = Field(default=None, description="Receive update notifications.")
-    mail_updates: Optional[bool] = Field(default=None, description="Receive mail update notifications.")
-    incoming_sound: Optional[bool] = Field(default=None, description="Enable incoming sound notifications.")
+    updates_notification: Optional[bool] = Field(
+        default=None, description="Receive update notifications."
+    )
+    mail_updates: Optional[bool] = Field(
+        default=None, description="Receive mail update notifications."
+    )
+    incoming_sound: Optional[bool] = Field(
+        default=None, description="Enable incoming sound notifications."
+    )
 
 
 class AppearanceSettingsFilter(BaseModel):
     accent_colors: Optional[List[str]] = Field(
         default=None,
-        description="List of selected accent colors (e.g. ['blue', 'purple'])."
+        description="List of selected accent colors (e.g. ['blue', 'purple']).",
     )
 
 
 class PrivacySecuritySettingsFilter(BaseModel):
-    private_account: Optional[bool] = Field(default=None, description="Enable private account.")
-    two_factor_auth: Optional[bool] = Field(default=None, description="Enable two-factor authentication.")
-    read_receipts: Optional[bool] = Field(default=None, description="Allow read receipts.")
-    profile_discovery: Optional[bool] = Field(default=None, description="Allow others to find your profile.")
+    private_account: Optional[bool] = Field(
+        default=None, description="Enable private account."
+    )
+    two_factor_auth: Optional[bool] = Field(
+        default=None, description="Enable two-factor authentication."
+    )
+    read_receipts: Optional[bool] = Field(
+        default=None, description="Allow read receipts."
+    )
+    profile_discovery: Optional[bool] = Field(
+        default=None, description="Allow others to find your profile."
+    )
 
 
 # ---------- Main Filter Wrapper ----------
 class SettingsFilter(BaseModel):
-    settings_type: Literal['general', 'notification', 'appearance', 'privacy_and_security']
+    settings_type: Literal[
+        "general", "notification", "appearance", "privacy_and_security"
+    ]
 
     general: Optional[GeneralSettingsFilter] = None
     notification: Optional[NotificationSettingsFilter] = None
