@@ -113,7 +113,7 @@ def get_upload_url(user: User, ext: FileContentType):
 
 async def update_settings(user: User, settings: SettingsFilter, session: AsyncSession):
     old_settings = (
-    (
+        (
             await session.execute(
                 select(User.settings).filter(User.username == user.username)
             )
@@ -121,7 +121,9 @@ async def update_settings(user: User, settings: SettingsFilter, session: AsyncSe
         .scalars()
         .one()
     )
-    old_settings.update(settings.model_dump(exclude_defaults=True, exclude={'settings_type'}))
+    old_settings.update(
+        settings.model_dump(exclude_defaults=True, exclude={"settings_type"})
+    )
     await session.execute(
         update(User)
         .filter(User.username == user.username)
