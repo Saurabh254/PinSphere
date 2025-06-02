@@ -136,13 +136,13 @@ async def read_user(
     return user
 
 
-@router.put("/settings", status_code=status.HTTP_200_OK)
+@router.put("/settings", status_code=status.HTTP_204_NO_CONTENT)
 async def update_settings(
     current_user: User = Depends(auth.get_current_user),
     settings: SettingsFilter = Depends(),
     session: AsyncSession = Depends(get_async_session),
 ):
-    return await service.update_settings(current_user, settings, session)
+    await service.update_settings(current_user, settings, session)
 
 
 # Update an existing users

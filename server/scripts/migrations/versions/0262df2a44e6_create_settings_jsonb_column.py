@@ -19,7 +19,7 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    op.add_column('users', sa.Column('settings', JSONB, nullable=True))
+    op.add_column('users', sa.Column('settings', JSONB, nullable=True, server_default='{}'))
 
 
 def downgrade() -> None:
