@@ -130,3 +130,7 @@ async def update_settings(user: User, settings: SettingsFilter, session: AsyncSe
         .values(settings=old_settings)
     )
     await session.commit()
+
+
+async def get_settings(session: AsyncSession, current_user: User):
+    return  ( await session.execute(select(User.settings).filter(User.username == current_user.username))).scalars().one()
