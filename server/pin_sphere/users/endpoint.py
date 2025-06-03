@@ -8,6 +8,7 @@ from core.authflow import auth
 from core.database.session_manager import get_async_session
 from core.models import User
 from core.types import FileContentType
+
 from . import filters, schemas, service
 
 # Create an API router for users-related endpoints
@@ -25,8 +26,8 @@ router = APIRouter(
     tags=["Account Operations"],
 )
 async def get_me(
-        current_user: User = Depends(auth.get_current_user),
-        session: AsyncSession = Depends(get_async_session),
+    current_user: User = Depends(auth.get_current_user),
+    session: AsyncSession = Depends(get_async_session),
 ):
     """Get current authenticated user's profile"""
     return await service.get_user(session, current_user.username)
@@ -41,9 +42,9 @@ async def get_me(
     dependencies=[Depends(auth.get_current_user)],
 )
 async def read_users(
-        skip: int = 0,
-        limit: int = 10,
-        db: AsyncSession = Depends(get_async_session),
+    skip: int = 0,
+    limit: int = 10,
+    db: AsyncSession = Depends(get_async_session),
 ):
     """
     Fetch a list of users with optional pagination.
@@ -64,8 +65,8 @@ async def read_users(
     dependencies=[Depends(auth.get_current_user)],
 )
 async def check_username_availability(
-        username: str,
-        db: AsyncSession = Depends(get_async_session),
+    username: str,
+    db: AsyncSession = Depends(get_async_session),
 ):
     """
     Check if the provided username is available for registration.
@@ -91,8 +92,8 @@ async def check_username_availability(
     dependencies=[Depends(auth.get_current_user)],
 )
 async def delete_account(
-        username: str,
-        db: AsyncSession = Depends(get_async_session),
+    username: str,
+    db: AsyncSession = Depends(get_async_session),
 ):
     """
     Delete a user account by their username.
@@ -112,11 +113,11 @@ async def delete_account(
     "/upload_url",
     summary="Get profile photo upload URL",
     description="Generate a pre-signed URL for uploading profile photos. Supports PNG and JPEG formats.",
-    tags=["Account Operations"]
+    tags=["Account Operations"],
 )
 async def retrieve_upload_url(
-        ext: Literal["image/png", "image/jpeg"],
-        current_user: User = Depends(auth.get_current_user),
+    ext: Literal["image/png", "image/jpeg"],
+    current_user: User = Depends(auth.get_current_user),
 ):
     """
     Generate upload URL for profile photo.
@@ -133,11 +134,11 @@ async def retrieve_upload_url(
     summary="Get user settings",
     description="Retrieve the current user's account settings and preferences.",
     tags=["Account Operations"],
-    response_model=filters.SettingsFilter
+    response_model=filters.SettingsFilter,
 )
 async def get_settings(
-        current_user: User = Depends(auth.get_current_user),
-        session: AsyncSession = Depends(get_async_session),
+    current_user: User = Depends(auth.get_current_user),
+    session: AsyncSession = Depends(get_async_session),
 ):
     """Get current user's settings"""
     return await service.get_settings(session, current_user)
@@ -147,12 +148,12 @@ async def get_settings(
     "/settings",
     status_code=status.HTTP_204_NO_CONTENT,
     summary="Update user settings",
-    description="Update the current user's account settings and preferences."
+    description="Update the current user's account settings and preferences.",
 )
 async def update_settings(
-        current_user: User = Depends(auth.get_current_user),
-        settings: filters.SettingsFilter = Depends(),
-        session: AsyncSession = Depends(get_async_session),
+    current_user: User = Depends(auth.get_current_user),
+    settings: filters.SettingsFilter = Depends(),
+    session: AsyncSession = Depends(get_async_session),
 ):
     """Update current user's settings"""
     await service.update_settings(current_user, settings, session)
@@ -166,8 +167,8 @@ async def update_settings(
     tags=["Account Operations"],
 )
 async def read_user(
-        username: str,
-        db: AsyncSession = Depends(get_async_session),
+    username: str,
+    db: AsyncSession = Depends(get_async_session),
 ):
     """
     Fetch a single user by their unique username.
@@ -191,9 +192,9 @@ async def read_user(
     tags=["Account Operations"],
 )
 async def update_existing_user(
-        user_update: schemas.UserUpdate,
-        db: AsyncSession = Depends(get_async_session),
-        current_user: User = Depends(auth.get_current_user),
+    user_update: schemas.UserUpdate,
+    db: AsyncSession = Depends(get_async_session),
+    current_user: User = Depends(auth.get_current_user),
 ):
     """
     Update the current user's profile information.
@@ -219,8 +220,8 @@ async def update_existing_user(
     dependencies=[Depends(auth.get_current_user)],
 )
 async def delete_existing_user(
-        username: str,
-        db: AsyncSession = Depends(get_async_session),
+    username: str,
+    db: AsyncSession = Depends(get_async_session),
 ):
     """
     Delete a user by their unique username.
