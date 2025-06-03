@@ -128,7 +128,36 @@ async def retrieve_upload_url(
     return service.get_upload_url(current_user, ext=ext_)
 
 
-# Fetch a specific users by username
+@router.get(
+    "/settings",
+    summary="Get user settings",
+    description="Retrieve the current user's account settings and preferences.",
+    tags=["Account Operations"],
+    response_model=filters.SettingsFilter
+)
+async def get_settings(
+        current_user: User = Depends(auth.get_current_user),
+        session: AsyncSession = Depends(get_async_session),
+):
+    """Get current user's settings"""
+    return await service.get_settings(session, current_user)
+
+
+@router.put(
+    "/settings",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Update user settings",
+    description="Update the current user's account settings and preferences."
+)
+async def update_settings(
+        current_user: User = Depends(auth.get_current_user),
+        settings: filters.SettingsFilter = Depends(),
+        session: AsyncSession = Depends(get_async_session),
+):
+    """Update current user's settings"""
+    await service.update_settings(current_user, settings, session)
+
+
 @router.get(
     "/{username}",
     response_model=schemas.UserResponse,
@@ -154,16 +183,6 @@ async def read_user(
     return user
 
 
-@router.put("/settings", status_code=status.HTTP_204_NO_CONTENT)
-async def update_settings(
-    current_user: User = Depends(auth.get_current_user),
-    settings: SettingsFilter = Depends(),
-    session: AsyncSession = Depends(get_async_session),
-):
-    await service.update_settings(current_user, settings, session)
-
-
-# Update an existing users
 @router.put(
     "",
     response_model=schemas.UserResponse,
