@@ -12,7 +12,7 @@ DefaultSettings = {
         "mail_updates": True,
         "incoming_sound": True,
     },
-    "appearance": {"accent_colors": "dark"},
+    "appearance": {"theme": "dark"},
     "privacy_and_security": {
         "private_account": False,
         "two_factor_auth": False,
