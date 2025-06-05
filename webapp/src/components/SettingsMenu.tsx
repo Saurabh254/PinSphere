@@ -1,8 +1,4 @@
-import {
-  RiHomeSmileLine,
-  RiNotificationLine,
-  RiPaletteLine,
-} from "@remixicon/react";
+import { RiHomeSmileLine, RiNotificationLine } from "@remixicon/react";
 import { Lock } from "lucide-react";
 
 const SettingsMenu: React.FC<{
@@ -33,24 +29,14 @@ const SettingsMenu: React.FC<{
           <RiNotificationLine />
         </a>
       </li>
+
       <li>
         <a
           className={` ${
             settingsType === 2 ? "dark:bg-gray-700 bg-gray-300" : ""
           }`}
-          data-tip="Appearance"
-          onClick={() => setSettingsType(2)}
-        >
-          <RiPaletteLine />
-        </a>
-      </li>
-      <li>
-        <a
-          className={` ${
-            settingsType === 3 ? "dark:bg-gray-700 bg-gray-300" : ""
-          }`}
           data-tip="Privacy & Security"
-          onClick={() => setSettingsType(3)}
+          onClick={() => setSettingsType(2)}
         >
           <Lock />
         </a>

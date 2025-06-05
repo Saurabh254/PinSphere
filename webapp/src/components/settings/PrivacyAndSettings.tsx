@@ -3,7 +3,6 @@ import React, { useState } from "react";
 const PrivacyAndSecuritySettings = () => {
   const [profileType, setProfileType] = useState(0);
   const [twoFactorAuth, setTwoFactorAuth] = useState(false);
-  const [readReceipts, setReadReceipts] = useState(true);
   const [profileDiscovery, setProfileDiscovery] = useState(true);
 
   return (
@@ -49,26 +48,6 @@ const PrivacyAndSecuritySettings = () => {
             className="toggle  toggle-primary bg-black"
             checked={twoFactorAuth}
             onChange={() => setTwoFactorAuth(!twoFactorAuth)}
-          />
-        </label>
-      </div>
-
-      {/* Read Receipts */}
-      <div className="form-control mb-4">
-        <label className="label cursor-pointer">
-          <div>
-            <span className="label-text font-semibold text-black dark:text-gray-200">
-              Read Receipts
-            </span>
-            <p className="text-xs text-gray-500 ml-1 mt-1 text-wrap">
-              Allow others to see when you've read their messages.
-            </p>
-          </div>
-          <input
-            type="checkbox"
-            className="toggle  toggle-primary bg-black"
-            checked={readReceipts}
-            onChange={() => setReadReceipts(!readReceipts)}
           />
         </label>
       </div>

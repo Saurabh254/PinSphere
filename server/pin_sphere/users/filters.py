@@ -43,9 +43,9 @@ class NotificationSettingsFilter(BaseModel):
 
 
 class AppearanceSettingsFilter(BaseModel):
-    accent_colors: Optional[str] = Field(
+    theme: Optional[str] = Field(
         default=None,
-        description="accent color (e.g. 'blue' or 'purple').",
+        description="accent color (e.g. 'light' or 'dark').",
     )
 
 
