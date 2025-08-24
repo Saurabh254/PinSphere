@@ -4,6 +4,7 @@ import { Content, Page } from "@/types";
 import { Axios } from "axios";
 import { useEffect, useState } from "react";
 import ContentWithBlurhash from "./ContentWithBlurhash";
+import CardsShimmer from "./shimmer/CardsShimmer";
 
 const MainView = () => {
   const [contents, setContents] = useState<Page<Content> | null>(null);
@@ -21,9 +22,10 @@ const MainView = () => {
     };
     api_call();
   }, []);
-
+  if (contents === null) {
+    return <CardsShimmer />;
+  }
   return (
-    // <div className="grid grid-cols-2 md:grid-cols-3 [&>*]:h-auto w-full h-full overflow-scroll gap-4 space-y-4 mt-8  px-4 md:px-8 ">
     <div className="columns-2 gap-x-2 bg-background lg:columns-4 space-y-2  px-2 pt-2 text-light ">
       {contents &&
         contents.items.map((content) => (
