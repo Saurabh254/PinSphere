@@ -9,9 +9,9 @@ from fastapi_pagination import add_pagination
 from sqlalchemy import text
 from starlette.middleware.cors import CORSMiddleware
 
+from core.database.session_manager import get_sync_session
 from pin_sphere import api
 from pin_sphere.exception_handling import add_exception_handler
-from core.database.session_manager import get_sync_session
 
 log = logging.getLogger(__name__)
 
