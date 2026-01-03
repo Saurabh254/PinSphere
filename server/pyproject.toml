@@ -48,11 +48,11 @@ dev = [
 [tool.taskipy.tasks]
 type_check = { cmd = "pyright pin_sphere core ", help="Check Typing using Pyright in strict mode"}
 lint = { cmd = "ruff check --select I --fix . && ruff format . && ruff check --fix  ", help = "run linters with autofix" }
-
 lint_check = { cmd = "ruff format --check . && ruff check .", help = "run ruff linter" }
 clean = { cmd = "find * -name '*.pyc' -delete && find * -name '__pycache__' -delete", help = "clean up .pyc and __pycache__" }
 reapply_migrations = {cmd = "alembic downgrade base && alembic upgrade head && echo 'Reapplied migration successfully'"}
 create_env = {cmd = "python scripts/create_env.py", help = "create a sample .env file if it doesn't exists"}
+
 [tool.ruff]
 target-version = "py310"
 exclude = [

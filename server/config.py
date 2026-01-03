@@ -31,7 +31,7 @@ class Settings(BaseSettings):
 
     def get_database_dsn(self, driver: Literal["asyncpg", "psycopg"]) -> PostgresDsn:
         return PostgresDsn(
-            f"postgresql+{driver}://postgres:postgres@localhost:5432/pin_sphere"
+            f"postgresql+{driver}://postgres:postgres@postgres:5432/pin_sphere"
         )
 
 

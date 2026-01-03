@@ -6,10 +6,12 @@ import uvicorn
 from asgi_correlation_id import CorrelationIdMiddleware
 from fastapi import FastAPI, Request
 from fastapi_pagination import add_pagination
+from sqlalchemy import text
 from starlette.middleware.cors import CORSMiddleware
 
 from pin_sphere import api
 from pin_sphere.exception_handling import add_exception_handler
+from core.database.session_manager import get_sync_session
 
 log = logging.getLogger(__name__)
 
@@ -17,6 +19,9 @@ log = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     log.info("Starting PinSphere API")
+    db = next(get_sync_session())
+    db.query(text("select 1"))
+    db.close()
     yield
 
 

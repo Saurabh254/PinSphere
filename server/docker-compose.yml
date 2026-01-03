@@ -13,16 +13,21 @@ services:
       - minio_data:/data
 
   postgres:
-    image: postgres:latest
-    container_name: postgres
+    image: pgvector/pgvector:pg16
+    container_name: pgvector
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres"
-      POSTGRES_DB: "pin_sphere"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: pin_sphere
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d pin_sphere"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:latest
@@ -35,25 +40,44 @@ services:
 
   app:
     build: .
+    command: sh /app/startup/entrypoint.sh
+
     container_name: fastapi_app
     ports:
       - "8000:8000"
     depends_on:
-      - postgres
-      - redis
-      - minio
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      minio:  
+        condition: service_started
     environment:
-      DATABASE_DSN: "postgresql+asyncpg://postgres:postgres@postgres:5432/pin_sphere"
+      DATABASE_DSN: "postgresql://postgres:postgres@postgres:5432/pin_sphere"
       REDIS_DSN: "redis://redis:6379/0"
+      CELERY_QUEUE_URL: "redis://redis:6379/1"
       ALGORITHM: "HS256"
       AUTH_SECRET: "159cdf30c1cee803eec9dc63bb16c1b2882c4354aa2eb6a34a46ed50775d94ad"
       AWS_STORAGE_BUCKET_NAME: "pinsphere"
       AWS_REGION: "us-east-1"
-      AWS_SECRET_ACCESS_KEY: "minio"
-      AWS_ACCESS_KEY_ID: "minio"
-      AWS_SESSION_TOKEN: "saurabh_prod"
+      AWS_ACCESS_KEY_ID: "uGPRISlXZ7rBkB3PahjU"
+      AWS_SECRET_ACCESS_KEY: "lzBdlQOBsAREMnmBD0LaUOm6NUTZO5i5awjf6Bkw"
       AWS_SIGNATURE_VERSION: "s3v4"
-      AWS_ENDPOINT_URL: "http://minio:9000"
+      AWS_ENDPOINT_URL: "http://localhost:9000"
+      ENVIRONMENT: "development"
+      SBERT_MODEL_NAME: "sentence-transformers/all-MiniLM-L6-v2"
+  celery-worker:
+    build: . 
+    command: make run-celery
+    depends_on:
+        
+        redis:
+          condition: service_started
+        minio:  
+          condition: service_started
+
+    environment: 
+      CELERY_QUEUE_URL: "redis://redis:6379/1"
 
 volumes:
   minio_data:
