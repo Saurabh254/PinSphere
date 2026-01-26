@@ -15,7 +15,6 @@ class Settings(BaseSettings):
     AWS_REGION: str
     AWS_SECRET_ACCESS_KEY: str
     AWS_ACCESS_KEY_ID: str
-    AWS_SESSION_TOKEN: str
     AWS_SIGNATURE_VERSION: str
     REFRESH_TOKEN_EXPIRATION_SECONDS: int
     AWS_ENDPOINT_URL: str
@@ -35,4 +34,6 @@ class Settings(BaseSettings):
         )
 
 
+print(Path(__file__).parent / ".env")
 settings = Settings()  # type: ignore
+print(settings)

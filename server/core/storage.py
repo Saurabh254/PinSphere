@@ -24,7 +24,7 @@ s3_client = boto3.client(  # type: ignore
 
 def get_image(s3_key: str) -> ImageFile:
     """
-    Fetches an image from S3, extracts its bytes, and gets contextual information using LangChain Ollama (LLaMA 3.2).
+    Fetches an image from S3, extracts its bytes, and gets contextual information using LangChain Ollamaz
 
     Args:
         s3_key (str): Key (path) of the image in S3.

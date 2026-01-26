@@ -2,19 +2,37 @@ services:
   minio:
     image: minio/minio:latest
     container_name: minio
+    command: server /data --console-address ":9001"
     ports:
       - "9000:9000"
       - "9001:9001"
     environment:
-      MINIO_ROOT_USER: "uGPRISlXZ7rBkB3PahjU"
-      MINIO_ROOT_PASSWORD: "lzBdlQOBsAREMnmBD0LaUOm6NUTZO5i5awjf6Bkw"
-    command: server --console-address ":9001" /data
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin123
     volumes:
       - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 2s
+      timeout: 1s
+      retries: 10
+
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 minioadmin minioadmin123;
+      mc mb -p local/pinsphere;
+      mc anonymous set download local/pinsphere;
+      mc anonymous get local/pinsphere;
+      "
 
   postgres:
     image: pgvector/pgvector:pg16
-    container_name: pgvector
+    container_name: postgres-pgvector
     ports:
       - "5432:5432"
     environment:
@@ -42,7 +60,7 @@ services:
     build: .
     command: sh /app/startup/entrypoint.sh
 
-    container_name: fastapi_app
+    container_name: pinsphere-app
     ports:
       - "8000:8000"
     depends_on:
@@ -50,7 +68,7 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
-      minio:  
+      minio:
         condition: service_started
     environment:
       DATABASE_DSN: "postgresql://postgres:postgres@postgres:5432/pin_sphere"
@@ -60,23 +78,23 @@ services:
       AUTH_SECRET: "159cdf30c1cee803eec9dc63bb16c1b2882c4354aa2eb6a34a46ed50775d94ad"
       AWS_STORAGE_BUCKET_NAME: "pinsphere"
       AWS_REGION: "us-east-1"
-      AWS_ACCESS_KEY_ID: "uGPRISlXZ7rBkB3PahjU"
-      AWS_SECRET_ACCESS_KEY: "lzBdlQOBsAREMnmBD0LaUOm6NUTZO5i5awjf6Bkw"
+      AWS_ACCESS_KEY_ID: "minioadmin"
+      AWS_SECRET_ACCESS_KEY: "minioadmin123"
       AWS_SIGNATURE_VERSION: "s3v4"
-      AWS_ENDPOINT_URL: "http://localhost:9000"
-      ENVIRONMENT: "development"
+      AWS_ENDPOINT_URL: "http://10.146.36.146:9000"
+      ENVIRONMENT: "dev"
       SBERT_MODEL_NAME: "sentence-transformers/all-MiniLM-L6-v2"
   celery-worker:
-    build: . 
+    build: .
     command: make run-celery
+    container_name: pinsphere-celery
     depends_on:
-        
-        redis:
-          condition: service_started
-        minio:  
-          condition: service_started
+      redis:
+        condition: service_started
+      minio:
+        condition: service_started
 
-    environment: 
+    environment:
       CELERY_QUEUE_URL: "redis://redis:6379/1"
 
 volumes:

@@ -20,8 +20,9 @@ WORKDIR /app
 # Dependency layer
 COPY pyproject.toml .python-version uv.lock /app/
 RUN uv sync
-
-# App code
 COPY . /app/
 
+COPY  .env /app/
+
+# App code
 EXPOSE 8000
