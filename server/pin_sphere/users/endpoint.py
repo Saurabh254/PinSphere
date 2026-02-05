@@ -1,6 +1,7 @@
 from typing import Literal
+from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Path
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -81,6 +82,20 @@ async def check_username_availability(
     if existing_user:
         raise HTTPException(status_code=400, detail="Username already taken")
     return {"message": "Username is available"}
+
+
+@router.get(
+    "/{user_id}",
+    response_model=schemas.UserResponse,
+    summary="Delete user account",
+    description="Delete a user account by username. Returns the deleted user information.",
+    tags=["Account Operations"],
+    dependencies=[Depends(auth.get_current_user)],
+)
+async def get_user_by_user_id(
+    user_id: UUID = Path(), db: AsyncSession = Depends(get_async_session)
+):
+    return await service.get_user_by_user_id(user_id, db)
 
 
 @router.delete(
