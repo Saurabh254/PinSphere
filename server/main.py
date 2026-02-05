@@ -12,6 +12,7 @@ from starlette.middleware.cors import CORSMiddleware
 from core.database.session_manager import get_sync_session
 from pin_sphere import api
 from pin_sphere.exception_handling import add_exception_handler
+from core.logging import configure
 
 log = logging.getLogger(__name__)
 
@@ -19,6 +20,7 @@ log = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     log.info("Starting PinSphere API")
+    configure()
     db = next(get_sync_session())
     db.query(text("select 1"))
     db.close()
