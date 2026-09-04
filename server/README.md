@@ -55,79 +55,102 @@ The primary goal of Pinsphere is to create a seamless and intuitive environment 
 
 ---
 
-## Infrastructure
+## Infrastructure & Tech Stack
 
-Pinsphere is built with the following key technologies:
+PinSphere Backend is built with modern, asynchronous Python and distributed systems:
 
-- **Backend:**
-  - Python with FastAPI: Server-side framework for handling API requests.
-  - MongoDB: NoSQL database for storing media metadata, tags, and categories.
-  - PostgreSQL: Relational database for user management and permissions.
-  - Cloud Storage (e.g., AWS S3 / Minio): For storing the media files themselves.
-
-- **Authentication & Authorization:**
-  - OAuth 2.0 for secure user authentication.
-  - Role-based access control (RBAC) to manage permissions and users.
-
-- **API:**
-  - RESTful API for developers to interact with the platform programmatically.
-
-- **DevOps:**
-  - Docker: For containerization and consistency across environments.
-  - CI/CD (GitHub Actions) for automated testing, building, and deployment.
-
+- **Web Framework & API:**
+  - **FastAPI (Python 3.12)**: Asynchronous REST API server with dependency injection, Pydantic v2 validation, and auto-generated OpenAPI 3.1 documentation.
+  - **Uvicorn / Starlette**: High-concurrency ASGI web server.
+- **Data Persistence & Vector Search:**
+  - **PostgreSQL 16**: Primary relational database for users, media metadata, comments, and engagement.
+  - **pgvector**: Native PostgreSQL extension for high-performance vector similarity and cosine distance search.
+  - **SQLAlchemy 2.0 (Async) + Alembic**: Declarative ORM supporting asynchronous connection pooling via `asyncpg` and schema migrations.
+  - **JSONB**: Flexible schema storage for custom user preferences and image dimensions.
+- **Asynchronous Processing & Caching:**
+  - **Celery**: Distributed task queue for asynchronous background jobs (Blurhash generation, Ollama vision inference, embedding generation).
+  - **Redis**: In-memory message broker for Celery and caching layer.
+- **AI & Multimodal Vision:**
+  - **Ollama (`gemma3:4b` vision)**: Multimodal LLM generating rich visual descriptions for uploaded media.
+  - **Sentence-Transformers (`all-MiniLM-L6-v2`)**: Dense vector representations for semantic search.
+- **Object Storage & Streaming:**
+  - **AWS S3 / MinIO**: Object storage using direct-to-S3 pre-signed POST URLs for zero server I/O bottleneck.
+- **Authentication & Security:**
+  - Google OAuth 2.0 and local password authentication (salted bcrypt hashing) with standard JWT bearer tokens.
+- **Observability & Code Quality:**
+  - `structlog` & `python-json-logger` for structured logging.
+  - `asgi-correlation-id` for end-to-end request tracing.
+  - `Pyright` in strict mode and `Ruff` for linting and formatting.
 
 ---
 ## Architecture
 
 ### High Level Architecture Diagram
 
-<img src="assets/high_level_architecture.png"/>
+<img src="assets/high_level_architecture.png" alt="Architecture Diagram" />
 
 ---
 
-## Installation
+## Installation & Setup
 
-To get started with Pinsphere locally, follow these steps:
+### 1. Prerequisites
+- Python 3.12+
+- Astral [`uv`](https://github.com/astral-sh/uv)
+- Docker & Docker Compose (for PostgreSQL, Redis, MinIO)
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/saurabh254/PinSphere.git
-   cd PinSphere/server
-   ```
+### 2. Clone and Install Dependencies:
+```bash
+git clone https://github.com/saurabh254/PinSphere.git
+cd PinSphere/server
+uv sync --dev
+```
 
-2. **Install dependencies:**
-   For backend, run:
-   ```bash
-   uv sync
-   ```
+### 3. Environment Configuration:
+Create a `.env` file in `server/` with the required parameters:
 
-3. ** Environment variables setup:**
-   Create a `.env` file and add the required environment variables for the database, cloud storage credentials, and OAuth setup. Example:
+```env
+DATABASE_DSN=postgresql://postgres:postgres@localhost:5432/pin_sphere
+REDIS_DSN=redis://localhost:6379/0
+CELERY_QUEUE_URL=redis://localhost:6379/1
+ALGORITHM=HS256
+AUTH_SECRET=your-random-auth-secret-key
+REFRESH_TOKEN_EXPIRATION_SECONDS=604800
+AWS_STORAGE_BUCKET_NAME=pinsphere
+AWS_REGION=us-east-1
+AWS_ACCESS_KEY_ID=minioadmin
+AWS_SECRET_ACCESS_KEY=minioadmin123
+AWS_SIGNATURE_VERSION=s3v4
+AWS_ENDPOINT_URL=http://localhost:9000
+ENVIRONMENT=dev
+SBERT_MODEL_NAME=sentence-transformers/all-MiniLM-L6-v2
+GOOGLE_OAUTH2_CLIENT_ID=your-google-client-id
+GOOGLE_OAUTH2_CLIENT_SECRET=your-google-client-secret
+GOOGLE_OAUTH2_REDIRECT_URI=http://localhost:5173/auth/google/callback
+```
 
-   ```env
-   MONGODB_URI=mongodb://localhost/pinsphere
-   POSTGRES_URI=postgresql://user:password@localhost/pinsphere
-   SECRET_KEY=your-secret-key
-   AWS_BUCKET=your-aws-bucket
-   AWS_ENDPOINT=your-aws-endpoint
-   AWS_REGION=your-aws-region
-   AWS_ACCESS_KEY=your-aws-access-key
-   AWS_SECRET_KEY=your-aws-secret-key
-   GOOGLE_CLIENT_ID=your-google-client-id
-   GOOGLE_CLIENT_SECRET=your-google-client-secret
-   ```
+### 4. Start Infrastructure (Docker):
+```bash
+# Spins up PostgreSQL (pgvector), Redis, and MinIO
+docker compose up minio minio-init postgres redis -d
+```
 
-4. **Apply migrations:**
-     ```bash
-    uv run task apply_migrations
-   ```
-5. **Start Backend server:**
-     ```bash
-    uv run fastapi run
-   ```
+### 5. Apply Database Migrations:
+```bash
+uv run alembic upgrade head
+```
 
-Your app should now be running at `http://localhost:3000`.
+### 6. Start Celery Worker:
+```bash
+uv run celery -A celery_app.app worker --loglevel=INFO
+```
+
+### 7. Start FastAPI Application:
+```bash
+uv run uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+The API will be running at `http://localhost:8000`.  
+Interactive documentation is available at `http://localhost:8000/docs` (Swagger UI) and `http://localhost:8000/redoc`.
 
 ---
 
@@ -236,17 +259,3 @@ server
 20 directories, 78 files
 
 ```
-## License
-
-Pinsphere is open-source software licensed under the [MIT License](LICENSE).
-
-
-
-### Points Covered:
-- **Aim:** The purpose of the platform is explained clearly.
-- **Features:** What the platform offers and how users can benefit.
-- **Usage:** Instructions for running the app locally and a brief guide for using the platform.
-- **Infrastructure:** Technologies used for both frontend and backend, authentication, and cloud storage.
-- **Installation:** Steps to set up the app locally.
-- **Contributing:** How others can contribute.
-- **License:** Open-source information.
