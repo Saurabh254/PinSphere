@@ -27,13 +27,16 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=Path(__file__).parent / ".env", env_file_encoding="utf-8"
     )
+    POSTGRES_UESRNAME: str
+    POSTGRES_PASSWORD: str
+    POSTGRES_HOST: str
+    POSTGRES_PORT: int
+    POSTGRES_DATABASE: str
 
     def get_database_dsn(self, driver: Literal["asyncpg", "psycopg"]) -> PostgresDsn:
         return PostgresDsn(
-            f"postgresql+{driver}://postgres:postgres@postgres:5432/pin_sphere"
+            f"postgresql+{driver}://{self.POSTGRES_UESRNAME}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DATABASE}"
         )
 
 
-print(Path(__file__).parent / ".env")
 settings = Settings()  # type: ignore
-print(settings)

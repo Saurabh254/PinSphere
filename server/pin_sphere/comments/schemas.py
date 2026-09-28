@@ -27,6 +27,3 @@ class SlimCommentResponse(CommentBase):
 
 class CommentResponse(SlimCommentResponse):
     replies: List["SlimCommentResponse"] = []
-
-    class Config:
-        orm_mode = True

@@ -1,4 +1,4 @@
-from typing import Literal, Optional
+from typing import Optional
 
 import pytz
 from pydantic import BaseModel, Field
@@ -66,10 +66,6 @@ class PrivacySecuritySettingsFilter(BaseModel):
 
 # ---------- Main Filter Wrapper ----------
 class SettingsFilter(BaseModel):
-    settings_type: Literal[
-        "general", "notification", "appearance", "privacy_and_security"
-    ]
-
     general: Optional[GeneralSettingsFilter] = None
     notification: Optional[NotificationSettingsFilter] = None
     appearance: Optional[AppearanceSettingsFilter] = None

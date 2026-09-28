@@ -6,7 +6,7 @@ from sqlalchemy import select, update
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from core import storage
+from core import models, storage
 from core.authflow.service import hash_password
 from core.models import User
 from core.types import FileContentType
@@ -23,6 +23,13 @@ async def get_user(db: AsyncSession, username: str):
         return result.scalars().one()
     except NoResultFound:
         return None
+
+
+async def get_user_by_user_id(
+    user_id: uuid.UUID, db: AsyncSession
+) -> models.User | None:
+    query = select(models.User).filter(models.User.id == str(user_id))
+    return await db.scalar(query)
 
 
 # Service to fetch a users by email
